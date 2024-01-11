@@ -157,9 +157,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
                             );
                           case Status.COMPLETED:
                             EventModel event = value.event.data!;
-                            print("********************************");
-                            print("********************************");
-                            print(event.paidEvent);
                             paid = event.paidEvent == true;
                             if (!loaded) {
                               loaded = true;
@@ -704,11 +701,17 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                 const SizedBox(height: 20,),
                                 GestureDetector(
                                     onTap: () async {
-
+                                      event.name = _titleController.text;
+                                      event.category = dropDownValue as EventCategoryModel;
+                                      event.address = _addressController.text;
+                                      event.details = _detailsController.text;
+                                      event.date = date;
+                                      eventViewModel.editEventApi(context, event, event.id!);
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                                       child: CommonButton(
+                                        loading: eventViewModel.loading,
                                         title: "Enrégistrer",
                                       ),
                                     )

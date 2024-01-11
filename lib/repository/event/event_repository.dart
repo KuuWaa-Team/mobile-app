@@ -53,7 +53,8 @@ class EventRepository {
 
   Future<dynamic> editEventApi ({required BuildContext context, required Map data, required int id}) async {
     try  {
-      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/{$id}", data, context: context);
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id", data, context: context, auth: true);
+
       return response;
     } catch(e) {
       rethrow;

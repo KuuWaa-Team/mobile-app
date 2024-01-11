@@ -206,7 +206,6 @@ class EventViewModel with ChangeNotifier{
       data["category_name"] = event.category!.name;
     }
 
-
     await _repository.editEventApi(context: context, data: data, id: id).then((value) {
       if (value['success'] == true  ) {
         Navigator.push(
@@ -216,20 +215,23 @@ class EventViewModel with ChangeNotifier{
           ),
         );
         Utils.toastMessage("Évenement modifié avec succès");
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => DetailsScreen(id: id),
           ),
+              (route) => false,
         );
         setLoading(false);
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        setLoading(false);
       }
-    }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
-      setLoading(false);
     });
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   setLoading(false);
+    // });
     return true;
   }
 
@@ -237,12 +239,12 @@ class EventViewModel with ChangeNotifier{
     setEvent(ApiResponse.loading());
     setLoading(true);
     await _repository.getEventDetailApi(context: context, id: id).then((value) {
+      setLoading(false);
       setEvent(ApiResponse.completed(EventModel.fromJson(value)));
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    //     .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return true;
   }
 
