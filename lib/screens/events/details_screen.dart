@@ -1,0 +1,606 @@
+import 'package:kuuwaa/common/app_colors.dart';
+import 'package:kuuwaa/common/common_button.dart';
+import 'package:kuuwaa/common/common_widget.dart';
+import 'package:kuuwaa/common/image_path.dart';
+import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/data/response/status.dart';
+import 'package:kuuwaa/model/event/event_model.dart';
+import 'package:kuuwaa/resource/config/app_url.dart';
+import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:kuuwaa/screens/events/edit_event_screen.dart';
+import 'package:kuuwaa/shimmer/event_detail_shimmer.dart';
+import 'package:kuuwaa/view_model/event/event_view_model.dart';
+import 'package:provider/provider.dart';
+
+class DetailsScreen extends StatefulWidget {
+  int id;
+
+  DetailsScreen({Key? key, required this.id}) : super(key: key);
+
+  @override
+  _DetailsScreenState createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  AppColors appColors = AppColors();
+  EventViewModel eventViewModel = EventViewModel();
+
+  @override
+  void initState() {
+    eventViewModel.getEventDetailApi(context, widget.id);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Scaffold(
+        backgroundColor: appColors.appMediumColor,
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: ChangeNotifierProvider<EventViewModel>(
+              create: (BuildContext context) => eventViewModel,
+              child: Consumer<EventViewModel>(
+                  builder: (context, value, _) {
+                    switch (value.event.status) {
+                      case Status.LOADING:
+                        return const EventDetailShimmer();
+                      case Status.ERROR:
+                        return Center(
+                          child: Text(value.event.message.toString()),
+                        );
+                      case Status.COMPLETED:
+                        EventModel event = value.event.data!;
+                        return Stack(
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.32,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(AppUrl.domainName + event.imagePath.toString())
+                                ),
+                                color: appColors.appMediumColor,
+                                // borderRadius: BorderRadius.circular(20)
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        top: MediaQuery.of(context).size.height * 0.25,
+                                        left: ResponsiveFlutter.of(context).moderateScale(20),
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: appColors.appDarkColor,
+                                            borderRadius: BorderRadius.circular(40),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              CupertinoIcons.back,
+                                              color: appColors.lightColor,
+                                              size: ResponsiveFlutter.of(context).moderateScale(15),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        top: MediaQuery.of(context).size.height * 0.25,
+                                        right: ResponsiveFlutter.of(context).moderateScale(25),
+                                        left: ResponsiveFlutter.of(context).moderateScale(10),
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                        },
+                                        child: Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: appColors.appDarkColor,
+                                            borderRadius: BorderRadius.circular(40),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.update,
+                                              color: appColors.lightColor,
+                                              size: ResponsiveFlutter.of(context).moderateScale(15),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.22),
+                              padding: EdgeInsets.only(
+                                right: ResponsiveFlutter.of(context).moderateScale(20),
+                                left: ResponsiveFlutter.of(context).moderateScale(20),
+                                top: MediaQuery.of(context).padding.top + ResponsiveFlutter.of(context).moderateScale(55),
+                                bottom: MediaQuery.of(context).padding.bottom + ResponsiveFlutter.of(context).moderateScale(20),
+                              ),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        MyTextView(
+                                          event.name.toString(),
+                                          textAligntNew: TextAlign.start,
+                                          maxLineWrap: true,
+                                          styleNew: MyTextStyle(
+                                            colorNew: appColors.lightColor,
+                                            fontWeightNew: FontWeight.w600,
+                                            size: ResponsiveFlutter.of(context).fontSize(2),
+                                          ),
+                                        ),
+                                        SizedBox(width: ResponsiveFlutter.of(context).moderateScale(20)),
+                                        Container(
+                                          height: ResponsiveFlutter.of(context).moderateScale(30),
+                                          width: ResponsiveFlutter.of(context).moderateScale(120),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: appColors.blurBtnColor,
+                                            borderRadius: BorderRadius.circular(
+                                              ResponsiveFlutter.of(context).moderateScale(20),
+                                            ),
+                                          ),
+                                          child: MyTextView(
+                                            event.category!.name.toString(),
+                                            textAligntNew: TextAlign.center,
+                                            maxLineWrap: true,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightPinkColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    // SizedBox(height: ResponsiveFlutter.of(context).moderateScale(15)),
+                                    // Row(
+                                    //   children: [
+                                    //     Image.asset(
+                                    //       ImagePath.calender,
+                                    //       color: appColors.lightColor,
+                                    //       height: ResponsiveFlutter.of(context).moderateScale(15),
+                                    //     ),
+                                    //     SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
+                                    //     MyTextView(
+                                    //       DateFormat('dd MMM, yyyy').format(event.date!),
+                                    //       textAligntNew: TextAlign.start,
+                                    //       maxLineWrap: true,
+                                    //       styleNew: MyTextStyle(
+                                    //         colorNew: appColors.lightColor,
+                                    //         fontWeightNew: FontWeight.w400,
+                                    //         size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                    //       ),
+                                    //     ),
+                                    //     SizedBox(width: ResponsiveFlutter.of(context).moderateScale(20)),
+                                    //     Image.asset(
+                                    //       ImagePath.time,
+                                    //       color: appColors.lightColor,
+                                    //       height: ResponsiveFlutter.of(context).moderateScale(15),
+                                    //     ),
+                                    //     SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
+                                    //     MyTextView(
+                                    //       DateFormat('kk:mm').format(event.date!),
+                                    //       textAligntNew: TextAlign.start,
+                                    //       maxLineWrap: true,
+                                    //       styleNew: MyTextStyle(
+                                    //         colorNew: appColors.lightColor,
+                                    //         fontWeightNew: FontWeight.w400,
+                                    //         size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                            context: context,
+                                            backgroundColor: appColors.appMediumColor,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only( // <-- SEE HERE
+                                                topLeft: Radius.circular(30.0),
+                                                topRight: Radius.circular(30.0),
+                                              ),
+                                            ),
+                                            builder: (context) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      MyTextView(
+                                                        "Details de l'évenement",
+                                                        textAligntNew: TextAlign.center,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor.withOpacity(.5),
+                                                          fontWeightNew: FontWeight.w400,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(5)),
+                                                      MyTextView(
+                                                        event.name.toString(),
+                                                        maxLinesNew: 2,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor,
+                                                          fontWeightNew: FontWeight.w600,
+                                                          size: ResponsiveFlutter.of(context).fontSize(2),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                      Container(
+                                                        height: ResponsiveFlutter.of(context).moderateScale(25),
+                                                        width: ResponsiveFlutter.of(context).moderateScale(120),
+                                                        alignment: Alignment.center,
+                                                        decoration: BoxDecoration(
+                                                          color: appColors.blurBtnColor,
+                                                          borderRadius: BorderRadius.circular(
+                                                            ResponsiveFlutter.of(context).moderateScale(20),
+                                                          ),
+                                                        ),
+                                                        child: MyTextView(
+                                                          event.category!.name.toString(),
+                                                          textAligntNew: TextAlign.center,
+                                                          maxLineWrap: true,
+                                                          styleNew: MyTextStyle(
+                                                            colorNew: appColors.lightPinkColor,
+                                                            fontWeightNew: FontWeight.w500,
+                                                            size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                      MyTextView(
+                                                        event.details.toString(),
+                                                        maxLinesNew: 10,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor.withOpacity(.7),
+                                                          fontWeightNew: FontWeight.w400,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                      Row(
+                                                        children: [
+                                                          Image.asset(
+                                                            ImagePath.calender,
+                                                            color: appColors.lightColor,
+                                                            height: ResponsiveFlutter.of(context).moderateScale(15),
+                                                          ),
+                                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
+                                                          MyTextView(
+                                                            Strings.dummyText22,
+                                                            textAligntNew: TextAlign.start,
+                                                            maxLineWrap: true,
+                                                            styleNew: MyTextStyle(
+                                                              colorNew: appColors.lightColor,
+                                                              fontWeightNew: FontWeight.w400,
+                                                              size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(20)),
+                                                          Image.asset(
+                                                            ImagePath.time,
+                                                            color: appColors.lightColor,
+                                                            height: ResponsiveFlutter.of(context).moderateScale(15),
+                                                          ),
+                                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
+                                                          MyTextView(
+                                                            Strings.dummyText23,
+                                                            textAligntNew: TextAlign.start,
+                                                            maxLineWrap: true,
+                                                            styleNew: MyTextStyle(
+                                                              colorNew: appColors.lightColor,
+                                                              fontWeightNew: FontWeight.w400,
+                                                              size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
+                                                      Container(
+                                                        height: ResponsiveFlutter.of(context).moderateScale(55),
+                                                        width: double.infinity,
+                                                        padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(10)),
+                                                        decoration: BoxDecoration(
+                                                          color: appColors.appLightColor,
+                                                          borderRadius: BorderRadius.circular(
+                                                            ResponsiveFlutter.of(context).moderateScale(20),
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                            Image.asset(
+                                                              ImagePath.location,
+                                                              color: appColors.lightColor,
+                                                              height: ResponsiveFlutter.of(context).moderateScale(15),
+                                                            ),
+                                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
+                                                            MyTextView(
+                                                              event.address.toString(),
+                                                              textAligntNew: TextAlign.start,
+                                                              maxLineWrap: true,
+                                                              styleNew: MyTextStyle(
+                                                                colorNew: appColors.lightColor,
+                                                                fontWeightNew: FontWeight.w500,
+                                                                size: ResponsiveFlutter.of(context).fontSize(2),
+                                                              ),
+                                                            ),
+                                                            const Spacer(),
+                                                            Container(
+                                                              width: ResponsiveFlutter.of(context).moderateScale(35),
+                                                              height: double.infinity,
+                                                              padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(10)),
+                                                              margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(5)),
+                                                              decoration: BoxDecoration(
+                                                                color: appColors.lightPinkColor,
+                                                                borderRadius: BorderRadius.circular(
+                                                                  ResponsiveFlutter.of(context).moderateScale(13),
+                                                                ),
+                                                              ),
+                                                              child: Image.asset(ImagePath.mapIcon),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) => EditEventScreen(id: event.id!),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: CommonButton(
+                                                          loading: false,
+                                                          title: "Modifier les details",
+                                                        ),
+                                                      ),
+
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: appColors.appLightColor,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                        child: Row (
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(CupertinoIcons.text_justify, size: 15, color: appColors.lightPinkColor,),
+                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                            MyTextView(
+                                              "Details de l'évenement",
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w500,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: appColors.appLightColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                      child: Row (
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(CupertinoIcons.photo, size: 15, color: appColors.lightPinkColor,),
+                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                          MyTextView(
+                                            "Modifier l'image",
+                                            textAligntNew: TextAlign.start,
+                                            maxLineWrap: true,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: appColors.appLightColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                      child: Row (
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(CupertinoIcons.mail_solid, size: 15, color: appColors.lightPinkColor,),
+                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                          MyTextView(
+                                            Strings.invites + " (0)",
+                                            textAligntNew: TextAlign.start,
+                                            maxLineWrap: true,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: appColors.appLightColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                      child: Row (
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(CupertinoIcons.table_fill, size: 15, color: appColors.lightPinkColor,),
+                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                          MyTextView(
+                                            Strings.tables  + " (0)",
+                                            textAligntNew: TextAlign.start,
+                                            maxLineWrap: true,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: appColors.appLightColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                      child: Row (
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(CupertinoIcons.hourglass_bottomhalf_fill, size: 15, color: appColors.lightPinkColor,),
+                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                          MyTextView(
+                                            Strings.beverage + " (0)",
+                                            textAligntNew: TextAlign.start,
+                                            maxLineWrap: true,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: appColors.appLightColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                      child: Row (
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(CupertinoIcons.info_circle_fill, size: 15, color: appColors.lightPinkColor,),
+                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                          MyTextView(
+                                            "Abonnement",
+                                            textAligntNew: TextAlign.start,
+                                            maxLineWrap: true,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10,),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: Colors.orange
+                                            ),
+                                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                                            child: MyTextView(
+                                              "En attente du paiement",
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w500,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                              ),
+                                            )
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: appColors.red.withOpacity(.2),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                      child: Row (
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(CupertinoIcons.delete_solid, size: 15, color: appColors.lightPinkColor,),
+                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                          MyTextView(
+                                            "Supprimer l'évenement",
+                                            textAligntNew: TextAlign.start,
+                                            maxLineWrap: true,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(15)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                    }
+                  }
+              )
+          ),
+        ),
+      ),
+    );
+  }
+}
