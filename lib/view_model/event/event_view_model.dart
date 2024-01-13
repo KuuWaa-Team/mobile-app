@@ -191,6 +191,29 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> editEventImageApi (BuildContext context, var image, int id) async {
+    setLoading(true);
+    Map data = {
+      "image": image
+    };
+
+    await _repository.editEventImageApi(context: context, data: data, id: id).then((value) {
+      if (value['success'] == true  ) {
+        setEvent(ApiResponse.completed(EventModel.fromJson(value['event'])));
+        Utils.toastMessage("Image modifiée avec succès");
+        setLoading(false);
+      } else {
+        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      }
+    });
+
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   setLoading(false);
+    // });
+    return true;
+  }
+
   Future<bool> editEventApi (BuildContext context, EventModel event, int id) async {
     setLoading(true);
     Map data = {

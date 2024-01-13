@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -26,6 +29,11 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   AppColors appColors = AppColors();
   EventViewModel eventViewModel = EventViewModel();
+
+  final ImagePicker picker = ImagePicker();
+  XFile? image;
+  File? imageFile;
+  bool loadingImage = false;
 
   @override
   void initState() {
@@ -57,6 +65,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         EventModel event = value.event.data!;
                         return Stack(
                           children: [
+                            imageFile == null || !loadingImage?
                             Container(
                               height: MediaQuery.of(context).size.height * 0.32,
                               decoration: BoxDecoration(
@@ -68,6 +77,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 // borderRadius: BorderRadius.circular(20)
                               ),
                               width: MediaQuery.of(context).size.width,
+                            )
+                            : Stack(
+                              children: [
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.32,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Image.file(imageFile!, fit: BoxFit.cover),
+                                ),
+                                Container(
+                                  height: MediaQuery.of(context).size.height * 0.32,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(.7),
+                                    // borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: CircularProgressIndicator(color: Colors.white.withOpacity(.7), strokeWidth: 2),
+                                    ),
+                                  ),
+                                  width: MediaQuery.of(context).size.width,
+                                )
+                              ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -421,28 +454,33 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: appColors.appLightColor,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                      child: Row (
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Icon(CupertinoIcons.photo, size: 15, color: appColors.lightPinkColor,),
-                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                          MyTextView(
-                                            "Modifier l'image",
-                                            textAligntNew: TextAlign.start,
-                                            maxLineWrap: true,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.lightColor,
-                                              fontWeightNew: FontWeight.w500,
-                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                    GestureDetector(
+                                      onTap: () {
+                                        imagePick(event);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: appColors.appLightColor,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                        child: Row (
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(CupertinoIcons.photo, size: 15, color: appColors.lightPinkColor,),
+                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                            MyTextView(
+                                              "Modifier l'image",
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w500,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
@@ -602,5 +640,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
       ),
     );
+  }
+
+  void imagePick(EventModel event) async {
+    image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      imageFile = File(image!.path);
+      debugPrint("Image ------------- >>>> ${image!.path}");
+    } else {
+      debugPrint("<<<< ------------- Image Not Selected ------------- >>>>");
+    }
+    setState(() {
+      loadingImage = true;
+    });
+    await eventViewModel.editEventImageApi(context, image, event.id!).then((value) {
+      setState(() {
+        loadingImage = false;
+        imageFile = null;
+      });
+    });
   }
 }

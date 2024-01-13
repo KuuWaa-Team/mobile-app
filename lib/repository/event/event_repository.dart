@@ -51,6 +51,15 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> editEventImageApi ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getMultipartApiResponse(AppUrl.eventEndPoint + "/$id/image", data, context: context, filename: 'image');
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> editEventApi ({required BuildContext context, required Map data, required int id}) async {
     try  {
       dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id", data, context: context, auth: true);
