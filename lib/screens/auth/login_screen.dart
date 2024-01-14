@@ -19,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   AppColors appColors = AppColors();
   ImagePath imagePath = ImagePath();
-  TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   bool loading = false;
   AuthViewModel authViewModel = AuthViewModel();
 

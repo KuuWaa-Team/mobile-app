@@ -1555,7 +1555,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                                           ),
                                                           const SizedBox(width: 10,),
                                                           MyTextView(
-                                                            "${element.price?.toInt()}\$",
+                                                            "+${element.price?.toInt()}\$",
                                                             textAligntNew: TextAlign.start,
                                                             maxLineWrap: true,
                                                             styleNew: MyTextStyle(

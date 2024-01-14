@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kuuwaa/view_model/auth/auth_view_model.dart';
+import 'package:kuuwaa/view_model/event/event_view_model.dart';
+import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,6 +49,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => EventViewModel()),
+        ChangeNotifierProvider(create: (_) => InvitationViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [

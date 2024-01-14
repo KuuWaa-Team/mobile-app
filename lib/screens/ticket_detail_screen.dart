@@ -4,7 +4,7 @@ import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/check_out_screen.dart';
-import 'package:kuuwaa/screens/invites_screen.dart';
+import 'package:kuuwaa/screens/invitations/invitations_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

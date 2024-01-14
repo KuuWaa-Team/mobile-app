@@ -93,7 +93,7 @@ class Strings {
   static const String cvv = "CVV";
   static const String enterCvv = "000";
   static const String add = "Ajouter";
-  static const String addInvite = "Ajouter un invité";
+  static const String addInvite = "Ajouter une invitation";
   static const String addBeverage = "Ajouter une boisson";
   static const String addTable = "Ajouter une table";
   static const String withdraw = "Withdraw";

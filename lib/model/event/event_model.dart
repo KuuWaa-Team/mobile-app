@@ -7,6 +7,8 @@ class EventModel {
   String? name;
   DateTime? date;
   String? address;
+  int? tablesCount;
+  int? invitationsCount;
   String? details;
   String? status;
   String? imagePath;
@@ -28,7 +30,9 @@ class EventModel {
     this.category,
     this.paidEvent,
     this.imagePath,
-    this.features
+    this.features,
+    this.invitationsCount,
+    this.tablesCount
   });
 
   EventModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +45,8 @@ class EventModel {
     status = json['status'];
     imagePath = json['imagePath'];
     paidEvent = json['paidEvent'];
+    tablesCount = json['tablesCount'];
+    invitationsCount = json['invitationsCount'];
     if (json['category'] != null) {
       category = EventCategoryModel.fromJson(json['category']);
     }
@@ -69,6 +75,8 @@ class EventModel {
     data['category'] = category;
     data['eventPack'] = eventPack;
     data['features'] = features;
+    data['tablesCount'] = tablesCount;
+    data['invitationsCount'] = invitationsCount;
 
     return data;
   }

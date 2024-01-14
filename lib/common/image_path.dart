@@ -77,4 +77,6 @@ class ImagePath {
   static const String image_7 = base + "image_7.png";
   static const String image_8 = base + "image_8.png";
   static const String map = base + "map.png";
+  static const String wpp = base + "wpp.png";
+  static const String telegram = base + "telegram.png";
 }
