@@ -1,3 +1,5 @@
+import '../table/table_model.dart';
+
 class InvitationModel {
   int? id;
   String? name;
@@ -5,6 +7,7 @@ class InvitationModel {
   String? status;
   int? count;
   String? phoneNumber;
+  TableModel? table;
 
   InvitationModel({
     this.id,
@@ -12,6 +15,7 @@ class InvitationModel {
     this.phoneNumber,
     this.count,
     this.civility,
+    this.table
   });
 
   InvitationModel.fromJson(Map<String, dynamic> json) {
@@ -21,6 +25,9 @@ class InvitationModel {
     count = json['count'];
     status = json['status'];
     phoneNumber = json['phoneNumber'];
+    if (json['invitationTable'] != null) {
+      table = TableModel.fromJson(json['invitationTable']);
+    }
   }
 
   Map<String, dynamic> toJson() {

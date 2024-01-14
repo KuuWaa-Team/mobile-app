@@ -32,6 +32,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
   bool sending = false;
 
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _countController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
   TableViewModel tableViewModel = TableViewModel();
@@ -53,6 +54,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
   );
 
   List<TableModel> tables = [];
+
+  bool isGroup = false;
 
   List<Map> civilities = [
     {
@@ -191,10 +194,41 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                             onChanged: (value) {
                                               setState(() {
                                                 dropDownValue = value!;
+                                                Map valueMap = value as Map;
+                                                if (valueMap["count"] == null) {
+                                                  isGroup = true;
+                                                } else {
+                                                  isGroup = false;
+                                                }
                                               });
                                             },
                                           ),
                                         ),
+                                        if (isGroup)
+                                        const SizedBox(height: 10,),
+                                        if (isGroup)
+                                        Container(
+                                          height: ResponsiveFlutter.of(context).verticalScale(40),
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                            horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                          ),
+                                          margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                          decoration: BoxDecoration(
+                                            color: appColors.appLightColor,
+                                            borderRadius: BorderRadius.circular(
+                                              ResponsiveFlutter.of(context).moderateScale(25),
+                                            ),
+                                          ),
+                                          child: commonTestField(
+                                            context: context,
+                                            controller: _countController,
+                                            hintText: "Nombre de personnes",
+                                            keyboardType: TextInputType.number,
+                                            icon: true,
+                                          ),
+                                        ),
+                                        if (!isGroup)
                                         const SizedBox(height: 10,),
                                         Container(
                                           height: ResponsiveFlutter.of(context).verticalScale(40),
@@ -269,7 +303,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                             context: context,
                                             controller: _nameController,
                                             hintText: "Nom complet",
-                                            keyboardType: TextInputType.phone,
+                                            keyboardType: TextInputType.text,
                                             icon: true,
                                           ),
                                         ),
@@ -298,6 +332,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
+                                            TableModel dropdownTable = tableDropDownValue as TableModel;
                                             Map civility = dropDownValue as Map;
                                             if (civility["count"] == 0) {
                                               Utils.flushBarErrorMessage("Vous devez séléctionner une civilité", context);
@@ -305,6 +340,10 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                               Utils.flushBarErrorMessage("Vous devez enter le nom de l'invité", context);
                                             } else if (_phoneController.text == "") {
                                               Utils.flushBarErrorMessage("Vous devez enter le numéro de téléphone de l'invité", context);
+                                            } else if (civility["count"] == null && _countController.text == "") {
+                                              Utils.flushBarErrorMessage("Vous devez enter le nombre des invités pour une invitation de groupe", context);
+                                            } else if (dropdownTable.id == null) {
+                                              Utils.flushBarErrorMessage("Vous devez choisir une table", context);
                                             } else {
                                               setState(() {
                                                 loading = true;
@@ -312,13 +351,11 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
 
                                               Map data = {
                                                 "civility": civility["name"],
-                                                "count": civility["count"],
+                                                "count": civility["count"] ?? int.parse(_countController.text),
                                                 "name": _nameController.text,
                                                 "phoneNumber": _phoneController.text,
                                                 "eventId": widget.id,
                                               };
-
-                                              TableModel dropdownTable = tableDropDownValue as TableModel;
 
                                               if (dropdownTable.id != null) {
                                                 data["tableId"] = dropdownTable.id;
@@ -556,6 +593,39 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         ],
                                                       ),
                                                     ),
+                                                    if (invitation.count! > 1)
+                                                    const SizedBox(height: 10,),
+                                                    if (invitation.count! > 1)
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(5),
+                                                          color: appColors.appLightColor
+                                                      ),
+                                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          MyTextView(
+                                                            "Nombre d'invités",
+                                                            textAligntNew: TextAlign.center,
+                                                            styleNew: MyTextStyle(
+                                                              colorNew: appColors.lightColor.withOpacity(.5),
+                                                              fontWeightNew: FontWeight.w400,
+                                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                            ),
+                                                          ),
+                                                          MyTextView(
+                                                            invitation.count.toString(),
+                                                            textAligntNew: TextAlign.center,
+                                                            styleNew: MyTextStyle(
+                                                              colorNew: appColors.lightColor,
+                                                              fontWeightNew: FontWeight.w600,
+                                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                     const SizedBox(height: 10,),
                                                     Container(
                                                       decoration: BoxDecoration(
@@ -576,7 +646,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ),
                                                           ),
                                                           MyTextView(
-                                                            " - ",
+                                                            (invitation.table == null ? " - " : invitation.table!.name.toString()),
                                                             textAligntNew: TextAlign.center,
                                                             styleNew: MyTextStyle(
                                                               colorNew: appColors.lightColor,

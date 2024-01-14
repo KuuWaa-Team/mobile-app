@@ -289,6 +289,30 @@ class _TableListScreenState extends State<TableListScreen> {
                                   itemCount: tableViewModel.tablesList.data!.length,
                                   itemBuilder: (context, index) {
                                     TableModel table = tableViewModel.tablesList.data![index];
+                                    List<Widget> tableIvitations = [];
+
+                                    if (table.invitations != null) {
+                                      for (var element in table.invitations!) {
+                                        tableIvitations.add(
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: appColors.appLightColor,
+                                              borderRadius: BorderRadius.circular(4)
+                                            ),
+                                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                                            child: MyTextView(
+                                              element.civility.toString() + " " + element.name.toString() + (element.count! >= 2 ? " (" +  element.count.toString() + ")" : ""),
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w400,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.4),
+                                              ),
+                                            ),
+                                          )
+                                        );
+                                      }
+                                    }
+
                                     return GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(
@@ -349,34 +373,84 @@ class _TableListScreenState extends State<TableListScreen> {
                                                         ),
                                                       ),
                                                       const SizedBox(height: 10,),
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(5),
-                                                            color: appColors.appLightColor
-                                                        ),
-                                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            MyTextView(
-                                                              "Invétés affectés",
-                                                              textAligntNew: TextAlign.center,
-                                                              styleNew: MyTextStyle(
-                                                                colorNew: appColors.lightColor,
-                                                                fontWeightNew: FontWeight.w400,
-                                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          if (table.invitations != null && table.invitations!.isNotEmpty) {
+                                                            showModalBottomSheet(
+                                                                context: context,
+                                                                backgroundColor: appColors.appMediumColor,
+                                                                shape: const RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.only( // <-- SEE HERE
+                                                                    topLeft: Radius.circular(30.0),
+                                                                    topRight: Radius.circular(30.0),
+                                                                  ),
+                                                                ),
+                                                                builder: (context) {
+                                                                  return StatefulBuilder(
+                                                                      builder: (context, setState) {
+                                                                        return Padding(
+                                                                          padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                                                          child: SingleChildScrollView(
+                                                                            child: Column(
+                                                                              children: [
+                                                                                MyTextView(
+                                                                                  "Invités (Table " + table.name.toString() + ")",
+                                                                                  textAligntNew: TextAlign.center,
+                                                                                  styleNew: MyTextStyle(
+                                                                                    colorNew: appColors.lightColor,
+                                                                                    fontWeightNew: FontWeight.w600,
+                                                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                                                  ),
+                                                                                ),
+                                                                                SizedBox(height: ResponsiveFlutter.of(context).verticalScale(20)),
+                                                                                Wrap(
+                                                                                  spacing: 10,
+                                                                                  runSpacing: 10,
+                                                                                  children: [
+                                                                                    ...tableIvitations
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: ResponsiveFlutter.of(context).verticalScale(20)),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      }
+                                                                  );
+                                                                }
+                                                            );
+                                                          }
+
+                                                        },
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(5),
+                                                              color: appColors.appLightColor
+                                                          ),
+                                                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              MyTextView(
+                                                                "Invétés affectés",
+                                                                textAligntNew: TextAlign.center,
+                                                                styleNew: MyTextStyle(
+                                                                  colorNew: appColors.lightColor,
+                                                                  fontWeightNew: FontWeight.w400,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            MyTextView(
-                                                              table.countTaken.toString(),
-                                                              textAligntNew: TextAlign.center,
-                                                              styleNew: MyTextStyle(
-                                                                colorNew: Colors.orange,
-                                                                fontWeightNew: FontWeight.w600,
-                                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                              MyTextView(
+                                                                table.countTaken.toString(),
+                                                                textAligntNew: TextAlign.center,
+                                                                styleNew: MyTextStyle(
+                                                                  colorNew: Colors.orange,
+                                                                  fontWeightNew: FontWeight.w600,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
                                                       const SizedBox(height: 10,),

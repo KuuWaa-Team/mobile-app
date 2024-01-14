@@ -145,12 +145,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => DetailsScreen(id: event.id!),
-                                            ),
-                                          );
+                                          setState(() {
+                                            eventViewModel.getEventDetailApi(context, widget.id);
+                                          });
                                         },
                                         child: Container(
                                           width: 40,
@@ -584,7 +581,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ),
                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                             MyTextView(
-                                              Strings.invites + " (0)",
+                                              Strings.invites + (event.invitationsCount == null || event.invitationsCount! == 0 ? " (0)" : " (${event.invitationsCount})"),
                                               textAligntNew: TextAlign.start,
                                               maxLineWrap: true,
                                               styleNew: MyTextStyle(
