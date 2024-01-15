@@ -2,7 +2,7 @@ import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:kuuwaa/screens/favorites_screen.dart';
+import 'package:kuuwaa/screens/invitations/my_invitations_screen.dart';
 import 'package:kuuwaa/screens/home_page_screen.dart';
 import 'package:kuuwaa/screens/setting_screen.dart';
 import 'package:kuuwaa/screens/wallet_screen.dart';

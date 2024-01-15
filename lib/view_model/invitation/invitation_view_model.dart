@@ -11,6 +11,7 @@ class InvitationViewModel with ChangeNotifier{
   bool _loading = false;
   bool get loading => _loading;
   ApiResponse<dynamic> invitationsList = ApiResponse.loading();
+  ApiResponse<InvitationModel> invitation = ApiResponse.loading();
 
   setLoading(bool value) {
     _loading = value;
@@ -20,6 +21,11 @@ class InvitationViewModel with ChangeNotifier{
 
   setInvitationsList (ApiResponse<dynamic> response) {
     invitationsList = response;
+    notifyListeners();
+  }
+  
+  setInvitation (ApiResponse<InvitationModel> response) {
+    invitation = response;
     notifyListeners();
   }
 
@@ -48,6 +54,43 @@ class InvitationViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> myInvitationsListingApi(BuildContext context) async {
+    setInvitationsList(ApiResponse.loading());
+    setLoading(true);
+    await _repository.getMyInvitationsApi(context: context).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        List invitationsJson = value['data'];
+        List<InvitationModel> invitationsData = [];
+        if (invitationsJson.isNotEmpty) {
+          for (var element in invitationsJson) {
+            invitationsData.add(InvitationModel.fromJson(element));
+          }
+        }
+        setInvitationsList(ApiResponse.completed(invitationsData));
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
+  Future<bool> invitationDetailApi(BuildContext context, int id) async {
+    setInvitationsList(ApiResponse.loading());
+    setLoading(true);
+    await _repository.invitationDetailApi(context: context, id: id).then((value) {
+      setLoading(false);
+      setInvitation(ApiResponse.completed(InvitationModel.fromJson(value)));
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
   Future<bool> addInvitation(BuildContext context, Map data) async {
     setLoading(true);
     await _repository.addInvitationsApi(context: context, data: data).then((value) {
@@ -65,11 +108,10 @@ class InvitationViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return true;
   }
 

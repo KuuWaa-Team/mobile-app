@@ -9,6 +9,8 @@ class EventModel {
   String? address;
   int? tablesCount;
   int? invitationsCount;
+  int? beveragesCount;
+  int? adminsCount;
   String? details;
   String? status;
   String? imagePath;
@@ -28,10 +30,12 @@ class EventModel {
     this.eventPack,
     this.paymentStatus,
     this.category,
+    this.adminsCount,
     this.paidEvent,
     this.imagePath,
     this.features,
     this.invitationsCount,
+    this.beveragesCount,
     this.tablesCount
   });
 
@@ -46,6 +50,8 @@ class EventModel {
     imagePath = json['imagePath'];
     paidEvent = json['paidEvent'];
     tablesCount = json['tablesCount'];
+    beveragesCount = json['beveragesCount'];
+    adminsCount = json['adminsCount'];
     invitationsCount = json['invitationsCount'];
     if (json['category'] != null) {
       category = EventCategoryModel.fromJson(json['category']);
@@ -76,7 +82,9 @@ class EventModel {
     data['eventPack'] = eventPack;
     data['features'] = features;
     data['tablesCount'] = tablesCount;
+    data['beveragesCount'] = beveragesCount;
     data['invitationsCount'] = invitationsCount;
+    data['adminsCount'] = adminsCount;
 
     return data;
   }

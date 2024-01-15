@@ -546,6 +546,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                       ),
                                                     ),
                                                     const SizedBox(height: 10,),
+                                                    if (invitation.status == 'sent')
                                                     Container(
                                                       decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(20),
@@ -562,6 +563,249 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         ),
                                                       ),
                                                     ),
+                                                    if (invitation.status == 'created')
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return StatefulBuilder(
+                                                                builder: (context, setState) {
+                                                                  return Dialog(
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(10),
+                                                                      ),
+                                                                      child: Stack(
+                                                                        children: [
+                                                                          Positioned(
+                                                                              right: 0,
+                                                                              top: 0,
+                                                                              child: IconButton(onPressed: (){
+                                                                                Navigator.pop(context);
+                                                                              }, icon: const Icon(Icons.close)
+                                                                              )
+                                                                          ),
+                                                                          Padding(
+                                                                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                                            child:
+                                                                            Column(
+                                                                              mainAxisSize: MainAxisSize.min,
+                                                                              children: [
+                                                                                SizedBox(
+                                                                                  height: 60,
+                                                                                  width: 60,
+                                                                                  child: Center(
+                                                                                    child: Icon(
+                                                                                      Icons.question_mark_rounded,
+                                                                                      color: appColors.btnColor,
+                                                                                      size: 50,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                const SizedBox(height: 10,),
+                                                                                Column(
+                                                                                  mainAxisSize: MainAxisSize.min,
+                                                                                  children: [
+                                                                                    Text("Comment voulez-vous partagere ${ invitation.count == null || invitation.count! > 1 ? 'au' : 'à' } ${invitation.civility! + " " + invitation.name!} son invitaion ?", style: const TextStyle(
+                                                                                        fontWeight: FontWeight.bold
+                                                                                    ), textAlign: TextAlign.center,),
+                                                                                  ],
+                                                                                ),
+                                                                                const SizedBox(height: 20,),
+                                                                                GestureDetector(
+                                                                                  onTap: () {
+                                                                                    if (!sending) {
+                                                                                      setState(() {
+                                                                                        sending = true;
+                                                                                      });
+                                                                                      invitationViewModel.sendInvitation(context,
+                                                                                          {
+                                                                                            "method": "sms"
+                                                                                          }, invitation.id!);
+                                                                                    }
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                        border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                                                        borderRadius: BorderRadius.circular(10)
+                                                                                    ),
+                                                                                    margin: const EdgeInsets.only(bottom: 10),
+                                                                                    width: MediaQuery.of(context).size.width,
+                                                                                    padding: const EdgeInsets.all(10),
+                                                                                    child: Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                      children: [
+                                                                                        const Icon(Icons.sms_outlined, size: 22,),
+                                                                                        const SizedBox(width: 7,),
+                                                                                        MyTextView(
+                                                                                          "Envoyer par SMS",
+                                                                                          textAligntNew: TextAlign.start,
+                                                                                          maxLineWrap: true,
+                                                                                          styleNew: MyTextStyle(
+                                                                                            colorNew: appColors.black,
+                                                                                            fontWeightNew: FontWeight.w500,
+                                                                                            size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                GestureDetector(
+                                                                                  onTap: () {
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                        border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                                                        borderRadius: BorderRadius.circular(10)
+                                                                                    ),
+                                                                                    margin: const EdgeInsets.only(bottom: 10),
+                                                                                    width: MediaQuery.of(context).size.width,
+                                                                                    padding: const EdgeInsets.all(10),
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Image.asset(ImagePath.wpp, width: 25,),
+                                                                                            const SizedBox(width: 7,),
+                                                                                            MyTextView(
+                                                                                              "Envoyer par WhatsApp",
+                                                                                              textAligntNew: TextAlign.start,
+                                                                                              maxLineWrap: true,
+                                                                                              styleNew: MyTextStyle(
+                                                                                                colorNew: appColors.black,
+                                                                                                fontWeightNew: FontWeight.w500,
+                                                                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                GestureDetector(
+                                                                                  onTap: () {
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                        border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                                                        borderRadius: BorderRadius.circular(10)
+                                                                                    ),
+                                                                                    margin: const EdgeInsets.only(bottom: 10),
+                                                                                    width: MediaQuery.of(context).size.width,
+                                                                                    padding: const EdgeInsets.all(10),
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Image.asset(ImagePath.telegram, width: 25,),
+                                                                                            const SizedBox(width: 7,),
+                                                                                            MyTextView(
+                                                                                              "Envoyer par Telegram",
+                                                                                              textAligntNew: TextAlign.start,
+                                                                                              maxLineWrap: true,
+                                                                                              styleNew: MyTextStyle(
+                                                                                                colorNew: appColors.black,
+                                                                                                fontWeightNew: FontWeight.w500,
+                                                                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                GestureDetector(
+                                                                                  onTap: () {
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                        border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                                                        borderRadius: BorderRadius.circular(10)
+                                                                                    ),
+                                                                                    margin: const EdgeInsets.only(bottom: 10),
+                                                                                    width: MediaQuery.of(context).size.width,
+                                                                                    padding: const EdgeInsets.all(10),
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                          children: [
+                                                                                            const Icon(Icons.copy_rounded, size: 22,),
+                                                                                            const SizedBox(width: 7,),
+                                                                                            MyTextView(
+                                                                                              "Copier le lien",
+                                                                                              textAligntNew: TextAlign.start,
+                                                                                              maxLineWrap: true,
+                                                                                              styleNew: MyTextStyle(
+                                                                                                colorNew: appColors.black,
+                                                                                                fontWeightNew: FontWeight.w500,
+                                                                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                const SizedBox(height: 20,),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    GestureDetector(
+                                                                                      onTap: () {
+                                                                                      },
+                                                                                      child: CommonButton(
+                                                                                        title: "Continuer",
+                                                                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                                                      ),
+                                                                                    )
+                                                                                  ],
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(10),
+                                                              color: appColors.btnColor
+                                                          ),
+                                                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              MyTextView(
+                                                                "Envoyer",
+                                                                textAligntNew: TextAlign.center,
+                                                                styleNew: MyTextStyle(
+                                                                  colorNew: appColors.lightColor,
+                                                                  fontWeightNew: FontWeight.w700,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                                                ),
+                                                              ),
+                                                              const SizedBox(width: 5,),
+                                                              Icon(Icons.share_outlined, color: appColors.lightColor, size: 12,)
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
                                                     const SizedBox(height: 20,),
                                                     Container(
                                                       decoration: BoxDecoration(

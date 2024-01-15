@@ -71,6 +71,7 @@ Widget commonTestField({
   String? image = "",
   String? initial = "",
   String? hintText,
+  Color? textColor,
   bool? obscureText = false,
   List<TextInputFormatter>? inputFormatters,
   TextInputType? keyboardType,
@@ -90,7 +91,7 @@ Widget commonTestField({
             color: appColors.iconColor,
           ) : (
             initial != null && initial != "" ? MyTextView(initial, styleNew: MyTextStyle(
-              colorNew: appColors.lightColor.withOpacity(.5),
+              colorNew: textColor ?? appColors.lightColor.withOpacity(.5),
               fontWeightNew: FontWeight.w500,
               size: ResponsiveFlutter.of(context).fontSize(1.9),
             ),) : null
@@ -100,12 +101,12 @@ Widget commonTestField({
       Expanded(
         child: TextField(
           style: MyTextStyle(
-            colorNew: appColors.lightColor,
+            colorNew: textColor ?? appColors.lightColor,
             fontWeightNew: FontWeight.w500,
             size: ResponsiveFlutter.of(context).fontSize(1.9),
           ),
           obscureText: obscureText!,
-          cursorColor: appColors.lightColor,
+          cursorColor: textColor ?? appColors.lightColor,
           keyboardType: keyboardType,
           controller: controller,
           inputFormatters: inputFormatters,
@@ -116,7 +117,7 @@ Widget commonTestField({
             hintText: hintText,
             isDense: true,
             hintStyle: MyTextStyle(
-              colorNew: appColors.mediumLightColor,
+              colorNew: textColor ?? appColors.mediumLightColor,
               fontWeightNew: FontWeight.w400,
               size: ResponsiveFlutter.of(context).fontSize(1.9),
             ),

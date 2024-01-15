@@ -24,8 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
   AuthViewModel authViewModel = AuthViewModel();
 
   var maskFormatter = MaskTextInputFormatter(
-      mask: '### ### ###',
-      filter: { "#": RegExp(r'\d') },
+      mask: '*## ### ###',
+      filter: { "#": RegExp(r'\d'), "*": RegExp(r'[1-9]') },
       type: MaskAutoCompletionType.lazy
   );
 

@@ -1,11 +1,11 @@
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/model/common_model.dart';
-import 'package:kuuwaa/screens/invitations_event_screen.dart';
+import 'package:kuuwaa/screens/invitations/invitations_event_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'events/details_screen.dart';
+import '../events/details_screen.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({Key? key}) : super(key: key);
@@ -16,15 +16,6 @@ class FavoritesScreen extends StatefulWidget {
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
   AppColors appColors = AppColors();
-  List<CommonModel>? select = [
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-  ];
   bool? like = true;
 
   @override
