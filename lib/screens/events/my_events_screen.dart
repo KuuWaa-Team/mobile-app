@@ -10,6 +10,7 @@ import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/screens/events/shared_event_invitation_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
@@ -123,12 +124,21 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                               EventModel current = events[index];
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailsScreen(id: current.id!),
-                                    ),
-                                  );
+                                  if (current.shared != true || current.adminStatus == 'accepted') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailsScreen(id: current.id!),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SharedEventInvitationScreen(event: current),
+                                      ),
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -227,7 +237,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                                     ),
                                                   ],
                                                 ),
-                                                if (current.paymentStatus == 'waiting')
+                                                if (current.paymentStatus == 'waiting' && current.shared != true)
                                                   Container(
                                                     decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(20),
@@ -243,6 +253,32 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                                         fontWeightNew: FontWeight.w500,
                                                         size: ResponsiveFlutter.of(context).fontSize(1.1),
                                                       ),
+                                                    ),
+                                                  ),
+                                                if (current.shared == true)
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                        color: current.adminStatus == 'waiting' ? Colors.orange : Colors.blue
+                                                    ),
+                                                    padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        const Icon(Icons.share, color: Colors.white, size: 10,),
+                                                        const SizedBox(width: 5,),
+                                                        MyTextView(
+                                                          "Partagé",
+                                                          textAligntNew: TextAlign.start,
+                                                          maxLineWrap: true,
+                                                          styleNew: MyTextStyle(
+                                                            colorNew: appColors.lightColor,
+                                                            fontWeightNew: FontWeight.w500,
+                                                            size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   )
                                               ],

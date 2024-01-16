@@ -50,4 +50,13 @@ class InvitationRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> sendAllInvitationsApi ({required BuildContext context, required Map data}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/send-all", data, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
 }

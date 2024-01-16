@@ -1816,6 +1816,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 20,),
           ],
         ),
       ),

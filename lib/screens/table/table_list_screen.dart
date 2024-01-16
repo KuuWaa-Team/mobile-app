@@ -1,10 +1,10 @@
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
-import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
+import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/table/table_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,8 +15,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class TableListScreen extends StatefulWidget {
-  int id;
-  TableListScreen({Key? key, required this.id}) : super(key: key);
+  EventModel event;
+  TableListScreen({Key? key, required this.event}) : super(key: key);
 
   @override
   _TableListScreenState createState() => _TableListScreenState();
@@ -40,7 +40,7 @@ class _TableListScreenState extends State<TableListScreen> {
 
   @override
   void initState() {
-    tableViewModel.listingApi(context, widget.id);
+    tableViewModel.listingApi(context, widget.event.id!);
     super.initState();
   }
 
@@ -59,7 +59,9 @@ class _TableListScreenState extends State<TableListScreen> {
               backArrow: true,
             ),
             Row(
+              mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
+                if (widget.event.shared != true)
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -143,7 +145,7 @@ class _TableListScreenState extends State<TableListScreen> {
                                               Map data = {
                                                 "name": _nameController.text,
                                                 "count": int.parse(_countController.text),
-                                                "eventId": widget.id
+                                                "eventId": widget.event.id
                                               };
 
                                               tableViewModel.addTable(context, data).then((value) {
@@ -420,7 +422,6 @@ class _TableListScreenState extends State<TableListScreen> {
                                                                 }
                                                             );
                                                           }
-
                                                         },
                                                         child: Container(
                                                           decoration: BoxDecoration(

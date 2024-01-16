@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -31,8 +32,8 @@ class _AdminListScreenState extends State<AdminListScreen> {
   final TextEditingController _phoneController = TextEditingController();
 
   var maskFormatter = MaskTextInputFormatter(
-      mask: '### ### ###',
-      filter: { "#": RegExp(r'\d') },
+      mask: '*## ### ###',
+      filter: { "#": RegExp(r'\d'), "*": RegExp(r'[1-9]') },
       type: MaskAutoCompletionType.lazy
   );
 
@@ -351,6 +352,20 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                                           size: ResponsiveFlutter.of(context).fontSize(1.3),
                                                         ),
                                                       ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              if (admin.status == 'refused')
+                                                Container(
+                                                  margin: const EdgeInsets.only(left: 10),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                      color: appColors.lightColor.withOpacity(.1)
+                                                  ),
+                                                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.close, color: appColors.lightColor, size: 15,)
                                                     ],
                                                   ),
                                                 ),

@@ -4,6 +4,7 @@ import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/api_response.dart';
 import 'package:kuuwaa/model/eventAdmin/event_admin_controller.dart';
 import 'package:kuuwaa/repository/eventAdmin/event_admin_repository.dart';
+import 'package:kuuwaa/screens/home_page_screen.dart';
 
 class EventAdminViewModel with ChangeNotifier{
   final _repository = EventAdminRepository();
@@ -61,6 +62,50 @@ class EventAdminViewModel with ChangeNotifier{
         }
         setAdminsList(ApiResponse.completed(adminsData));
         Navigator.pop(context);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
+  Future<bool> acceptInvitationApi (BuildContext context, Map data, int id) async {
+    setLoading(true);
+    await _repository.acceptInvitationApi(context: context, data: data, id: id).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+        Utils.toastMessage(value['message']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
+  Future<bool> refuseInvitationApi (BuildContext context, Map data, int id) async {
+    setLoading(true);
+    await _repository.refuseInvitationApi(context: context, data: data, id: id).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+        Utils.toastMessage(value['message']);
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }

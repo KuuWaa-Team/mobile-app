@@ -36,7 +36,7 @@ class Strings {
 
   static const String settings = "SETTINGS";
   static const String notificationSettings = "Paramètres de notifications";
-  static const String myInvites = "Mes invités";
+  static const String myInvites = "Invités";
   static const String changePassword = "Modifier le mot de passe";
   static const String helpAndSupport = "Aide et Support";
   static const String privacyPolicy = "Politique de confidentialité";

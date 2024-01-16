@@ -5,6 +5,7 @@ import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
+import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
 import 'package:kuuwaa/model/table/table_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
@@ -17,8 +18,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class InvitationsListScreen extends StatefulWidget {
-  int id;
-  InvitationsListScreen({Key? key, required this.id}) : super(key: key);
+  EventModel event;
+  InvitationsListScreen({Key? key, required this.event}) : super(key: key);
 
   @override
   _InvitationsListScreenState createState() => _InvitationsListScreenState();
@@ -38,8 +39,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
   TableViewModel tableViewModel = TableViewModel();
 
   var maskFormatter = MaskTextInputFormatter(
-      mask: '### ### ###',
-      filter: { "#": RegExp(r'\d') },
+      mask: '*## ### ###',
+      filter: { "#": RegExp(r'\d'), "*": RegExp(r'[1-9]') },
       type: MaskAutoCompletionType.lazy
   );
 
@@ -85,9 +86,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
   @override
   void initState() {
     civilities.insert(0, dropDownValue as Map);
-    invitationViewModel.listingApi(context, widget.id);
+    invitationViewModel.listingApi(context, widget.event.id!);
     List<TableModel> fetchedTables = [tableDropDownValue as TableModel];
-    tableViewModel.listingApi(context, widget.id).then((value) {
+    tableViewModel.listingApi(context, widget.event.id!).then((value) {
       for (var element in tableViewModel.tables) {
         fetchedTables.add(element);
       }
@@ -113,7 +114,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
               backArrow: true,
             ),
             Row(
+              mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
+                if (widget.event.shared != true)
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -354,7 +357,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                 "count": civility["count"] ?? int.parse(_countController.text),
                                                 "name": _nameController.text,
                                                 "phoneNumber": _phoneController.text,
-                                                "eventId": widget.id,
+                                                "eventId": widget.event.id,
                                               };
 
                                               if (dropdownTable.id != null) {
@@ -415,7 +418,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                       color: appColors.appLightColor,
                       borderRadius: BorderRadius.circular(30)
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -439,18 +442,208 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                   ),
                 ),
                 const SizedBox(width: 10,),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.share_outlined, color: Colors.white, size: 20,),
-                    ],
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: IconButton(onPressed: (){
+                                          Navigator.pop(context);
+                                        }, icon: const Icon(Icons.close)
+                                        )
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                      child:
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                            height: 60,
+                                            width: 60,
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.question_mark_rounded,
+                                                color: appColors.btnColor,
+                                                size: 50,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10,),
+                                          const Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text("Envoyer toutes les invitations", style: TextStyle(
+                                                  fontWeight: FontWeight.bold
+                                              ), textAlign: TextAlign.center,),
+                                              SizedBox(height: 10,),
+                                              Text("Comment voulez-vous envoyer à tous les invités leurs invitations ?", style: TextStyle(
+                                                  fontSize: 12
+                                              ), textAlign: TextAlign.center,),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 20,),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (!sending) {
+                                                setState(() {
+                                                  sending = true;
+                                                });
+                                                invitationViewModel.sendAllInvitations(context,
+                                                  {
+                                                    "method": "sms",
+                                                    "eventId": widget.event.id
+                                                  },
+                                                );
+                                              }
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              width: MediaQuery.of(context).size.width,
+                                              padding: const EdgeInsets.all(10),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  const Icon(Icons.sms_outlined, size: 22,),
+                                                  const SizedBox(width: 7,),
+                                                  MyTextView(
+                                                    "Envoyer par SMS",
+                                                    textAligntNew: TextAlign.start,
+                                                    maxLineWrap: true,
+                                                    styleNew: MyTextStyle(
+                                                      colorNew: appColors.black,
+                                                      fontWeightNew: FontWeight.w500,
+                                                      size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              width: MediaQuery.of(context).size.width,
+                                              padding: const EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Image.asset(ImagePath.wpp, width: 25,),
+                                                      const SizedBox(width: 7,),
+                                                      MyTextView(
+                                                        "Envoyer par WhatsApp",
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.black,
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              width: MediaQuery.of(context).size.width,
+                                              padding: const EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Image.asset(ImagePath.telegram, width: 25,),
+                                                      const SizedBox(width: 7,),
+                                                      MyTextView(
+                                                        "Envoyer par Telegram",
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.black,
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                },
+                                                child: CommonButton(
+                                                  title: "Continuer",
+                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                        color: appColors.appLightColor,
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.share_outlined, color: Colors.white, size: 20,),
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -563,7 +756,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         ),
                                                       ),
                                                     ),
-                                                    if (invitation.status == 'created')
+                                                    if (invitation.status == 'created' && widget.event.shared != true)
                                                       GestureDetector(
                                                         onTap: () {
                                                           showDialog(
@@ -606,7 +799,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                                 Column(
                                                                                   mainAxisSize: MainAxisSize.min,
                                                                                   children: [
-                                                                                    Text("Comment voulez-vous partagere ${ invitation.count == null || invitation.count! > 1 ? 'au' : 'à' } ${invitation.civility! + " " + invitation.name!} son invitaion ?", style: const TextStyle(
+                                                                                    Text("Comment voulez-vous partager ${ invitation.count == null || invitation.count! > 1 ? 'au' : 'à' } ${invitation.civility! + " " + invitation.name!} son invitaion ?", style: const TextStyle(
                                                                                         fontWeight: FontWeight.bold
                                                                                     ), textAlign: TextAlign.center,),
                                                                                   ],
@@ -806,6 +999,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                           ),
                                                         ),
                                                       ),
+                                                    if (invitation.status == 'created' && widget.event.shared != true)
                                                     const SizedBox(height: 20,),
                                                     Container(
                                                       decoration: BoxDecoration(
@@ -1010,7 +1204,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                           ),
                                           Row(
                                             children: [
-                                              if (invitation.status == 'created')
+                                              if (invitation.status == 'created' && widget.event.shared != true)
                                                 GestureDetector(
                                                   onTap: () {
                                                     showDialog(

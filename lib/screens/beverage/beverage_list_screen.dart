@@ -5,6 +5,7 @@ import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/beverage/beverage_model.dart';
+import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class BeverageListScreen extends StatefulWidget {
-  int id;
-  BeverageListScreen({Key? key, required this.id}) : super(key: key);
+  EventModel event;
+  BeverageListScreen({Key? key, required this.event}) : super(key: key);
 
   @override
   _BeverageListScreenState createState() => _BeverageListScreenState();
@@ -39,7 +40,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
 
   @override
   void initState() {
-    beverageViewModel.listingApi(context, widget.id);
+    beverageViewModel.listingApi(context, widget.event.id!);
     super.initState();
   }
 
@@ -58,7 +59,9 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
               backArrow: true,
             ),
             Row(
+              mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
+                if (widget.event.shared != true)
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -120,7 +123,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                               });
                                               Map data = {
                                                 "name": _nameController.text,
-                                                "eventId": widget.id
+                                                "eventId": widget.event.id
                                               };
 
                                               beverageViewModel.addBeverage(context, data).then((value) {

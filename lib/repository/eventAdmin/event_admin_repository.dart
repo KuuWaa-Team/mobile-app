@@ -23,4 +23,22 @@ class EventAdminRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> acceptInvitationApi ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventAdminEndPoint + "/$id/accept", data, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> refuseInvitationApi ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventAdminEndPoint + "/$id/refuse", data, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
 }

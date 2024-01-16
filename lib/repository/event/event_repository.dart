@@ -72,7 +72,7 @@ class EventRepository {
 
   Future<dynamic> getEventDetailApi ({required BuildContext context, required int id}) async {
     try  {
-      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id", context: context);
+      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id", context: context, auth: true);
       return response;
     } catch(e) {
       rethrow;

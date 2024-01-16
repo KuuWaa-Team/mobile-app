@@ -140,4 +140,29 @@ class InvitationViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> sendAllInvitations(BuildContext context, Map data) async {
+    setLoading(true);
+    await _repository.sendAllInvitationsApi(context: context, data: data).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        List invitationsJson = value['invitations'];
+        List<InvitationModel> invitationsData = [];
+        if (invitationsJson.isNotEmpty) {
+          for (var element in invitationsJson) {
+            invitationsData.add(InvitationModel.fromJson(element));
+          }
+        }
+        setInvitationsList(ApiResponse.completed(invitationsData));
+        Utils.toastMessage(value['message']);
+        Navigator.pop(context);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
 }

@@ -9,10 +9,13 @@ class EventModel {
   String? address;
   int? tablesCount;
   int? invitationsCount;
+  bool? shared;
   int? beveragesCount;
   int? adminsCount;
+  int? adminId;
   String? details;
   String? status;
+  String? adminStatus;
   String? imagePath;
   String? paymentStatus;
   EventCategoryModel? category;
@@ -26,7 +29,10 @@ class EventModel {
     this.date,
     this.address,
     this.details,
+    this.shared,
+    this.adminId,
     this.status,
+    this.adminStatus,
     this.eventPack,
     this.paymentStatus,
     this.category,
@@ -45,14 +51,17 @@ class EventModel {
     date = DateTime.parse(json['date'].toString());
     address = json['address'];
     details = json['details'];
+    adminStatus = json['adminStatus'];
     paymentStatus = json['paymentStatus'];
     status = json['status'];
     imagePath = json['imagePath'];
     paidEvent = json['paidEvent'];
+    shared = json['shared'];
     tablesCount = json['tablesCount'];
     beveragesCount = json['beveragesCount'];
     adminsCount = json['adminsCount'];
     invitationsCount = json['invitationsCount'];
+    adminId = json['adminId'];
     if (json['category'] != null) {
       category = EventCategoryModel.fromJson(json['category']);
     }
@@ -79,8 +88,11 @@ class EventModel {
     data['status'] = paymentStatus;
     data['paidEvent'] = paidEvent;
     data['category'] = category;
+    data['adminStatus'] = adminStatus;
+    data['adminId'] = adminId;
     data['eventPack'] = eventPack;
     data['features'] = features;
+    data['shared'] = shared;
     data['tablesCount'] = tablesCount;
     data['beveragesCount'] = beveragesCount;
     data['invitationsCount'] = invitationsCount;

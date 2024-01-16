@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -15,10 +16,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/screens/admin/admin_list_screen.dart';
 import 'package:kuuwaa/screens/beverage/beverage_list_screen.dart';
+import 'package:kuuwaa/screens/events/check/check_screen.dart';
 import 'package:kuuwaa/screens/events/edit_event_screen.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/screens/table/table_list_screen.dart';
 import 'package:kuuwaa/shimmer/event_detail_shimmer.dart';
+import 'package:kuuwaa/shimmer/event_owner_detail_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +66,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   builder: (context, value, _) {
                     switch (value.event.status) {
                       case Status.LOADING:
-                        return const EventDetailShimmer();
+                        return const EventOwnerDetailShimmer();
                       case Status.ERROR:
                         return Center(
                           child: Text(value.event.message.toString()),
@@ -145,7 +148,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     Container(
                                       margin: EdgeInsets.only(
                                         top: MediaQuery.of(context).size.height * 0.25,
-                                        right: ResponsiveFlutter.of(context).moderateScale(25),
+                                        right: ResponsiveFlutter.of(context).moderateScale(10),
                                         left: ResponsiveFlutter.of(context).moderateScale(10),
                                       ),
                                       child: GestureDetector(
@@ -168,6 +171,37 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               size: ResponsiveFlutter.of(context).moderateScale(15),
                                             ),
                                           ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (event.shared == true)
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        top: MediaQuery.of(context).size.height * 0.25,
+                                        right: ResponsiveFlutter.of(context).moderateScale(25),
+                                      ),
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.circular(40),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.share_outlined, color: appColors.lightColor, size: 18,),
+                                            const SizedBox(width: 10,),
+                                            MyTextView(
+                                              "Protocoleur",
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w600,
+                                                size: ResponsiveFlutter.of(context).fontSize(2),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -224,45 +258,112 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ],
                                     ),
-                                    // SizedBox(height: ResponsiveFlutter.of(context).moderateScale(15)),
-                                    // Row(
-                                    //   children: [
-                                    //     Image.asset(
-                                    //       ImagePath.calender,
-                                    //       color: appColors.lightColor,
-                                    //       height: ResponsiveFlutter.of(context).moderateScale(15),
-                                    //     ),
-                                    //     SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
-                                    //     MyTextView(
-                                    //       DateFormat('dd MMM, yyyy').format(event.date!),
-                                    //       textAligntNew: TextAlign.start,
-                                    //       maxLineWrap: true,
-                                    //       styleNew: MyTextStyle(
-                                    //         colorNew: appColors.lightColor,
-                                    //         fontWeightNew: FontWeight.w400,
-                                    //         size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                    //       ),
-                                    //     ),
-                                    //     SizedBox(width: ResponsiveFlutter.of(context).moderateScale(20)),
-                                    //     Image.asset(
-                                    //       ImagePath.time,
-                                    //       color: appColors.lightColor,
-                                    //       height: ResponsiveFlutter.of(context).moderateScale(15),
-                                    //     ),
-                                    //     SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
-                                    //     MyTextView(
-                                    //       DateFormat('kk:mm').format(event.date!),
-                                    //       textAligntNew: TextAlign.start,
-                                    //       maxLineWrap: true,
-                                    //       styleNew: MyTextStyle(
-                                    //         colorNew: appColors.lightColor,
-                                    //         fontWeightNew: FontWeight.w400,
-                                    //         size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (event.invitationsCount == null || event.invitationsCount! < 1) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return StatefulBuilder(
+                                                builder: (context, setState) {
+                                                  return Dialog(
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      child: Stack(
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                            child:
+                                                            Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 60,
+                                                                  width: 60,
+                                                                  child: Center(
+                                                                    child: Icon(
+                                                                      Icons.lightbulb_outline,
+                                                                      color: appColors.btnColor,
+                                                                      size: 50,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(height: 10,),
+                                                                const Column(
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  children: [
+                                                                    Text("Aucune invitation n'a encore été enrégistrée pour cet évenement.", style: TextStyle(
+                                                                        fontWeight: FontWeight.bold
+                                                                    ), textAlign: TextAlign.center,),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(height: 20,),
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    GestureDetector(
+                                                                      onTap: () {
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      child: CommonButton(
+                                                                        loading: false,
+                                                                        title: "Compris",
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => CheckScreen(event: event),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: event.invitationsCount == null || event.invitationsCount! < 1 ? appColors.appLightColor.withOpacity(.5) : appColors.appLightColor,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                        child: Row (
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.qrcode_viewfinder,
+                                              size: 15,
+                                              color: event.invitationsCount == null || event.invitationsCount! < 1 ? appColors.lightPinkColor.withOpacity(.3) : appColors.lightPinkColor,
+                                            ),
+                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                            MyTextView(
+                                              "Vérifier invitation",
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: event.invitationsCount == null || event.invitationsCount! < 1 ? appColors.lightColor.withOpacity(.3) : appColors.lightColor,
+                                                fontWeightNew: FontWeight.w500,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(
@@ -341,7 +442,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                           ),
                                                           SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
                                                           MyTextView(
-                                                            Strings.dummyText22,
+                                                            DateFormat('dd MMM, yyyy').format(event.date!),
                                                             textAligntNew: TextAlign.start,
                                                             maxLineWrap: true,
                                                             styleNew: MyTextStyle(
@@ -358,7 +459,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                           ),
                                                           SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
                                                           MyTextView(
-                                                            Strings.dummyText23,
+                                                            DateFormat('kk:mm').format(event.date!),
                                                             textAligntNew: TextAlign.start,
                                                             maxLineWrap: true,
                                                             styleNew: MyTextStyle(
@@ -417,20 +518,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                         ),
                                                       ),
                                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => EditEventScreen(id: event.id!),
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: CommonButton(
-                                                          loading: false,
-                                                          title: "Modifier les details",
+                                                      if (event.shared != true)
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) => EditEventScreen(id: event.id!),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: CommonButton(
+                                                            loading: false,
+                                                            title: "Modifier les details",
+                                                          ),
                                                         ),
-                                                      ),
 
                                                     ],
                                                   ),
@@ -465,6 +567,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true)
                                     GestureDetector(
                                       onTap: () {
                                         imagePick(event);
@@ -494,6 +597,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
+                                    if (event.shared != true)
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
@@ -565,7 +669,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => InvitationsListScreen(id: event.id!),
+                                              builder: (context) => InvitationsListScreen(event: event),
                                             ),
                                           );
                                         }
@@ -605,7 +709,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => TableListScreen(id: event.id!),
+                                            builder: (context) => TableListScreen(event: event),
                                           ),
                                         );
                                       },
@@ -640,7 +744,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => BeverageListScreen(id: event.id!),
+                                            builder: (context) => BeverageListScreen(event: event),
                                           ),
                                         );
                                       },
@@ -670,6 +774,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true)
                                     GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(
@@ -827,7 +932,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                           title: "Activer l'évenement",
                                                         ),
                                                       ),
-
+                                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
                                                     ],
                                                   ),
                                                 ),
@@ -884,7 +989,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
+                                    if (event.shared != true)
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true)
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -919,31 +1026,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: appColors.red.withOpacity(.2),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                      child: Row (
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Icon(CupertinoIcons.delete_solid, size: 15, color: appColors.lightPinkColor,),
-                                          SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                          MyTextView(
-                                            "Supprimer l'évenement",
-                                            textAligntNew: TextAlign.start,
-                                            maxLineWrap: true,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.lightColor,
-                                              fontWeightNew: FontWeight.w500,
-                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    if (event.shared != true)
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(15)),
                                   ],
                                 ),
