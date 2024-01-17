@@ -1,3 +1,4 @@
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -57,15 +58,17 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                           children: [
                             Container(
                               height: MediaQuery.of(context).size.height * 0.32,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(AppUrl.domainName + invitation.event!.imagePath.toString())
-                                ),
-                                color: appColors.appMediumColor,
-                                // borderRadius: BorderRadius.circular(20)
-                              ),
+                              // decoration: BoxDecoration(
+                              //   image: DecorationImage(
+                              //       fit: BoxFit.cover,
+                              //       image: NetworkImage(AppUrl.domainName + invitation.event!.imagePath.toString())
+                              //   ),
+                              //   color: appColors.appMediumColor,
+                              //   // borderRadius: BorderRadius.circular(20)
+                              // ),
+                              color: appColors.appMediumColor,
                               width: MediaQuery.of(context).size.width,
+                              child: InstaImageViewer(child: Image.network(AppUrl.domainName + invitation.event!.imagePath.toString())),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -557,12 +560,15 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                 ),
                                 child: Center(
                                   child: Container(
-                                      padding: const EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(3),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(5),
                                           color: Colors.white
                                       ),
-                                      child: Image.asset(ImagePath.code,)),
+                                      child: InstaImageViewer(
+                                        child: Image.network(AppUrl.domainName + invitation.codePath.toString())
+                                      )
+                                  ),
                                 ),
                               ),
                             ),

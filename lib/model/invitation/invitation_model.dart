@@ -9,6 +9,7 @@ class InvitationModel {
   String? status;
   int? count;
   String? phoneNumber;
+  String? codePath;
   TableModel? table;
   EventModel? event;
 
@@ -19,6 +20,7 @@ class InvitationModel {
     this.count,
     this.civility,
     this.table,
+    this.codePath,
     this.event
   });
 
@@ -28,6 +30,7 @@ class InvitationModel {
     civility = json['civility'];
     count = json['count'];
     status = json['status'];
+    codePath = json['codePath'];
     phoneNumber = json['phoneNumber'];
     if (json['invitationTable'] != null && json['invitationTable'].runtimeType.toString() != "String") {
       table = TableModel.fromJson(json['invitationTable']);
@@ -42,6 +45,7 @@ class InvitationModel {
     data['id'] = id;
     data['name'] = name;
     data['civility'] = civility;
+    data['codePath'] = codePath;
     data['count'] = count;
     data['status'] = status;
     data['phoneNumber'] = phoneNumber;

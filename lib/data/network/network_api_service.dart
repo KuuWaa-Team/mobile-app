@@ -67,6 +67,7 @@ class NetworkApiService extends BaseApiServices {
         body: jsonEncode(data),
         headers: auth? headerAuth: header,
       ).timeout(const Duration(seconds: 120));
+      print(response.body);
 
       if (response.body.runtimeType == String && response.body.split(']}').length > 1) {
         Map responseMap = json.decode(response.body.split(']}')[1]);

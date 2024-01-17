@@ -412,33 +412,180 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.search, color: Colors.white, size: 20,),
-                    ],
+                GestureDetector(
+                  onTap: () {
+                    invitationViewModel.listingApi(context, widget.event.id!);
+                  },
+                  child: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                        color: appColors.appLightColor,
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.refresh, color: Colors.white, size: 20,),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10,),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.upload_file_outlined, color: Colors.white, size: 20,),
-                    ],
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: IconButton(onPressed: (){
+                                          Navigator.pop(context);
+                                        }, icon: const Icon(Icons.close)
+                                        )
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                      child:
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                            height: 60,
+                                            width: 60,
+                                            child: Center(
+                                              child: Image.asset("assets/images/excel.png", width: 50,)
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10,),
+                                          const Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text("Importer la liste des invité à partir d'Excel", style: TextStyle(
+                                                  fontWeight: FontWeight.bold
+                                              ), textAlign: TextAlign.center,),
+                                              SizedBox(height: 10,),
+                                              Text("Vous devez télécharger le ficher Excel de model, le remplir puis l'importer", style: TextStyle(
+                                                  fontSize: 12
+                                              ), textAlign: TextAlign.center,),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 20,),
+                                          GestureDetector(
+                                            onTap: () {
+
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              width: MediaQuery.of(context).size.width,
+                                              padding: const EdgeInsets.all(10),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  const Icon(CupertinoIcons.cloud_download_fill, size: 22, color: Colors.green,),
+                                                  const SizedBox(width: 7,),
+                                                  MyTextView(
+                                                    "Télécharger le fichier model",
+                                                    textAligntNew: TextAlign.start,
+                                                    maxLineWrap: true,
+                                                    styleNew: MyTextStyle(
+                                                      colorNew: appColors.black,
+                                                      fontWeightNew: FontWeight.w500,
+                                                      size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              width: MediaQuery.of(context).size.width,
+                                              padding: const EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      const Icon(CupertinoIcons.cloud_upload_fill, color: Colors.green,),
+                                                      const SizedBox(width: 7,),
+                                                      MyTextView(
+                                                        "Importer le fichier",
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.black,
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          // const SizedBox(height: 20,),
+                                          // Row(
+                                          //   mainAxisAlignment: MainAxisAlignment.center,
+                                          //   children: [
+                                          //     GestureDetector(
+                                          //       onTap: () {
+                                          //       },
+                                          //       child: CommonButton(
+                                          //         title: "Continuer",
+                                          //         padding: const EdgeInsets.symmetric(horizontal: 20),
+                                          //       ),
+                                          //     )
+                                          //   ],
+                                          // )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                        color: appColors.appLightColor,
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Icon(Icons.upload_file_outlined, color: Colors.white, size: 20,),
+                        Image.asset("assets/images/excel.png", width: 20,)
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10,),
@@ -606,20 +753,6 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(height: 20,),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                },
-                                                child: CommonButton(
-                                                  title: "Continuer",
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                ),
-                                              )
-                                            ],
-                                          )
                                         ],
                                       ),
                                     ),
@@ -756,7 +889,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         ),
                                                       ),
                                                     ),
-                                                    if (invitation.status == 'created' && widget.event.shared != true)
+                                                    if (invitation.status == 'sent')
+                                                      const SizedBox(height: 10,),
+                                                    // if (invitation.status == 'created' && widget.event.shared != true)
                                                       GestureDetector(
                                                         onTap: () {
                                                           showDialog(
@@ -999,8 +1134,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                           ),
                                                         ),
                                                       ),
-                                                    if (invitation.status == 'created' && widget.event.shared != true)
-                                                    const SizedBox(height: 20,),
+                                                    // if (invitation.status == 'created' && widget.event.shared != true)
+                                                    const SizedBox(height: 10,),
                                                     Container(
                                                       decoration: BoxDecoration(
                                                           borderRadius: BorderRadius.circular(5),
