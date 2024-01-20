@@ -9,6 +9,7 @@ class InvitationModel {
   String? status;
   int? count;
   String? phoneNumber;
+  bool? bookSent;
   String? codePath;
   TableModel? table;
   EventModel? event;
@@ -17,6 +18,7 @@ class InvitationModel {
     this.id,
     this.name,
     this.phoneNumber,
+    this.bookSent,
     this.count,
     this.civility,
     this.table,
@@ -28,6 +30,7 @@ class InvitationModel {
     id = json['id'];
     name = json['name'];
     civility = json['civility'];
+    bookSent = json['bookSent'];
     count = json['count'];
     status = json['status'];
     codePath = json['codePath'];
@@ -45,6 +48,7 @@ class InvitationModel {
     data['id'] = id;
     data['name'] = name;
     data['civility'] = civility;
+    data['bookSent'] = bookSent;
     data['codePath'] = codePath;
     data['count'] = count;
     data['status'] = status;

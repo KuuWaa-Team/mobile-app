@@ -1,3 +1,4 @@
+import 'package:kuuwaa/model/book/book_model.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
 import 'package:kuuwaa/model/event/feature_model.dart';
@@ -22,11 +23,13 @@ class EventModel {
   EventPackModel? eventPack;
   bool? paidEvent;
   List<FeatureModel>? features;
+  List<BookModel>? books;
 
   EventModel({
     this.id,
     this.name,
     this.date,
+    this.books,
     this.address,
     this.details,
     this.shared,
@@ -72,6 +75,13 @@ class EventModel {
       features = [];
       json['features'].forEach((element) {
         features!.add(FeatureModel.fromJson(element));
+      });
+    }
+
+    if (json['books'] != null) {
+      books = [];
+      json['books'].forEach((element) {
+        books?.add(BookModel.fromJson(element));
       });
     }
   }

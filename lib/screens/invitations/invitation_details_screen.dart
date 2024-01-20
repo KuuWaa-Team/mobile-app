@@ -1,8 +1,10 @@
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
+import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
@@ -10,6 +12,7 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/shimmer/event_detail_shimmer.dart';
+import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +26,11 @@ class InvitationDetailsScreen extends StatefulWidget {
 class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
   AppColors appColors = AppColors();
   InvitationViewModel invitationViewModel = InvitationViewModel();
+  bool loadingBook = false;
+
+  EventViewModel eventViewModel = EventViewModel();
+
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   void initState() {
@@ -526,6 +534,177 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                           ),
                                         ),
                                       ],
+                                    ),
+                                    const SizedBox(height: 5,),
+                                    if (invitation.bookSent == true)
+                                    Container(
+                                      height: ResponsiveFlutter.of(context).scale(40),
+                                      decoration: BoxDecoration(
+                                          color: appColors.appLightColor,
+                                          borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.check_circle_outline_rounded, color: appColors.lightColor.withOpacity(.2),),
+                                          const SizedBox(width: 10,),
+                                          MyTextView(
+                                            "Message envoyé avec succès",
+                                            textAligntNew: TextAlign.start,
+                                            maxLinesNew: 3,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor.withOpacity(.2),
+                                              fontWeightNew: FontWeight.w400,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    if (invitation.bookSent != true)
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (context) {
+                                            return StatefulBuilder(
+                                              builder: (context, setState) {
+                                                return Dialog(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    child: Stack(
+                                                      children: [
+                                                        Positioned(
+                                                            right: 0,
+                                                            top: 0,
+                                                            child: IconButton(onPressed: (){
+                                                              Navigator.pop(context);
+                                                            }, icon: const Icon(Icons.close)
+                                                            )
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                          child:
+                                                          Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 200,
+                                                                child: Text("Laissez un mot qui restera au livre d'or", style: TextStyle(
+                                                                    fontWeight: FontWeight.bold
+                                                                ), textAlign: TextAlign.center,),
+                                                              ),
+                                                              const SizedBox(height: 20,),
+                                                              Container(
+                                                                width: double.infinity,
+                                                                padding: EdgeInsets.symmetric(
+                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                ),
+                                                                decoration: BoxDecoration(
+                                                                  border: Border.all(color: appColors.borderColor, width: 1),
+                                                                  borderRadius: BorderRadius.circular(
+                                                                    ResponsiveFlutter.of(context).moderateScale(20),
+                                                                  ),
+                                                                ),
+                                                                child: TextField(
+                                                                  style: MyTextStyle(
+                                                                    colorNew: appColors.borderColor,
+                                                                    fontWeightNew: FontWeight.w400,
+                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                  ),
+                                                                  cursorColor: appColors.borderColor,
+                                                                  keyboardType: TextInputType.multiline,
+                                                                  expands: false,
+                                                                  controller: _messageController,
+                                                                  maxLines: 5,
+                                                                  decoration: InputDecoration(
+                                                                    border: InputBorder.none,
+                                                                    hintText: "Entrez votre message",
+                                                                    hintStyle: MyTextStyle(
+                                                                      colorNew: appColors.borderColor,
+                                                                      fontWeightNew: FontWeight.w400,
+                                                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                    ),
+                                                                    isDense: true,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              const SizedBox(height: 20,),
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () async {
+                                                                      if (_messageController.text == "") {
+                                                                        Utils.flushBarErrorMessage("Vous devez saisir un message", context);
+                                                                      } else {
+                                                                        setState(() {
+                                                                          loadingBook = true;
+                                                                        });
+                                                                        eventViewModel.addBookApi(context, {
+                                                                          "invitationId": invitation.id,
+                                                                          "message": _messageController.text,
+                                                                        }, invitation.event!.id!).then((value) {
+                                                                          setState(() {
+                                                                            loadingBook = false;
+                                                                            invitation.bookSent = true;
+                                                                          });
+                                                                          Navigator.pop(context);
+                                                                        });
+                                                                      }
+                                                                    },
+                                                                    child: CommonButton(
+                                                                      title: "Envoyer",
+                                                                      loading: loadingBook,
+                                                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        height: ResponsiveFlutter.of(context).moderateScale(40),
+                                        margin: EdgeInsets.only(
+                                          bottom: ResponsiveFlutter.of(context).moderateScale(10),
+                                        ),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            ResponsiveFlutter.of(context).moderateScale(25),
+                                          ), // Creates border
+                                          color: appColors.btnColor,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            MyTextView(
+                                              "Laisser un message au livre d'or ",
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.white,
+                                                fontWeightNew: FontWeight.w600,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                     SizedBox(height: MediaQuery.of(context).size.height * 0.17,),
                                   ],

@@ -70,6 +70,16 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> addBookApi ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/book", data, context: context, auth: true);
+
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> getEventDetailApi ({required BuildContext context, required int id}) async {
     try  {
       dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id", context: context, auth: true);

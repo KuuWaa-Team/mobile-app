@@ -21,6 +21,7 @@ class BookScreen extends StatefulWidget {
 class _BookScreenState extends State<BookScreen> {
   AppColors appColors = AppColors();
   InvitationViewModel invitationViewModel = InvitationViewModel();
+  bool loaded = false;
 
   int step = 0;
 
@@ -36,6 +37,7 @@ class _BookScreenState extends State<BookScreen> {
   bool sending = false;
 
   TableViewModel tableViewModel = TableViewModel();
+  List<Widget> books = [];
 
 
   @override
@@ -45,6 +47,43 @@ class _BookScreenState extends State<BookScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!loaded) {
+      setState(() {
+        loaded = true;
+      });
+      widget.event.books?.forEach((element) {
+        books.add(Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20), right: ResponsiveFlutter.of(context).moderateScale(20), bottom: ResponsiveFlutter.of(context).moderateScale(20)),
+          color: appColors.white,
+          padding: EdgeInsets.symmetric(vertical: ResponsiveFlutter.of(context).moderateScale(40), horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset("assets/images/quote.png", width: 30,),
+                Container(
+                  width: 250,
+                  margin: const EdgeInsets.only(left: 20, top: 10),
+                  child: Text(element.message!, style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: appColors.black
+                  )),
+                ),
+                const SizedBox(height: 30,),
+                Text("${element.invitation!.civility!} ${element.invitation!.name}", style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 10,
+                    fontStyle: FontStyle.italic
+                ),)
+              ],
+            ),
+          ),
+        ));
+      });
+    }
     final List<Widget> _pages = [
       Container(
         height: MediaQuery.of(context).size.height * 0.6,
@@ -123,36 +162,7 @@ class _BookScreenState extends State<BookScreen> {
           ],
         ),
       ),
-      Container(
-        height: MediaQuery.of(context).size.height * 0.6,
-        margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20), right: ResponsiveFlutter.of(context).moderateScale(20), bottom: ResponsiveFlutter.of(context).moderateScale(20)),
-        color: appColors.white,
-        padding: EdgeInsets.symmetric(vertical: ResponsiveFlutter.of(context).moderateScale(40), horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset("assets/images/quote.png", width: 30,),
-              Container(
-                width: 250,
-                margin: const EdgeInsets.only(left: 20, top: 10),
-                child: Text("Ils étaient là et vous ont laissé un mot en guise de leur amour pour vous.", style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: appColors.black
-                )),
-              ),
-              const SizedBox(height: 30,),
-              const Text("Mr. Daniel Mwema", style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 10,
-                fontStyle: FontStyle.italic
-              ),)
-            ],
-          ),
-        ),
-      ),
+      ...books
     ];
     return SafeArea(
       bottom: false,
@@ -243,12 +253,43 @@ class _BookScreenState extends State<BookScreen> {
               ),
             ),
             const SizedBox(height: 30,),
+            if (widget.event.books!.isNotEmpty)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
               child: CommonButton(
                 title: "Télécharger",
               ),
             ),
+            if (widget.event.books!.isEmpty)
+              Container(
+                height: ResponsiveFlutter.of(context).scale(40),
+                decoration: BoxDecoration(
+                    color: appColors.appLightColor,
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                margin: const EdgeInsets.only(
+                    left: 20, right: 20, top: 20
+                ),
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.block_outlined, color: appColors.lightColor.withOpacity(.2),),
+                    const SizedBox(width: 10,),
+                    MyTextView(
+                      "Livre d'or actuellement vide",
+                      textAligntNew: TextAlign.start,
+                      maxLinesNew: 3,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.lightColor.withOpacity(.2),
+                        fontWeightNew: FontWeight.w400,
+                        size: ResponsiveFlutter.of(context).fontSize(1.8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             SizedBox(height: ResponsiveFlutter.of(context).moderateScale(30),),
           ],
         ),

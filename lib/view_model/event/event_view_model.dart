@@ -68,11 +68,10 @@ class EventViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return true;
   }
 
@@ -209,6 +208,23 @@ class EventViewModel with ChangeNotifier{
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
+    return true;
+  }
+
+  Future<bool> addBookApi (BuildContext context, Map data, int id) async {
+    setLoading(true);
+
+    await _repository.addBookApi(context: context, data: data, id: id).then((value) {
+      if (value['success'] == true  ) {
+        setLoading(false);
+      } else {
+        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      }
+    });
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   setLoading(false);
+    // });
     return true;
   }
 
