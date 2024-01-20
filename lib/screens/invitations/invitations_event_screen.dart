@@ -7,6 +7,7 @@ import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/common_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
+import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:kuuwaa/screens/invitations/invitation_details_screen.dart';
@@ -125,106 +126,107 @@ class _InvitationEventScreenState extends State<InvitationEventScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Flexible(
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                          child: Row(
                                             children: [
-                                              Row(
+                                              Container(
+                                                width: 50,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10)
+                                                ),
+                                                margin: const EdgeInsets.only(right: 15),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(50),
+                                                  child: Image.network(
+                                                    AppUrl.domainName + current.event!.imagePath.toString(),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              Column(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      MyTextView(
-                                                        current.event!.name.toString(),
-                                                        textAligntNew: TextAlign.start,
-                                                        maxLineWrap: true,
-                                                        styleNew: MyTextStyle(
-                                                          colorNew: appColors.lightColor,
-                                                          fontWeightNew: FontWeight.w600,
-                                                          size: ResponsiveFlutter.of(context).fontSize(2),
-                                                        ),
-                                                      ),
-                                                      MyTextView(
-                                                        current.event!.category!.name.toString(),
-                                                        textAligntNew: TextAlign.start,
-                                                        maxLineWrap: true,
-                                                        styleNew: MyTextStyle(
-                                                          colorNew: Colors.orange.withOpacity(.4),
-                                                          fontWeightNew: FontWeight.w400,
-                                                          size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                                        ),
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          MyTextView(
+                                                            current.event!.name.toString(),
+                                                            textAligntNew: TextAlign.start,
+                                                            maxLineWrap: true,
+                                                            styleNew: MyTextStyle(
+                                                              colorNew: appColors.lightColor,
+                                                              fontWeightNew: FontWeight.w600,
+                                                              size: ResponsiveFlutter.of(context).fontSize(2),
+                                                            ),
+                                                          ),
+                                                          MyTextView(
+                                                            current.event!.category!.name.toString(),
+                                                            textAligntNew: TextAlign.start,
+                                                            maxLineWrap: true,
+                                                            styleNew: MyTextStyle(
+                                                              colorNew: Colors.orange.withOpacity(.4),
+                                                              fontWeightNew: FontWeight.w400,
+                                                              size: ResponsiveFlutter.of(context).fontSize(1.4),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ],
                                                   ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 5,),
-                                              Row(
-                                                children: [
-                                                  Image.asset(
-                                                    ImagePath.calender,
-                                                    color: appColors.lightColor.withOpacity(.5),
-                                                    height: ResponsiveFlutter.of(context).moderateScale(14),
-                                                  ),
-                                                  SizedBox(
-                                                    width: ResponsiveFlutter.of(context).moderateScale(6),
-                                                  ),
-                                                  MyTextView(
-                                                    DateFormat('dd MMM, yyyy').format(current.event!.date!),
-                                                    textAligntNew: TextAlign.start,
-                                                    maxLineWrap: true,
-                                                    styleNew: MyTextStyle(
-                                                      colorNew: appColors.lightColor.withOpacity(.5),
-                                                      fontWeightNew: FontWeight.w500,
-                                                      size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: ResponsiveFlutter.of(context).moderateScale(10),
-                                                  ),
-                                                  Image.asset(
-                                                    ImagePath.time,
-                                                    color: appColors.lightColor.withOpacity(.5),
-                                                    height: ResponsiveFlutter.of(context).moderateScale(14),
-                                                  ),
-                                                  SizedBox(
-                                                    width: ResponsiveFlutter.of(context).moderateScale(6),
-                                                  ),
-                                                  MyTextView(
-                                                    DateFormat('kk:mm').format(current.event!.date!),
-                                                    textAligntNew: TextAlign.start,
-                                                    maxLineWrap: true,
-                                                    styleNew: MyTextStyle(
-                                                      colorNew: appColors.lightColor.withOpacity(.5),
-                                                      fontWeightNew: FontWeight.w500,
-                                                      size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: ResponsiveFlutter.of(context).moderateScale(10),
-                                                  ),
-                                                  SizedBox(
-                                                    width: ResponsiveFlutter.of(context).moderateScale(6),
-                                                  ),
-                                                  if (current.status == 'waiting')
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(20),
-                                                          color: Colors.orange
+                                                  const SizedBox(height: 5,),
+                                                  Row(
+                                                    children: [
+                                                      Image.asset(
+                                                        ImagePath.calender,
+                                                        color: appColors.lightColor.withOpacity(.5),
+                                                        height: ResponsiveFlutter.of(context).moderateScale(14),
                                                       ),
-                                                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                                                      child: MyTextView(
-                                                        "En attente de la reponse",
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(6),
+                                                      ),
+                                                      MyTextView(
+                                                        DateFormat('dd MMM, yyyy').format(current.event!.date!),
                                                         textAligntNew: TextAlign.start,
                                                         maxLineWrap: true,
                                                         styleNew: MyTextStyle(
-                                                          colorNew: appColors.lightColor,
+                                                          colorNew: appColors.lightColor.withOpacity(.5),
                                                           fontWeightNew: FontWeight.w500,
-                                                          size: ResponsiveFlutter.of(context).fontSize(1.1),
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.4),
                                                         ),
                                                       ),
-                                                    )
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(10),
+                                                      ),
+                                                      Image.asset(
+                                                        ImagePath.time,
+                                                        color: appColors.lightColor.withOpacity(.5),
+                                                        height: ResponsiveFlutter.of(context).moderateScale(14),
+                                                      ),
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(6),
+                                                      ),
+                                                      MyTextView(
+                                                        DateFormat('kk:mm').format(current.event!.date!),
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor.withOpacity(.5),
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.4),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(10),
+                                                      ),
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(6),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                             ],

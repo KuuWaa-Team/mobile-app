@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:kuuwaa/common/check_dialog.dart';
+import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/api_response.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
@@ -138,6 +141,39 @@ class InvitationViewModel with ChangeNotifier{
       setLoading(false);
     });
     return true;
+  }
+
+  Future<dynamic> checkInvitation(BuildContext context, Map data) async {
+    setLoading(true);
+    await _repository.checkInvitationsCodeApi(context: context, data: data).then((value) {
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return CheckDialog(
+            context: context,
+            color: value['success'] ? Colors.green: Colors.red,
+            message: value['message'],
+            status: "Invitation valide",
+            icon: value['success'] ? CupertinoIcons.check_mark_circled_solid: CupertinoIcons.xmark_circle_fill,
+            onClose: () {
+              Navigator.pop(context);
+            },
+            onValidate: () {
+              Navigator.pop(context);
+            },
+            btnTitle: "Valider",
+          );
+        },
+      );
+      setLoading(false);
+      return value;
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return null;
   }
 
   Future<bool> sendAllInvitations(BuildContext context, Map data) async {

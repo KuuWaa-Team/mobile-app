@@ -45,16 +45,23 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.app.kuuwaa"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-
+    signingConfigs {
+        release {
+            keyAlias 'key'
+            keyPassword 'Qd2022' // Remplacez par le mot de passe de votre clé
+            storeFile file('../../keystore.jks') // Chemin vers votre fichier keystore
+            storePassword 'Qd2022' // Remplacez par le mot de passe de votre keystore
+        }
+    }
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }

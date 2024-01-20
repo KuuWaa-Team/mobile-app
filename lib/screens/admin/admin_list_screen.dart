@@ -136,6 +136,8 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                           onTap: () {
                                             if (_nameController.text == "") {
                                               Utils.flushBarErrorMessage("Vous devez enter le nom du protocoleur", context);
+                                            } else if (_phoneController.text == "") {
+                                              Utils.flushBarErrorMessage("Vous devez enter le numéro de téléphone du protocoleur", context);
                                             } else {
                                               setState(() {
                                                 loading = true;
@@ -194,18 +196,23 @@ class _AdminListScreenState extends State<AdminListScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.search, color: Colors.white, size: 20,),
-                    ],
+                GestureDetector(
+                  onTap: () {
+                    adminViewModel.listingApi(context, widget.id);
+                  },
+                  child: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                        color: appColors.appLightColor,
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.arrow_clockwise, color: Colors.white, size: 20,),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -372,14 +379,35 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                               if (admin.status == 'waiting')
                                                 Container(
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    color: Colors.orange
+                                                      borderRadius: BorderRadius.circular(10),
+                                                      color: Colors.orange
                                                   ),
                                                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                                   child: Row(
                                                     children: [
                                                       MyTextView(
                                                         'En attente' ,
+                                                        textAligntNew: TextAlign.center,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor,
+                                                          fontWeightNew: FontWeight.w400,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              if (admin.status == 'accepted')
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10),
+                                                      color: Colors.green
+                                                  ),
+                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      MyTextView(
+                                                        'Actif' ,
                                                         textAligntNew: TextAlign.center,
                                                         styleNew: MyTextStyle(
                                                           colorNew: appColors.lightColor,

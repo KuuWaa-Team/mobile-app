@@ -8,6 +8,7 @@ import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
 import 'package:kuuwaa/model/table/table_model.dart';
+import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

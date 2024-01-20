@@ -79,7 +79,7 @@ class NetworkApiService extends BaseApiServices {
         responseJson = returnResponse(response, context);
       }
     } on SocketException {
-      Navigator.pushNamed(context, RoutesName.networkError);
+      Utils.flushBarErrorMessage("Vérifiez votre connexion internet", context);
     } catch (e) {
       rethrow;
     }

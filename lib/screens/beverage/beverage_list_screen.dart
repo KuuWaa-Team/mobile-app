@@ -151,7 +151,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 20, right: 10),
-                    width: MediaQuery.of(context).size.width - 50 - 100 - 10,
+                    width: MediaQuery.of(context).size.width - 100,
                     decoration: BoxDecoration(
                         color: appColors.btnColor,
                         borderRadius: BorderRadius.circular(30)
@@ -175,33 +175,23 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.search, color: Colors.white, size: 20,),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 10,),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.upload_file_outlined, color: Colors.white, size: 20,),
-                    ],
+                GestureDetector(
+                  onTap: () {
+                    beverageViewModel.listingApi(context, widget.event.id!);
+                  },
+                  child: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                        color: appColors.appLightColor,
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.arrow_clockwise, color: Colors.white, size: 20,),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -471,7 +461,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                     child: Row(
                                                       children: [
                                                         MyTextView(
-                                                          beverage.countTaken!.toString() + " commande" +  (beverage.countTaken! > 1 ? "s" : ""),
+                                                          beverage.countTaken!.toString() + " précommande" +  (beverage.countTaken! > 1 ? "s" : ""),
                                                           textAligntNew: TextAlign.center,
                                                           styleNew: MyTextStyle(
                                                             colorNew: appColors.lightColor,

@@ -7,6 +7,7 @@ import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/common_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
+import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:flutter/material.dart';
@@ -152,139 +153,161 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                     ),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Flexible(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    MyTextView(
-                                                      current.name.toString(),
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: appColors.lightColor,
-                                                        fontWeightNew: FontWeight.w600,
-                                                        size: ResponsiveFlutter.of(context).fontSize(2),
-                                                      ),
-                                                    ),
-                                                    MyTextView(
-                                                      current.category!.name.toString(),
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: Colors.orange.withOpacity(.4),
-                                                        fontWeightNew: FontWeight.w400,
-                                                        size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 5,),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Image.asset(
-                                                      ImagePath.calender,
-                                                      color: appColors.lightColor.withOpacity(.5),
-                                                      height: ResponsiveFlutter.of(context).moderateScale(14),
-                                                    ),
-                                                    SizedBox(
-                                                      width: ResponsiveFlutter.of(context).moderateScale(6),
-                                                    ),
-                                                    MyTextView(
-                                                      DateFormat('dd MMM, yyyy').format(current.date!),
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: appColors.lightColor.withOpacity(.5),
-                                                        fontWeightNew: FontWeight.w500,
-                                                        size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: ResponsiveFlutter.of(context).moderateScale(10),
-                                                    ),
-                                                    Image.asset(
-                                                      ImagePath.time,
-                                                      color: appColors.lightColor.withOpacity(.5),
-                                                      height: ResponsiveFlutter.of(context).moderateScale(14),
-                                                    ),
-                                                    SizedBox(
-                                                      width: ResponsiveFlutter.of(context).moderateScale(6),
-                                                    ),
-                                                    MyTextView(
-                                                      DateFormat('kk:mm').format(current.date!),
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: appColors.lightColor.withOpacity(.5),
-                                                        fontWeightNew: FontWeight.w500,
-                                                        size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                if (current.paymentStatus == 'waiting' && current.shared != true)
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(20),
-                                                        color: Colors.orange
-                                                    ),
-                                                    padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                                                    child: MyTextView(
-                                                      "En attente du paiement",
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: appColors.lightColor,
-                                                        fontWeightNew: FontWeight.w500,
-                                                        size: ResponsiveFlutter.of(context).fontSize(1.1),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                if (current.shared == true)
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(20),
-                                                        color: current.adminStatus == 'waiting' ? Colors.orange : Colors.blue
-                                                    ),
-                                                    padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-                                                        const Icon(Icons.share, color: Colors.white, size: 10,),
-                                                        const SizedBox(width: 5,),
-                                                        MyTextView(
-                                                          "Partagé",
-                                                          textAligntNew: TextAlign.start,
-                                                          maxLineWrap: true,
-                                                          styleNew: MyTextStyle(
-                                                            colorNew: appColors.lightColor,
-                                                            fontWeightNew: FontWeight.w500,
-                                                            size: ResponsiveFlutter.of(context).fontSize(1.3),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                              ],
-                                            ),
-                                          ],
+                                      Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10)
                                         ),
+                                        margin: const EdgeInsets.only(right: 15),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(50),
+                                          child: Image.network(
+                                            AppUrl.domainName + current.imagePath.toString(),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      MyTextView(
+                                                        current.name.toString(),
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor,
+                                                          fontWeightNew: FontWeight.w600,
+                                                          size: ResponsiveFlutter.of(context).fontSize(2),
+                                                        ),
+                                                      ),
+                                                      MyTextView(
+                                                        current.category!.name.toString(),
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: Colors.orange.withOpacity(.4),
+                                                          fontWeightNew: FontWeight.w400,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.4),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5,),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Image.asset(
+                                                        ImagePath.calender,
+                                                        color: appColors.lightColor.withOpacity(.5),
+                                                        height: ResponsiveFlutter.of(context).moderateScale(14),
+                                                      ),
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(6),
+                                                      ),
+                                                      MyTextView(
+                                                        DateFormat('dd MMM, yyyy').format(current.date!),
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor.withOpacity(.5),
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.4),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(10),
+                                                      ),
+                                                      Image.asset(
+                                                        ImagePath.time,
+                                                        color: appColors.lightColor.withOpacity(.5),
+                                                        height: ResponsiveFlutter.of(context).moderateScale(14),
+                                                      ),
+                                                      SizedBox(
+                                                        width: ResponsiveFlutter.of(context).moderateScale(6),
+                                                      ),
+                                                      MyTextView(
+                                                        DateFormat('kk:mm').format(current.date!),
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor.withOpacity(.5),
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.4),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  if (current.paymentStatus == 'waiting' && current.shared != true)
+                                                    const SizedBox(width: 10,),
+                                                  if (current.paymentStatus == 'waiting' && current.shared != true)
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                          color: Colors.orange
+                                                      ),
+                                                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                                      child: MyTextView(
+                                                        "À PAYER",
+                                                        textAligntNew: TextAlign.start,
+                                                        maxLineWrap: true,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor,
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.1),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  if (current.shared == true)
+                                                    const SizedBox(width: 10,),
+                                                  if (current.shared == true)
+                                                    Container(
+                                                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                          color: current.adminStatus == 'waiting' ? Colors.orange : Colors.blue
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          const Icon(Icons.share, color: Colors.white, size: 10,),
+                                                          const SizedBox(width: 5,),
+                                                          MyTextView(
+                                                              "PARTAGÉ",
+                                                            textAligntNew: TextAlign.start,
+                                                            maxLineWrap: true,
+                                                            styleNew: MyTextStyle(
+                                                              colorNew: appColors.lightColor,
+                                                              fontWeightNew: FontWeight.w500,
+                                                              size: ResponsiveFlutter.of(context).fontSize(1),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),

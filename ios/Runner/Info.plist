@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Kuuwaa</string>
+	<string>KuuWaa</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -47,5 +47,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+    <string>Cette application nécéssite l'utilisation de votre camera</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Cette application nécéssite l'utilisation de votre gallerie</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Cette application nécéssite l'utilisation de votre gallerie</string>
 </dict>
 </plist>

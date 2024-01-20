@@ -2,7 +2,6 @@ import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
-import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
