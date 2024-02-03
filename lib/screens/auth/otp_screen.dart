@@ -6,7 +6,7 @@ import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/auth/login_screen.dart';
-import 'package:kuuwaa/screens/complete_profile_screen.dart';
+import 'package:kuuwaa/screens/auth/complete_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kuuwaa/view_model/auth/auth_view_model.dart';

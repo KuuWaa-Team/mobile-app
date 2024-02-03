@@ -40,6 +40,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   int maxStep = 4;
   bool loading = false;
   bool loadingNext = false;
+  bool paying = false;
 
   List<Map<String, dynamic>> provinces = [
     {
@@ -2010,9 +2011,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                                     EventViewModel eventViewModel2 = EventViewModel();
                                                     await eventViewModel2.createEventApi(context, event, image).then((value) {
                                                       Navigator.pop(context);
+                                                      if (value.runtimeType == int) {
+                                                        setState(() {
+                                                          event.id = value;
+                                                        });
+                                                      }
                                                       _controller.nextPage(
-                                                          duration: const Duration(milliseconds: 300),
-                                                          curve: Curves.linear
+                                                        duration: const Duration(milliseconds: 300),
+                                                        curve: Curves.linear
                                                       );
                                                     });
                                                   },
@@ -2113,7 +2119,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                                                     const Column(
                                                                       mainAxisSize: MainAxisSize.min,
                                                                       children: [
-                                                                        Text("Entre votre numéro mobile monney...", style: TextStyle(
+                                                                        Text("Entrez votre numéro mobile monney...", style: TextStyle(
                                                                             fontWeight: FontWeight.bold
                                                                         ), textAlign: TextAlign.center,),
                                                                       ],
@@ -2150,14 +2156,23 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                                       children: [
                                                                         GestureDetector(
-                                                                          onTap: () {
+                                                                          onTap: () async {
                                                                             Map data = {
                                                                               "phoneNumber": _phoneController.text
                                                                             };
-                                                                            //
+                                                                            setState(() {
+                                                                              paying = true;
+                                                                            });
+                                                                            EventViewModel eventViewModel2 = EventViewModel();
+                                                                            await eventViewModel2.payPackApi(context, data, event).then((value) {
+                                                                              setState(() {
+                                                                                paying = false;
+                                                                              });
+                                                                            });
                                                                           },
                                                                           child: CommonButton(
                                                                             title: "Continuer",
+                                                                            loading: paying,
                                                                             padding: const EdgeInsets.symmetric(horizontal: 20),
                                                                           ),
                                                                         )

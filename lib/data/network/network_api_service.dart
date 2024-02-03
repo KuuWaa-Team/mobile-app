@@ -191,7 +191,6 @@ class NetworkApiService extends BaseApiServices {
       case 401:
         Utils.flushBarErrorMessage("Vous devez vous connecter", context);
         UserViewModel().remove().then((value) {
-
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

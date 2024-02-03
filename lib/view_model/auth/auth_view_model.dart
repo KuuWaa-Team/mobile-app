@@ -4,9 +4,9 @@ import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/repository/auth/auth_repository.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
-import 'package:kuuwaa/screens/complete_profile_screen.dart';
+import 'package:kuuwaa/screens/auth/complete_profile_screen.dart';
 import 'package:kuuwaa/screens/home_page_screen.dart';
-import 'package:kuuwaa/screens/otp_screen.dart';
+import 'package:kuuwaa/screens/auth/otp_screen.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class AuthViewModel with ChangeNotifier{

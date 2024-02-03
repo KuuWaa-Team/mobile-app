@@ -141,7 +141,7 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
-  Future<bool> createEventApi (BuildContext context, EventModel event, var image) async {
+  Future<dynamic> createEventApi (BuildContext context, EventModel event, var image) async {
     setLoading(true);
     Map data = {
       "name": event.name,
@@ -175,10 +175,15 @@ class EventViewModel with ChangeNotifier{
       }
     }
 
+    bool success = false;
+    dynamic eventId;
+
     await _repository.createEventApi(context: context, data: data).then((value) {
-      if (value['success'] == true  ) {
-        // Utils.toastMessage("Évenement créé avec succès");
+      if (value['success'] == true) {
         setLoading(false);
+        success = true;
+        eventId = value['eventId'];
+        // Utils.toastMessage("Évenement créé avec succès");
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
@@ -189,7 +194,12 @@ class EventViewModel with ChangeNotifier{
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
-    return true;
+
+    if (success) {
+      return eventId;
+    } else {
+      return false;
+    }
   }
 
   Future<bool> editEventImageApi (BuildContext context, var image, int id) async {
@@ -219,6 +229,21 @@ class EventViewModel with ChangeNotifier{
     await _repository.addBookApi(context: context, data: data, id: id).then((value) {
       if (value['success'] == true  ) {
         setLoading(false);
+      } else {
+        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
+  Future<bool> payPackApi (BuildContext context, Map data, EventModel event) async {
+    setLoading(true);
+    await _repository.payPackApi(context: context, data: data, id: event.id!).then((value) {
+      if (value['success'] == true  ) {
+        // setLoading(false);
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
@@ -287,5 +312,4 @@ class EventViewModel with ChangeNotifier{
     });
     return true;
   }
-
 }

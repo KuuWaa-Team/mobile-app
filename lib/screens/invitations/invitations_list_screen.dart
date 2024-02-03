@@ -1373,7 +1373,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             if (widget.event.paymentStatus == 'paid')
                                                             GestureDetector(
                                                               onTap: () {
-                                                                String url = "https://kuuwaa.com/invitations/" + invitation.code.toString();
+                                                                String url = "http://kuuwaa.com/invitations/" + invitation.code.toString();
                                                                 _openUrl(url);
                                                               },
                                                               child: Container(

@@ -6,6 +6,7 @@ import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:kuuwaa/screens/auth/login_screen.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/view_model/auth/auth_view_model.dart';
@@ -70,7 +71,28 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                           fontWeightNew: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(15)),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>  LoginScreen(),
+                              ),
+                                  (route) => false,
+                            );
+                          },
+                          child: MyTextView(
+                            "Se connecter avec un autre numéro",
+                            textAligntNew: TextAlign.center,
+                            maxLinesNew: 3,
+                            styleNew: MyTextStyle(
+                              colorNew: Colors.white.withOpacity(.5),
+                              size: ResponsiveFlutter.of(context).fontSize(1.6),
+                              fontWeightNew: FontWeight.w400,
+                            ),
+                          )
+                      ),
+                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(5)),
                       Container(
                         height: ResponsiveFlutter.of(context).verticalScale(40),
                         padding: EdgeInsets.symmetric(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/screens/auth/login_screen.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
-import 'package:kuuwaa/screens/complete_profile_screen.dart';
+import 'package:kuuwaa/screens/auth/complete_profile_screen.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class SplashService {
