@@ -62,45 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
             //   fit: BoxFit.cover,
             // ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(75)),
-                child: Image.asset(ImagePath.logo, width: 120,),
-              ),
-              SizedBox(
-                height: ResponsiveFlutter.of(context).moderateScale(20),
-              ),
-              MyTextView(
-                'KuuWaa',
-                maxLineWrap: true,
-                styleNew: MyTextStyle(
-                  size: ResponsiveFlutter.of(context).fontSize(2.2),
-                  fontWeightNew: FontWeight.w700,
-                  colorNew: appColors.btnColor,
-                ),
-              ),
-              SizedBox(
-                height: ResponsiveFlutter.of(context).moderateScale(10),
-              ),
-              MyTextView(
-                'Gérer ses évenements n\'a jamais été aussi facile' ,
-                maxLinesNew: 3,
-                styleNew: MyTextStyle(
-                  size: ResponsiveFlutter.of(context).fontSize(1.5),
-                  fontWeightNew: FontWeight.w500,
-                  colorNew: appColors.lightColor.withOpacity(.4),
-                ),
-              ),
-              SizedBox(
-                height: ResponsiveFlutter.of(context).moderateScale(60),
-              ),
-              Image.asset(
-                ImagePath.splashImage,
-              ),
-            ],
-          ),
+          child: Center(child: Image.asset(ImagePath.logo, width: 120,)),
         ),
       ),
     );

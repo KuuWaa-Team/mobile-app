@@ -8,6 +8,9 @@ import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
+import 'package:kuuwaa/model/address/address_model.dart';
+import 'package:kuuwaa/model/address/country_model.dart';
+import 'package:kuuwaa/model/address/province_model.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
@@ -16,8 +19,10 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class CreateEventScreen extends StatefulWidget {
@@ -34,11 +39,131 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   int step = 0;
   int maxStep = 4;
   bool loading = false;
+  bool loadingNext = false;
+
+  List<Map<String, dynamic>> provinces = [
+    {
+      "name": "Kinshasa",
+      "id": 1
+    },
+    {
+      "name": "Bas-Uele",
+      "id": 2
+    },
+    {
+      "name": "Équateur",
+      "id": 3
+    },
+    {
+      "name": "Haut-Katanga",
+      "id": 4
+    },
+    {
+      "name": "Haut-Lomami",
+      "id": 5
+    },
+    {
+      "name": "Haut-Uele",
+      "id": 6
+    },
+    {
+      "name": "Ituri",
+      "id": 7
+    },
+    {
+      "name": "Kasaï",
+      "id": 8
+    },
+    {
+      "name": " Kasaï central",
+      "id": 9
+    },
+    {
+      "name": "Kasaï oriental",
+      "id": 10
+    },
+    {
+      "name": "Kongo-Central",
+      "id": 11
+    },
+    {
+      "name": "Kwango",
+      "id": 12
+    },
+    {
+      "name": "Kwilu",
+      "id": 13
+    },
+    {
+      "name": "Lomami",
+      "id": 14
+    },
+    {
+      "name": "Lualaba",
+      "id": 15
+    },
+    {
+      "name": "Mai-Ndombe",
+      "id": 16
+    },
+    {
+      "name": "Maniema",
+      "id": 17
+    },
+    {
+      "name": "Mongala",
+      "id": 18
+    },
+    {
+      "name": "Nord-Kivu",
+      "id": 19
+    },
+    {
+      "name": "Nord-Ubangi",
+      "id": 20
+    },
+    {
+      "name": "Sankuru",
+      "id": 21
+    },
+    {
+      "name": "Sud-Kivu",
+      "id": 22
+    },
+    {
+      "name": "Sud-Ubangi",
+      "id": 23
+    },
+    {
+      "name": "Tanganyika",
+      "id": 24
+    },
+    {
+      "name": "Tshopo",
+      "id": 25
+    },
+    {
+      "name": "Tshuapa",
+      "id": 26
+    },
+  ];
 
   int selected = 1;
   EventModel event = EventModel(
     paidEvent: false
   );
+
+  var maskFormatter = MaskTextInputFormatter(
+      mask: '*## ### ###',
+      filter: { "#": RegExp(r'\d'), "*": RegExp(r'[7-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
+  final TextEditingController _phoneController = TextEditingController();
+
+  Map<String, dynamic> selectedProvince = {
+    "name": "",
+    "id": null
+  };
 
   double total = 0;
 
@@ -61,8 +186,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _detailsController = TextEditingController();
+
+  final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _refController = TextEditingController();
 
   final TextEditingController _priceCategoryController = TextEditingController();
   final TextEditingController _priceValueController = TextEditingController();
@@ -90,45 +218,23 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     super.initState();
   }
 
+  _pickDate() async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year+5),
+      initialDate: date ?? DateTime.now(),
+    );
+    if(date != null) {
+      setState(() {
+        date = selectedDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> featuresWidget = [];
-    if (features.isEmpty) {
-      if (eventViewModel.features.isNotEmpty) {
-        eventViewModel.features.forEach((element) {
-          featuresWidget.add(
-            Column(
-              children: [
-                Divider(color: appColors.lightColor.withOpacity(.1), height: 20, thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "+ ${element.name}",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    MyTextView(
-                      "+" + element.price!.toInt().toString() + "\$",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.green,
-                        fontWeightNew: FontWeight.w600,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        });
-      }
-    }
 
     final List<Widget> _pages = [
       ListView(
@@ -488,7 +594,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           });
                         },
                         use24hFormat: true,
-                        // initialDateTime: DateTime.now(),
+                        // initialDateTime: date ?? DateTime.now(),
                         minimumDate: DateTime.now(),
                         mode: CupertinoDatePickerMode.dateAndTime,
                       ),
@@ -537,40 +643,334 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           SizedBox(
             height: ResponsiveFlutter.of(context).verticalScale(10),
           ),
-          Container(
-            height: ResponsiveFlutter.of(context).verticalScale(50),
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-            ),
-            decoration: BoxDecoration(
-              color: appColors.appLightColor,
-              borderRadius: BorderRadius.circular(
-                ResponsiveFlutter.of(context).moderateScale(20),
-              ),
-              border: Border.all(
-                color: appColors.borderColor,
-                width: 1.5,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: commonTestField(
-                    context: context,
-                    controller: _addressController,
-                    keyboardType: TextInputType.multiline,
-                    hintText: Strings.location,
-                    icon: false,
+          // GestureDetector(
+          //   onTap: _pickDate,
+          //   child: Container  (
+          //     height: ResponsiveFlutter.of(context).verticalScale(50),
+          //     width: double.infinity,
+          //     padding: EdgeInsets.symmetric(
+          //       horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+          //     ),
+          //     decoration: BoxDecoration(
+          //       color: appColors.appLightColor,
+          //       borderRadius: BorderRadius.circular(
+          //         ResponsiveFlutter.of(context).moderateScale(20),
+          //       ),
+          //       border: Border.all(
+          //         color: appColors.borderColor,
+          //         width: 1.5,
+          //       ),
+          //     ),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Expanded(
+          //           child: MyTextView(
+          //             date == null ? "Date et heure" : DateFormat('dd/MM/yyyy à kk:mm').format(date!),
+          //             styleNew: MyTextStyle(
+          //               colorNew: appColors.lightColor,
+          //               fontWeightNew: FontWeight.w400,
+          //               size: ResponsiveFlutter.of(context).fontSize(1.8),
+          //             ),
+          //           ),
+          //         ),
+          //         Image.asset(
+          //           ImagePath.pinkCalendar,
+          //           color: appColors.lightPinkColor,
+          //           height: ResponsiveFlutter.of(context).moderateScale(23),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: ResponsiveFlutter.of(context).verticalScale(10),
+          // ),
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: appColors.appMediumColor,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only( // <-- SEE HERE
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
                   ),
                 ),
-                Image.asset(
-                  ImagePath.pinkLocation,
-                  color: appColors.lightPinkColor,
-                  height: ResponsiveFlutter.of(context).moderateScale(23),
+                builder: (context) {
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        return SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  MyTextView(
+                                    "Entrez l'adresse de l'évenement",
+                                    textAligntNew: TextAlign.center,
+                                    styleNew: MyTextStyle(
+                                      colorNew: appColors.lightColor,
+                                      fontWeightNew: FontWeight.w400,
+                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15,),
+
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          backgroundColor: appColors.appMediumColor,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only( // <-- SEE HERE
+                                              topLeft: Radius.circular(30.0),
+                                              topRight: Radius.circular(30.0),
+                                            ),
+                                          ),
+                                          builder: (context) {
+                                            return SingleChildScrollView(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(top: MediaQuery.of(context).viewInsets.top + 60, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                                child: Column(
+                                                  children: [
+                                                    MyTextView(
+                                                      "Choisissez la province",
+                                                      textAligntNew: TextAlign.center,
+                                                      styleNew: MyTextStyle(
+                                                        colorNew: appColors.lightColor,
+                                                        fontWeightNew: FontWeight.w400,
+                                                        size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 15,),
+                                                    ListView.builder(
+                                                      shrinkWrap: true,
+                                                      itemCount: provinces.length,
+                                                      itemBuilder: (context, index) {
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              selectedProvince = provinces[index];
+                                                              Navigator.pop(context);
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                            padding: EdgeInsets.symmetric(
+                                                              vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                              horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                            ),
+                                                            margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(2)),
+                                                            decoration: BoxDecoration(
+                                                              color: selectedProvince["id"] == provinces[index]["id"] ? appColors.lightPinkColor.withOpacity(.1) :  appColors.appLightColor,
+                                                            ),
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  MyTextView(
+                                                                    provinces[index]["name"],
+                                                                    textAligntNew: TextAlign.center,
+                                                                    styleNew: MyTextStyle(
+                                                                      colorNew: appColors.lightColor,
+                                                                      fontWeightNew: FontWeight.w600,
+                                                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                      );
+                                    },
+                                    child: Container(
+                                      height: ResponsiveFlutter.of(context).verticalScale(40),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                        horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                      ),
+                                      margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                      decoration: BoxDecoration(
+                                        color: appColors.appLightColor,
+                                        borderRadius: BorderRadius.circular(
+                                          ResponsiveFlutter.of(context).moderateScale(25),
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            MyTextView(
+                                              selectedProvince["id"] == null ? "Province" : selectedProvince["name"],
+                                              textAligntNew: TextAlign.center,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w600,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                              ),
+                                            ),
+                                            Icon(CupertinoIcons.chevron_down, color: appColors.lightColor, size: 15,)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: ResponsiveFlutter.of(context).verticalScale(40),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                      horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                    ),
+                                    margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    decoration: BoxDecoration(
+                                      color: appColors.appLightColor,
+                                      borderRadius: BorderRadius.circular(
+                                        ResponsiveFlutter.of(context).moderateScale(25),
+                                      ),
+                                    ),
+                                    child: commonTestField(
+                                      context: context,
+                                      controller: _streetController,
+                                      hintText: "Rue",
+                                      keyboardType: TextInputType.text,
+                                      icon: true,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: ResponsiveFlutter.of(context).verticalScale(40),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                      horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                    ),
+                                    margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    decoration: BoxDecoration(
+                                      color: appColors.appLightColor,
+                                      borderRadius: BorderRadius.circular(
+                                        ResponsiveFlutter.of(context).moderateScale(25),
+                                      ),
+                                    ),
+                                    child: commonTestField(
+                                      context: context,
+                                      controller: _numberController,
+                                      hintText: "Numéro",
+                                      keyboardType: TextInputType.text,
+                                      icon: true,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: ResponsiveFlutter.of(context).verticalScale(40),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                      horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                    ),
+                                    margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    decoration: BoxDecoration(
+                                      color: appColors.appLightColor,
+                                      borderRadius: BorderRadius.circular(
+                                        ResponsiveFlutter.of(context).moderateScale(25),
+                                      ),
+                                    ),
+                                    child: commonTestField(
+                                      context: context,
+                                      controller: _refController,
+                                      hintText: "Réference",
+                                      keyboardType: TextInputType.text,
+                                      icon: true,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10,),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      height: ResponsiveFlutter.of(context).verticalScale(40),
+                                      padding: EdgeInsets.only(
+                                        top: ResponsiveFlutter.of(context).moderateScale(6),
+                                        bottom: ResponsiveFlutter.of(context).moderateScale(6),
+                                        left: ResponsiveFlutter.of(context).moderateScale(15),
+                                        right: ResponsiveFlutter.of(context).moderateScale(15),
+                                      ),
+                                      margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                      decoration: BoxDecoration(
+                                          color: appColors.btnColor,
+                                          borderRadius: BorderRadius.circular(30)
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          MyTextView(
+                                            "Valider",
+                                            textAligntNew: TextAlign.center,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w600,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    );
+                  }
+              );
+            },
+            child: Container(
+              height: ResponsiveFlutter.of(context).verticalScale(50),
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+              ),
+              decoration: BoxDecoration(
+                color: appColors.appLightColor,
+                borderRadius: BorderRadius.circular(
+                  ResponsiveFlutter.of(context).moderateScale(20),
                 ),
-              ],
+                border: Border.all(
+                  color: appColors.borderColor,
+                  width: 1.5,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  MyTextView(
+                    selectedProvince["id"] == null || _streetController.text == "" || _numberController.text == "" ? "Adresse" :_numberController.text + ", " + _streetController.text + ". " +  selectedProvince["name"],
+                    textAligntNew: TextAlign.center,
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.lightColor,
+                      fontWeightNew: FontWeight.w400,
+                      size: ResponsiveFlutter.of(context).fontSize(1.8),
+                    ),
+                  ),
+                  Image.asset(
+                    ImagePath.pinkLocation,
+                    color: appColors.lightPinkColor,
+                    height: ResponsiveFlutter.of(context).moderateScale(23),
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(
@@ -1180,7 +1580,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       MyTextView(
-                        "Pack pris",
+                        "Pack",
                         textAligntNew: TextAlign.center,
                         styleNew: MyTextStyle(
                           colorNew: appColors.lightColor.withOpacity(.5),
@@ -1228,7 +1628,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       MyTextView(
-                        "Coût du package",
+                        "Coût du pack",
                         textAligntNew: TextAlign.center,
                         styleNew: MyTextStyle(
                           colorNew: appColors.lightColor.withOpacity(.5),
@@ -1247,7 +1647,42 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       ),
                     ],
                   ),
-                  ...featuresWidget,
+                  ListView.builder(
+                    itemCount: event.features == null ? 0 : event.features!.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      FeatureModel element = event.features![index];
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Divider(color: appColors.lightColor.withOpacity(.1), height: 20, thickness: .5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MyTextView(
+                                "+ ${element.name}",
+                                textAligntNew: TextAlign.center,
+                                styleNew: MyTextStyle(
+                                  colorNew: appColors.lightColor.withOpacity(.5),
+                                  fontWeightNew: FontWeight.w400,
+                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                ),
+                              ),
+                              MyTextView(
+                                "+" + element.price!.toInt().toString() + "\$",
+                                textAligntNew: TextAlign.center,
+                                styleNew: MyTextStyle(
+                                  colorNew: appColors.green,
+                                  fontWeightNew: FontWeight.w600,
+                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -1268,7 +1703,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           ),
                         ),
                         MyTextView(
-                          total.toInt().toString() + "\$",
+                          total.toInt().toString() + "\$ HT",
                           textAligntNew: TextAlign.center,
                           styleNew: MyTextStyle(
                             colorNew: appColors.green,
@@ -1339,44 +1774,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               backArrow: true,
               context: context,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MyTextView(
-                  (step + 1).toString(),
-                  textAligntNew: TextAlign.center,
-                  styleNew: MyTextStyle(
-                    colorNew: appColors.btnColor,
-                    fontWeightNew: FontWeight.w600,
-                    size: ResponsiveFlutter.of(context).fontSize(3),
-                  ),
-                ),
-                MyTextView(
-                  "/" + maxStep.toString(),
-                  textAligntNew: TextAlign.center,
-                  styleNew: MyTextStyle(
-                    colorNew: appColors.lightColor.withOpacity(.8),
-                    fontWeightNew: FontWeight.w300,
-                    size: ResponsiveFlutter.of(context).fontSize(2),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 5,),
-            MyTextView(
-              step == 0 ? "Type d'évenement" : (
-                step == 1 ? "Détails de l'évenement" : (
-                  step == 2 ? "Choisir un pack" : "Paiement"
-                )
-            ),
-              textAligntNew: TextAlign.center,
-              styleNew: MyTextStyle(
-                colorNew: appColors.lightColor,
-                fontWeightNew: FontWeight.w400,
-                size: ResponsiveFlutter.of(context).fontSize(1.3),
-              ),
-            ),
-            const SizedBox(height: 10,),
             Expanded(
               child:
               PageView.builder(
@@ -1393,61 +1790,252 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             const SizedBox(height: 20,),
             GestureDetector(
               onTap: () async {
-                FocusManager.instance.primaryFocus?.unfocus();
-                List<dynamic> fetchedCategories = [dropDownValue];
-                if (step == 0) {
-                  await eventViewModel.getCategories(context, event.paidEvent == true).then((value) {
-                    for (var element in eventViewModel.categories) {
-                      fetchedCategories.add(element);
-                    }
-                    fetchedCategories.add(EventCategoryModel(
-                        id: null,
-                        name: "Autre (À préciser)"
-                    ));
-                    setState(() {
-                      items = fetchedCategories;
-                    });
+                if (! loadingNext) {
+                  setState(() {
+                    loadingNext = true;
                   });
-                  _controller.nextPage(
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.easeInOutQuint
-                  );
-                } else if (step == 1) {
-                  EventCategoryModel categoryValue = dropDownValue as EventCategoryModel;
-                  if (imageFile == null) {
-                    Utils.flushBarErrorMessage("Vous devez ajouter une image", context);
-                  } else if (categoryValue.id == 0) {
-                    Utils.flushBarErrorMessage("Vous devez choisir une catégorie", context);
-                  } else if (categoryValue.id == null && _categoryController.text == "") {
-                    Utils.flushBarErrorMessage("Vous devez entrer le nom de la catégorie", context);
-                  } else if (_titleController.text == "") {
-                    Utils.flushBarErrorMessage("Vous devez entrer un titre de l'évenement", context);
-                  } else if (date == null) {
-                    Utils.flushBarErrorMessage("Vous devez entrer la date de l'évenement", context);
-                  } else if (_addressController.text == "") {
-                    Utils.flushBarErrorMessage("Vous devez entrer l'adresse", context);
-                  } else if (_detailsController.text == "") {
-                    Utils.flushBarErrorMessage("Vous devez entrer un message description de l'évenement", context);
-                  } else {
-                    event.date = date;
-                    event.name = _titleController.text;
-                    event.category = categoryValue;
-                    event.address = _addressController.text;
-                    event.details = _detailsController.text;
-
-                    eventViewModel.getPacksApi(context);
-                    eventViewModel.getFeaturesApi(context);
-
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  List<dynamic> fetchedCategories = [dropDownValue];
+                  if (step == 0) {
+                    await eventViewModel.getCategories(context, event.paidEvent == true).then((value) {
+                      for (var element in eventViewModel.categories) {
+                        fetchedCategories.add(element);
+                      }
+                      fetchedCategories.add(EventCategoryModel(
+                          id: null,
+                          name: "Autre (À préciser)"
+                      ));
+                      setState(() {
+                        items = fetchedCategories;
+                      });
+                    });
                     _controller.nextPage(
-                        duration: const Duration(milliseconds: 800),
-                        curve: Curves.easeInOutQuint
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.linear
                     );
-                  }
-                } else if (step == 2) {
-                  if (selectedPack == null) {
-                    Utils.flushBarErrorMessage("Vous devez séléctionner un pack", context);
-                  } else {
-                    event.eventPack = selectedPack!;
+                  } else if (step == 1) {
+                    EventCategoryModel categoryValue = dropDownValue as EventCategoryModel;
+                    if (imageFile == null) {
+                      Utils.flushBarErrorMessage("Vous devez ajouter une image", context);
+                    } else if (categoryValue.id == 0) {
+                      Utils.flushBarErrorMessage("Vous devez choisir une catégorie", context);
+                    } else if (categoryValue.id == null && _categoryController.text == "") {
+                      Utils.flushBarErrorMessage("Vous devez entrer le nom de la catégorie", context);
+                    } else if (_titleController.text == "") {
+                      Utils.flushBarErrorMessage("Vous devez entrer un titre de l'évenement", context);
+                    } else if (date == null) {
+                      Utils.flushBarErrorMessage("Vous devez entrer la date de l'évenement", context);
+                    } else if (_detailsController.text == "") {
+                      Utils.flushBarErrorMessage("Vous devez entrer un message description de l'évenement", context);
+                    } else if (selectedProvince["id"] == null || _streetController.text == "" || _numberController.text == "") {
+                      Utils.flushBarErrorMessage("Vous devez compléter les informations de l'adress", context);
+                    } else {
+                      event.date = date;
+                      event.name = _titleController.text;
+                      event.category = categoryValue;
+                      event.details = _detailsController.text;
+                      event.address = AddressModel(
+                          country: CountryModel(
+                              id: 1,
+                              name: "République Démocratique du Congo"
+                          ),
+                          number: _numberController.text,
+                          province: ProvinceModel.fromJson(selectedProvince),
+                          street: _streetController.text,
+                          ref: _refController.text
+                      );
+
+                      eventViewModel.getPacksApi(context);
+                      eventViewModel.getFeaturesApi(context);
+
+                      _controller.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.linear
+                      );
+                    }
+                  } else if (step == 2) {
+                    if (selectedPack == null) {
+                      Utils.flushBarErrorMessage("Vous devez séléctionner un pack", context);
+                    } else {
+                      event.eventPack = selectedPack!;
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                          right: 0,
+                                          top: 0,
+                                          child: IconButton(onPressed: (){
+                                            Navigator.pop(context);
+                                          }, icon: const Icon(Icons.close)
+                                          )
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                        child:
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SizedBox(
+                                              height: 60,
+                                              width: 60,
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.card_giftcard,
+                                                  color: appColors.btnColor,
+                                                  size: 50,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10,),
+                                            const Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text("Appuyez sur ces fonctionnalités pour les ajouter à votre évenement", style: TextStyle(
+                                                    fontWeight: FontWeight.bold
+                                                ), textAlign: TextAlign.center,),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 20,),
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: eventViewModel.features.length,
+                                              itemBuilder: (context, index) {
+                                                FeatureModel element = eventViewModel.features[index];
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    if (selectedFeatures.contains(element)) {
+                                                      setState(() {
+                                                        selectedFeatures.remove(element);
+                                                      });
+                                                    } else {
+                                                      setState(() {
+                                                        selectedFeatures.add(element);
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                        borderRadius: BorderRadius.circular(10)
+                                                    ),
+                                                    margin: const EdgeInsets.only(bottom: 10),
+                                                    width: MediaQuery.of(context).size.width,
+                                                    padding: const EdgeInsets.all(10),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+                                                                Container(
+                                                                  width: 16,
+                                                                  height: 16,
+                                                                  padding: const EdgeInsets.all(2),
+                                                                  margin: const EdgeInsets.only(right: 7),
+                                                                  decoration: BoxDecoration(
+                                                                      color: selectedFeatures.contains(element) ? appColors.btnColor : null,
+                                                                      borderRadius: BorderRadius.circular(20),
+                                                                      border: selectedFeatures.contains(element) ? null : Border.all(width: 1, color: appColors.appLightColor.withOpacity(.5))
+                                                                  ),
+                                                                  child: Icon(Icons.check, size: 12, color: appColors.lightColor,),
+                                                                ),
+                                                                MyTextView(
+                                                                  element.name.toString(),
+                                                                  textAligntNew: TextAlign.start,
+                                                                  maxLineWrap: true,
+                                                                  styleNew: MyTextStyle(
+                                                                    colorNew: appColors.black,
+                                                                    fontWeightNew: FontWeight.w400,
+                                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            const SizedBox(width: 10,),
+                                                            MyTextView(
+                                                              "+${element.price?.toInt()}\$",
+                                                              textAligntNew: TextAlign.start,
+                                                              maxLineWrap: true,
+                                                              styleNew: MyTextStyle(
+                                                                colorNew: appColors.btnColor,
+                                                                fontWeightNew: FontWeight.w700,
+                                                                size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(height: 5,),
+                                                        MyTextView(
+                                                          element.description.toString(),
+                                                          textAligntNew: TextAlign.start,
+                                                          maxLineWrap: true,
+                                                          styleNew: MyTextStyle(
+                                                            colorNew: appColors.black.withOpacity(.5),
+                                                            fontWeightNew: FontWeight.w400,
+                                                            size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(height: 20,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    setState(() {
+                                                      event.features = selectedFeatures;
+                                                      total += event.eventPack!.price!;
+                                                      event.features?.forEach((element) {
+                                                        total += element.price!;
+                                                      });
+                                                    });
+
+                                                    EventViewModel eventViewModel2 = EventViewModel();
+                                                    await eventViewModel2.createEventApi(context, event, image).then((value) {
+                                                      Navigator.pop(context);
+                                                      _controller.nextPage(
+                                                          duration: const Duration(milliseconds: 300),
+                                                          curve: Curves.linear
+                                                      );
+                                                    });
+                                                  },
+                                                  child: CommonButton(
+                                                    loading: loading,
+                                                    title: "Continuer",
+                                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }
+                  } else if (step == 3) {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -1478,7 +2066,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                             width: 60,
                                             child: Center(
                                               child: Icon(
-                                                Icons.card_giftcard,
+                                                Icons.question_mark_rounded,
                                                 color: appColors.btnColor,
                                                 size: 50,
                                               ),
@@ -1488,128 +2076,136 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                           const Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Text("Appuyez sur ces fonctionnalités pour les ajouter à votre évenement", style: TextStyle(
+                                              Text("Comment voulez-vous payer ?", style: TextStyle(
                                                   fontWeight: FontWeight.bold
                                               ), textAlign: TextAlign.center,),
                                             ],
                                           ),
                                           const SizedBox(height: 20,),
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: eventViewModel.features.length,
-                                            itemBuilder: (context, index) {
-                                              FeatureModel element = eventViewModel.features[index];
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  if (selectedFeatures.contains(element)) {
-                                                    setState(() {
-                                                      selectedFeatures.remove(element);
-                                                    });
-                                                  } else {
-                                                    setState(() {
-                                                      selectedFeatures.add(element);
-                                                    });
-                                                  }
-                                                },
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                                                      borderRadius: BorderRadius.circular(10)
-                                                  ),
-                                                  margin: const EdgeInsets.only(bottom: 10),
-                                                  width: MediaQuery.of(context).size.width,
-                                                  padding: const EdgeInsets.all(10),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return StatefulBuilder(
+                                                    builder: (context, setState) {
+                                                      return Dialog(
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(10),
+                                                          ),
+                                                          child: Stack(
                                                             children: [
-                                                              Container(
-                                                                width: 16,
-                                                                height: 16,
-                                                                padding: const EdgeInsets.all(2),
-                                                                margin: const EdgeInsets.only(right: 7),
-                                                                decoration: BoxDecoration(
-                                                                    color: selectedFeatures.contains(element) ? appColors.btnColor : null,
-                                                                    borderRadius: BorderRadius.circular(20),
-                                                                    border: selectedFeatures.contains(element) ? null : Border.all(width: 1, color: appColors.appLightColor.withOpacity(.5))
-                                                                ),
-                                                                child: Icon(Icons.check, size: 12, color: appColors.lightColor,),
+                                                              Positioned(
+                                                                  right: 0,
+                                                                  top: 0,
+                                                                  child: IconButton(onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  }, icon: const Icon(Icons.close)
+                                                                  )
                                                               ),
-                                                              MyTextView(
-                                                                element.name.toString(),
-                                                                textAligntNew: TextAlign.start,
-                                                                maxLineWrap: true,
-                                                                styleNew: MyTextStyle(
-                                                                  colorNew: appColors.black,
-                                                                  fontWeightNew: FontWeight.w400,
-                                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                              Padding(
+                                                                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                                child:
+                                                                Column(
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  children: [
+                                                                    const Column(
+                                                                      mainAxisSize: MainAxisSize.min,
+                                                                      children: [
+                                                                        Text("Entre votre numéro mobile monney...", style: TextStyle(
+                                                                            fontWeight: FontWeight.bold
+                                                                        ), textAlign: TextAlign.center,),
+                                                                      ],
+                                                                    ),
+                                                                    const SizedBox(height: 10,),
+                                                                    Image.asset(ImagePath.map),
+                                                                    const SizedBox(height: 10,),
+                                                                    Container(
+                                                                      height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                      padding: EdgeInsets.symmetric(
+                                                                        vertical: ResponsiveFlutter.of(context).moderateScale(5),
+                                                                        horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                      ),
+                                                                      margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(25)),
+                                                                      decoration: BoxDecoration(
+                                                                          color: appColors.lightColor,
+                                                                          borderRadius: BorderRadius.circular(
+                                                                            ResponsiveFlutter.of(context).moderateScale(25),
+                                                                          ),
+                                                                          border: Border.all(color: appColors.borderColor, width: 1)
+                                                                      ),
+                                                                      child: commonTestField(
+                                                                        textColor: appColors.borderColor,
+                                                                        context: context,
+                                                                        controller: _phoneController,
+                                                                        initial: "+243",
+                                                                        hintText: "XXX XXX XXX",
+                                                                        keyboardType: TextInputType.phone,
+                                                                        inputFormatters: [maskFormatter],
+                                                                        icon: true,
+                                                                      ),
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                          onTap: () {
+                                                                            Map data = {
+                                                                              "phoneNumber": _phoneController.text
+                                                                            };
+                                                                            //
+                                                                          },
+                                                                          child: CommonButton(
+                                                                            title: "Continuer",
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    )
+                                                                  ],
                                                                 ),
                                                               ),
                                                             ],
-                                                          ),
-                                                          const SizedBox(width: 10,),
-                                                          MyTextView(
-                                                            "+${element.price?.toInt()}\$",
-                                                            textAligntNew: TextAlign.start,
-                                                            maxLineWrap: true,
-                                                            styleNew: MyTextStyle(
-                                                              colorNew: appColors.btnColor,
-                                                              fontWeightNew: FontWeight.w700,
-                                                              size: ResponsiveFlutter.of(context).fontSize(1.3),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 5,),
+                                                          )
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              width: MediaQuery.of(context).size.width,
+                                              padding: const EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      const Icon(Icons.mobile_screen_share_rounded, size: 17,),
+                                                      const SizedBox(width: 7,),
                                                       MyTextView(
-                                                        element.description.toString(),
+                                                        "Payer par mobile money",
                                                         textAligntNew: TextAlign.start,
                                                         maxLineWrap: true,
                                                         styleNew: MyTextStyle(
-                                                          colorNew: appColors.black.withOpacity(.5),
-                                                          fontWeightNew: FontWeight.w400,
-                                                          size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                          colorNew: appColors.black,
+                                                          fontWeightNew: FontWeight.w500,
+                                                          size: ResponsiveFlutter.of(context).fontSize(1.6),
                                                         ),
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                              );
-                                            },
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                          const SizedBox(height: 20,),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    event.features = selectedFeatures;
-                                                    total += event.eventPack!.price!;
-                                                    event.features?.forEach((element) {
-                                                      total += element.price!;
-                                                    });
-                                                  });
-                                                  Navigator.pop(context);
-                                                  _controller.nextPage(
-                                                      duration: const Duration(milliseconds: 800),
-                                                      curve: Curves.easeInOutQuint
-                                                  );
-                                                },
-                                                child: CommonButton(
-                                                  loading: loading,
-                                                  title: "Continuer",
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                ),
-                                              )
-                                            ],
-                                          )
                                         ],
                                       ),
                                     ),
@@ -1621,154 +2217,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       },
                     );
                   }
-                } else if (step == 3) {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return StatefulBuilder(
-                        builder: (context, setState) {
-                          return Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                      right: 0,
-                                      top: 0,
-                                      child: IconButton(onPressed: (){
-                                        Navigator.pop(context);
-                                      }, icon: const Icon(Icons.close)
-                                      )
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                                    child:
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(
-                                          height: 60,
-                                          width: 60,
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.question_mark_rounded,
-                                              color: appColors.btnColor,
-                                              size: 50,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10,),
-                                        const Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text("Comment voulez-vous payer ?", style: TextStyle(
-                                                fontWeight: FontWeight.bold
-                                            ), textAlign: TextAlign.center,),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 20,),
-                                        GestureDetector(
-                                          onTap: () {
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                                                borderRadius: BorderRadius.circular(10)
-                                            ),
-                                            margin: const EdgeInsets.only(bottom: 10),
-                                            width: MediaQuery.of(context).size.width,
-                                            padding: const EdgeInsets.all(10),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(Icons.mobile_screen_share_rounded, size: 17,),
-                                                    const SizedBox(width: 7,),
-                                                    MyTextView(
-                                                      "Payer par mobile monnaie",
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: appColors.black,
-                                                        fontWeightNew: FontWeight.w500,
-                                                        size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                                                borderRadius: BorderRadius.circular(10)
-                                            ),
-                                            margin: const EdgeInsets.only(bottom: 10),
-                                            width: MediaQuery.of(context).size.width,
-                                            padding: const EdgeInsets.all(10),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(Icons.credit_card, size: 17,),
-                                                    const SizedBox(width: 7,),
-                                                    MyTextView(
-                                                      "Payer par carte de crédit",
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: appColors.black,
-                                                        fontWeightNew: FontWeight.w500,
-                                                        size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 10,),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 5,),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                              },
-                                              child: CommonButton(
-                                                title: "Continuer",
-                                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                          );
-                        },
-                      );
-                    },
-                  );
+                  setState(() {
+                    loadingNext = false;
+                  });
                 }
               },
               child: Padding(
                 padding: EdgeInsets.only(bottom: step == 3 ? 10 : 20, left: 20, right: 20),
                 child: CommonButton(
+                  loading: loadingNext,
                   title: step == 3 ? "Payer maintenant" : Strings.next,
                 ),
               )
@@ -1777,13 +2234,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             if (step == 3)
             GestureDetector(
               onTap: ()  {
-                if (!loading) {
-                  setState(() {
-                    loading = true;
-                  });
-                  EventViewModel eventViewModel2 = EventViewModel();
-                  eventViewModel2.createEventApi(context, event, image);
-                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BottomBarScreen(),
+                  ),
+                );
               },
               child: Container(
                 height: ResponsiveFlutter.of(context).moderateScale(40),
@@ -1802,6 +2258,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    if (loading)
+                    CupertinoActivityIndicator(color: appColors.lightColor, animating: true, radius: 8),
+                    if (loading)
+                    const SizedBox(width: 10,),
+                    if (!loading)
                     MyTextView(
                       "Ignorer pour le moment",
                       textAligntNew: TextAlign.start,

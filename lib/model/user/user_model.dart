@@ -5,6 +5,7 @@ class UserModel {
   String? lastname;
   String? address;
   bool? otpVerified;
+  bool? completed;
   String? token;
 
   UserModel({
@@ -14,7 +15,8 @@ class UserModel {
     this.lastname,
     this.address,
     this.token,
-    this.otpVerified
+    this.otpVerified,
+    this.completed
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class UserModel {
     phoneNumber = json['phoneNumber'];
     firstname = json['firstname'];
     lastname = json['lastname'];
+    completed = json['completed'];
     address = json['address'];
     token = json['token'];
     otpVerified = json['otpVerified'];
@@ -32,6 +35,7 @@ class UserModel {
     data['id'] = id;
     data['phoneNumber'] = phoneNumber;
     data['firstname'] = firstname;
+    data['completed'] = completed;
     data['lastname'] = lastname;
     data['address'] = address;
     return data;

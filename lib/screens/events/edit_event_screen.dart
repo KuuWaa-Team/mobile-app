@@ -5,6 +5,9 @@ import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/data/response/status.dart';
+import 'package:kuuwaa/model/address/address_model.dart';
+import 'package:kuuwaa/model/address/country_model.dart';
+import 'package:kuuwaa/model/address/province_model.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
@@ -29,6 +32,117 @@ class _EditEventScreenState extends State<EditEventScreen> {
   bool loading = false;
   bool loaded = false;
 
+  List<Map<String, dynamic>> provinces = [
+    {
+      "name": "Kinshasa",
+      "id": 1
+    },
+    {
+      "name": "Bas-Uele",
+      "id": 2
+    },
+    {
+      "name": "Équateur",
+      "id": 3
+    },
+    {
+      "name": "Haut-Katanga",
+      "id": 4
+    },
+    {
+      "name": "Haut-Lomami",
+      "id": 5
+    },
+    {
+      "name": "Haut-Uele",
+      "id": 6
+    },
+    {
+      "name": "Ituri",
+      "id": 7
+    },
+    {
+      "name": "Kasaï",
+      "id": 8
+    },
+    {
+      "name": " Kasaï central",
+      "id": 9
+    },
+    {
+      "name": "Kasaï oriental",
+      "id": 10
+    },
+    {
+      "name": "Kongo-Central",
+      "id": 11
+    },
+    {
+      "name": "Kwango",
+      "id": 12
+    },
+    {
+      "name": "Kwilu",
+      "id": 13
+    },
+    {
+      "name": "Lomami",
+      "id": 14
+    },
+    {
+      "name": "Lualaba",
+      "id": 15
+    },
+    {
+      "name": "Mai-Ndombe",
+      "id": 16
+    },
+    {
+      "name": "Maniema",
+      "id": 17
+    },
+    {
+      "name": "Mongala",
+      "id": 18
+    },
+    {
+      "name": "Nord-Kivu",
+      "id": 19
+    },
+    {
+      "name": "Nord-Ubangi",
+      "id": 20
+    },
+    {
+      "name": "Sankuru",
+      "id": 21
+    },
+    {
+      "name": "Sud-Kivu",
+      "id": 22
+    },
+    {
+      "name": "Sud-Ubangi",
+      "id": 23
+    },
+    {
+      "name": "Tanganyika",
+      "id": 24
+    },
+    {
+      "name": "Tshopo",
+      "id": 25
+    },
+    {
+      "name": "Tshuapa",
+      "id": 26
+    },
+  ];
+  Map<String, dynamic> selectedProvince = {
+    "name": "",
+    "id": null
+  };
+
   double total = 0;
 
   bool showOtherCategory = false;
@@ -41,7 +155,9 @@ class _EditEventScreenState extends State<EditEventScreen> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _refController = TextEditingController();
   final TextEditingController _detailsController = TextEditingController();
 
   final TextEditingController _priceCategoryController = TextEditingController();
@@ -163,7 +279,13 @@ class _EditEventScreenState extends State<EditEventScreen> {
                               _titleController.text = event.name!;
                               date = DateTime.parse(event.date.toString());
                               _detailsController.text = event.details.toString();
-                              _addressController.text = event.address.toString();
+                              _numberController.text = event.address!.number.toString();
+                              _streetController.text = event.address!.street.toString();
+                              if (event.address!.ref != null && event.address!.ref != "null") {
+                                _refController.text = event.address!.ref.toString();
+                              }
+                              selectedProvince["name"] = event.address!.province!.name.toString();
+                              selectedProvince["id"] = event.address!.province!.id.toString();
                               for (var element in items) {
                                 if (element.name == event.category!.name!) {
                                   dropDownValue = element;
@@ -373,40 +495,292 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                       SizedBox(
                                         height: ResponsiveFlutter.of(context).verticalScale(10),
                                       ),
-                                      Container(
-                                        height: ResponsiveFlutter.of(context).verticalScale(50),
-                                        width: double.infinity,
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: appColors.appLightColor,
-                                          borderRadius: BorderRadius.circular(
-                                            ResponsiveFlutter.of(context).moderateScale(20),
-                                          ),
-                                          border: Border.all(
-                                            color: appColors.borderColor,
-                                            width: 1.5,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: commonTestField(
-                                                context: context,
-                                                controller: _addressController,
-                                                keyboardType: TextInputType.multiline,
-                                                hintText: Strings.location,
-                                                icon: false,
+                                      GestureDetector(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              backgroundColor: appColors.appMediumColor,
+                                              shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only( // <-- SEE HERE
+                                                  topLeft: Radius.circular(30.0),
+                                                  topRight: Radius.circular(30.0),
+                                                ),
                                               ),
+                                              builder: (context) {
+                                                return StatefulBuilder(
+                                                    builder: (context, setState) {
+                                                      return SingleChildScrollView(
+                                                        child: Padding(
+                                                          padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                                          child: SingleChildScrollView(
+                                                            child: Column(
+                                                              children: [
+                                                                MyTextView(
+                                                                  "Entrez l'adresse de l'évenement",
+                                                                  textAligntNew: TextAlign.center,
+                                                                  styleNew: MyTextStyle(
+                                                                    colorNew: appColors.lightColor,
+                                                                    fontWeightNew: FontWeight.w400,
+                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(height: 15,),
+
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    showModalBottomSheet(
+                                                                        context: context,
+                                                                        isScrollControlled: true,
+                                                                        backgroundColor: appColors.appMediumColor,
+                                                                        shape: const RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.only( // <-- SEE HERE
+                                                                            topLeft: Radius.circular(30.0),
+                                                                            topRight: Radius.circular(30.0),
+                                                                          ),
+                                                                        ),
+                                                                        builder: (context) {
+                                                                          return SingleChildScrollView(
+                                                                            child: Padding(
+                                                                              padding: EdgeInsets.only(top: MediaQuery.of(context).viewInsets.top + 60, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  MyTextView(
+                                                                                    "Choisissez la province",
+                                                                                    textAligntNew: TextAlign.center,
+                                                                                    styleNew: MyTextStyle(
+                                                                                      colorNew: appColors.lightColor,
+                                                                                      fontWeightNew: FontWeight.w400,
+                                                                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                                    ),
+                                                                                  ),
+                                                                                  const SizedBox(height: 15,),
+                                                                                  ListView.builder(
+                                                                                      shrinkWrap: true,
+                                                                                      itemCount: provinces.length,
+                                                                                      itemBuilder: (context, index) {
+                                                                                        return GestureDetector(
+                                                                                          onTap: () {
+                                                                                            setState(() {
+                                                                                              selectedProvince = provinces[index];
+                                                                                              Navigator.pop(context);
+                                                                                            });
+                                                                                          },
+                                                                                          child: Container(
+                                                                                            height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                                            padding: EdgeInsets.symmetric(
+                                                                                              vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                                              horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                                            ),
+                                                                                            margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(2)),
+                                                                                            decoration: BoxDecoration(
+                                                                                              color: selectedProvince["id"] == provinces[index]["id"] ? appColors.lightPinkColor.withOpacity(.1) :  appColors.appLightColor,
+                                                                                            ),
+                                                                                            child: Padding(
+                                                                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                                              child: Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                                children: [
+                                                                                                  MyTextView(
+                                                                                                    provinces[index]["name"],
+                                                                                                    textAligntNew: TextAlign.center,
+                                                                                                    styleNew: MyTextStyle(
+                                                                                                      colorNew: appColors.lightColor,
+                                                                                                      fontWeightNew: FontWeight.w600,
+                                                                                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        );
+                                                                                      }
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        }
+                                                                    );
+                                                                  },
+                                                                  child: Container(
+                                                                    height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                    padding: EdgeInsets.symmetric(
+                                                                      vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                      horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                    ),
+                                                                    margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                                    decoration: BoxDecoration(
+                                                                      color: appColors.appLightColor,
+                                                                      borderRadius: BorderRadius.circular(
+                                                                        ResponsiveFlutter.of(context).moderateScale(25),
+                                                                      ),
+                                                                    ),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                      child: Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          MyTextView(
+                                                                            selectedProvince["id"] == null ? "Province" : selectedProvince["name"],
+                                                                            textAligntNew: TextAlign.center,
+                                                                            styleNew: MyTextStyle(
+                                                                              colorNew: appColors.lightColor,
+                                                                              fontWeightNew: FontWeight.w600,
+                                                                              size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                            ),
+                                                                          ),
+                                                                          Icon(CupertinoIcons.chevron_down, color: appColors.lightColor, size: 15,)
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                  padding: EdgeInsets.symmetric(
+                                                                    vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                    horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                  ),
+                                                                  margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                                  decoration: BoxDecoration(
+                                                                    color: appColors.appLightColor,
+                                                                    borderRadius: BorderRadius.circular(
+                                                                      ResponsiveFlutter.of(context).moderateScale(25),
+                                                                    ),
+                                                                  ),
+                                                                  child: commonTestField(
+                                                                    context: context,
+                                                                    controller: _streetController,
+                                                                    hintText: "Rue",
+                                                                    keyboardType: TextInputType.text,
+                                                                    icon: true,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                  padding: EdgeInsets.symmetric(
+                                                                    vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                    horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                  ),
+                                                                  margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                                  decoration: BoxDecoration(
+                                                                    color: appColors.appLightColor,
+                                                                    borderRadius: BorderRadius.circular(
+                                                                      ResponsiveFlutter.of(context).moderateScale(25),
+                                                                    ),
+                                                                  ),
+                                                                  child: commonTestField(
+                                                                    context: context,
+                                                                    controller: _numberController,
+                                                                    hintText: "Numéro",
+                                                                    keyboardType: TextInputType.text,
+                                                                    icon: true,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                  padding: EdgeInsets.symmetric(
+                                                                    vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                    horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                  ),
+                                                                  margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                                  decoration: BoxDecoration(
+                                                                    color: appColors.appLightColor,
+                                                                    borderRadius: BorderRadius.circular(
+                                                                      ResponsiveFlutter.of(context).moderateScale(25),
+                                                                    ),
+                                                                  ),
+                                                                  child: commonTestField(
+                                                                    context: context,
+                                                                    controller: _refController,
+                                                                    hintText: "Réference",
+                                                                    keyboardType: TextInputType.text,
+                                                                    icon: true,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(height: 10,),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    setState(() {});
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  child: Container(
+                                                                    height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                    padding: EdgeInsets.only(
+                                                                      top: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                      bottom: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                      left: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                      right: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                    ),
+                                                                    margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                                    decoration: BoxDecoration(
+                                                                        color: appColors.btnColor,
+                                                                        borderRadius: BorderRadius.circular(30)
+                                                                    ),
+                                                                    child: Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                      children: [
+                                                                        MyTextView(
+                                                                          "Valider",
+                                                                          textAligntNew: TextAlign.center,
+                                                                          styleNew: MyTextStyle(
+                                                                            colorNew: appColors.lightColor,
+                                                                            fontWeightNew: FontWeight.w600,
+                                                                            size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Container(
+                                          height: ResponsiveFlutter.of(context).verticalScale(50),
+                                          width: double.infinity,
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: appColors.appLightColor,
+                                            borderRadius: BorderRadius.circular(
+                                              ResponsiveFlutter.of(context).moderateScale(20),
                                             ),
-                                            Image.asset(
-                                              ImagePath.pinkLocation,
-                                              color: appColors.lightPinkColor,
-                                              height: ResponsiveFlutter.of(context).moderateScale(23),
+                                            border: Border.all(
+                                              color: appColors.borderColor,
+                                              width: 1.5,
                                             ),
-                                          ],
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              MyTextView(
+                                                _numberController.text + ", " + _streetController.text + ". " +  selectedProvince["name"],
+                                                textAligntNew: TextAlign.center,
+                                                styleNew: MyTextStyle(
+                                                  colorNew: appColors.lightColor,
+                                                  fontWeightNew: FontWeight.w400,
+                                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                ),
+                                              ),
+                                              Image.asset(
+                                                ImagePath.pinkLocation,
+                                                color: appColors.lightPinkColor,
+                                                height: ResponsiveFlutter.of(context).moderateScale(23),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
@@ -451,270 +825,35 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                           ),
                                         ),
                                       ),
-                                      if (event.paidEvent == true)
-                                      SizedBox(
-                                        height: ResponsiveFlutter.of(context).verticalScale(10),
-                                      ),
-                                      if (paid == true)
-                                      GestureDetector(
-                                        onTap: () {
-                                          showModalBottomSheet(
-                                              context: context,
-                                              backgroundColor: appColors.appMediumColor,
-                                              shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only( // <-- SEE HERE
-                                                  topLeft: Radius.circular(30.0),
-                                                  topRight: Radius.circular(30.0),
-                                                ),
-                                              ),
-                                              builder: (context) {
-                                                return Padding(
-                                                  padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      children: [
-                                                        MyTextView(
-                                                          "Ajouter un prix de ticket",
-                                                          textAligntNew: TextAlign.center,
-                                                          styleNew: MyTextStyle(
-                                                            colorNew: appColors.lightColor,
-                                                            fontWeightNew: FontWeight.w400,
-                                                            size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 15,),
-                                                        Container(
-                                                          height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                          padding: EdgeInsets.symmetric(
-                                                            vertical: ResponsiveFlutter.of(context).moderateScale(6),
-                                                            horizontal: ResponsiveFlutter.of(context).moderateScale(15),
-                                                          ),
-                                                          margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                          decoration: BoxDecoration(
-                                                            color: appColors.appLightColor,
-                                                            borderRadius: BorderRadius.circular(
-                                                              ResponsiveFlutter.of(context).moderateScale(25),
-                                                            ),
-                                                          ),
-                                                          child: commonTestField(
-                                                            context: context,
-                                                            controller: _priceCategoryController,
-                                                            hintText: "Catégorie",
-                                                            keyboardType: TextInputType.phone,
-                                                            icon: true,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                          padding: EdgeInsets.symmetric(
-                                                            vertical: ResponsiveFlutter.of(context).moderateScale(6),
-                                                            horizontal: ResponsiveFlutter.of(context).moderateScale(15),
-                                                          ),
-                                                          margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                          decoration: BoxDecoration(
-                                                            color: appColors.appLightColor,
-                                                            borderRadius: BorderRadius.circular(
-                                                              ResponsiveFlutter.of(context).moderateScale(25),
-                                                            ),
-                                                          ),
-                                                          child: commonTestField(
-                                                            context: context,
-                                                            controller: _priceValueController,
-                                                            hintText: "Prix",
-                                                            keyboardType: TextInputType.phone,
-                                                            icon: true,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 10,),
-                                                        MyTextView(
-                                                          "Choisissez une couleur pour cette catégorie",
-                                                          styleNew: MyTextStyle(
-                                                            colorNew: appColors.lightColor,
-                                                            fontWeightNew: FontWeight.w400,
-                                                            size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 10,),
-                                                        Row(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: [
-                                                              Container(
-                                                                width: ResponsiveFlutter.of(context).scale(40),
-                                                                height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                                decoration: BoxDecoration(
-                                                                  color: Colors.red,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(40),
-                                                                  ),
-                                                                ),
-                                                                child: Icon(Icons.check, color: appColors.lightColor,),
-                                                              ),
-                                                              const SizedBox(width: 10,),
-                                                              Container(
-                                                                width: ResponsiveFlutter.of(context).scale(40),
-                                                                height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                                decoration: BoxDecoration(
-                                                                  color: Colors.orange,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(40),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(width: 10,),
-                                                              Container(
-                                                                width: ResponsiveFlutter.of(context).scale(40),
-                                                                height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                                decoration: BoxDecoration(
-                                                                  color: Colors.green,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(40),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(width: 10,),
-                                                              Container(
-                                                                width: ResponsiveFlutter.of(context).scale(40),
-                                                                height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                                decoration: BoxDecoration(
-                                                                  color: Colors.blue,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(40),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(width: 10,),
-                                                              Container(
-                                                                width: ResponsiveFlutter.of(context).scale(40),
-                                                                height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                                decoration: BoxDecoration(
-                                                                  color: Colors.yellow,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(40),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ]
-                                                        ),
-                                                        const SizedBox(height: 20,),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            if (_priceCategoryController.text != "" && _priceValueController.text != "" && !addingPrice) {
-                                                              setState(() {
-                                                                addingPrice = true;
-                                                                prices.add({
-                                                                  "category": _priceCategoryController.text,
-                                                                  "price": _priceCategoryController.text
-                                                                });
-                                                                addingPrice = false;
-                                                              });
-                                                              Navigator.pop(context);
-                                                            }
-                                                          },
-                                                          child: Container(
-                                                            height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                            padding: EdgeInsets.only(
-                                                              top: ResponsiveFlutter.of(context).moderateScale(6),
-                                                              bottom: ResponsiveFlutter.of(context).moderateScale(6),
-                                                              left: ResponsiveFlutter.of(context).moderateScale(15),
-                                                              right: ResponsiveFlutter.of(context).moderateScale(15),
-                                                            ),
-                                                            margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                            decoration: BoxDecoration(
-                                                                color: appColors.btnColor,
-                                                                borderRadius: BorderRadius.circular(30)
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                MyTextView(
-                                                                  Strings.add,
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w600,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                          );
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                            vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: appColors.appLightColor,
-                                            borderRadius: BorderRadius.circular(
-                                              ResponsiveFlutter.of(context).moderateScale(20),
-                                            ),
-                                            border: Border.all(
-                                              color: appColors.borderColor,
-                                              width: 1.5,
-                                            ),
-                                          ),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  MyTextView(
-                                                    "Prix des tickets",
-                                                    styleNew: MyTextStyle(
-                                                      colorNew: appColors.lightColor,
-                                                      fontWeightNew: FontWeight.w400,
-                                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                    ),
-                                                  ),
-                                                  Icon(Icons.add_circle, color: appColors.btnColor, size: 25,)
-                                                ],
-                                              ),
-                                              if (pricesList.isNotEmpty)
-                                                const SizedBox(height: 15,),
-                                              Wrap(
-                                                runAlignment: WrapAlignment.start,
-                                                alignment: WrapAlignment.start,
-                                                runSpacing: 10,
-                                                spacing: 10,
-                                                crossAxisAlignment: WrapCrossAlignment.start,
-                                                children: pricesList,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),
                                 const SizedBox(height: 20,),
                                 GestureDetector(
-                                    onTap: () async {
-                                      event.name = _titleController.text;
-                                      event.category = dropDownValue as EventCategoryModel;
-                                      event.address = _addressController.text;
-                                      event.details = _detailsController.text;
-                                      event.date = date;
-                                      eventViewModel.editEventApi(context, event, event.id!);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                                      child: CommonButton(
-                                        loading: eventViewModel.loading,
-                                        title: "Enrégistrer",
-                                      ),
-                                    )
+                                  onTap: () async {
+                                    event.name = _titleController.text;
+                                    event.category = dropDownValue as EventCategoryModel;
+                                    event.details = _detailsController.text;
+                                    event.date = date;
+                                    event.address = AddressModel(
+                                        country: CountryModel(
+                                            id: 1,
+                                            name: "République Démocratique du Congo"
+                                        ),
+                                        number: _numberController.text,
+                                        province: ProvinceModel.fromJson(selectedProvince),
+                                        street: _streetController.text,
+                                        ref: _refController.text
+                                    );
+                                    eventViewModel.editEventApi(context, event, event.id!);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                    child: CommonButton(
+                                      loading: eventViewModel.loading,
+                                      title: "Enrégistrer",
+                                    ),
+                                  )
                                 ),
                               ],
                             );

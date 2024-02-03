@@ -2,11 +2,13 @@ import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:kuuwaa/view_model/book/book_view_model.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
 import 'package:kuuwaa/view_model/table/table_view_model.dart';
 
@@ -23,6 +25,11 @@ class _BookScreenState extends State<BookScreen> {
   InvitationViewModel invitationViewModel = InvitationViewModel();
   bool loaded = false;
 
+  bool loadingDelete = false;
+
+  BookViewModel bookViewModel = BookViewModel();
+  EventModel event = EventModel();
+
   int step = 0;
 
   final PageController _controller = PageController();
@@ -38,11 +45,173 @@ class _BookScreenState extends State<BookScreen> {
 
   TableViewModel tableViewModel = TableViewModel();
   List<Widget> books = [];
-
+  List<Widget> _pages = [];
 
   @override
   void initState() {
+    setState(() {
+      event = widget.event;
+    });
     super.initState();
+  }
+
+  void loadBooks () {
+    setState(() {
+      books = [];
+      event.books?.forEach((element) {
+        books.add(Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20), right: ResponsiveFlutter.of(context).moderateScale(20), bottom: ResponsiveFlutter.of(context).moderateScale(20)),
+          color: appColors.white,
+          padding: EdgeInsets.symmetric(vertical: ResponsiveFlutter.of(context).moderateScale(40), horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: IconButton(onPressed: (){
+                                          Navigator.pop(context);
+                                        }, icon: const Icon(Icons.close)
+                                        )
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                      child:
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                            height: 60,
+                                            width: 60,
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.question_mark_rounded,
+                                                color: appColors.btnColor,
+                                                size: 50,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10,),
+                                          const Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text("Êtes-vous sûr de vouloir supprimer ce message du livre d'or ?", style: TextStyle(
+                                                  fontWeight: FontWeight.bold
+                                              ), textAlign: TextAlign.center,),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 20,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: CommonButton(
+                                                  loading: loading,
+                                                  btnColor: appColors.appLightColor,
+                                                  title: "Annuler",
+                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10,),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  bookViewModel.deleteBook(context, element.id!, event).then((value) {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      event.books!.remove(element);
+                                                      _controller.previousPage(
+                                                          duration: const Duration(milliseconds: 500),
+                                                          curve: Curves.easeInOutQuint
+                                                      );
+                                                      loadBooks();
+                                                    });
+                                                  });
+                                                },
+                                                child: CommonButton(
+                                                  loading: loadingDelete,
+                                                  title: "Confirmer",
+                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: appColors.black.withOpacity(.03)
+                    ),
+                    padding: const EdgeInsets.only(top: 3, left: 5, right: 7, bottom: 4),
+                    child: Row(
+                      children: [
+                        Icon(Icons.close, size: 12, color: appColors.black.withOpacity(.5),),
+                        const SizedBox(width: 2,),
+                        Text("Supprimer", style: TextStyle(
+                            fontSize: 10,
+                            color: appColors.black.withOpacity(.4),
+                            fontWeight: FontWeight.w600
+                        ),)
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset("assets/images/quote.png", width: 30,),
+                  Container(
+                    width: 250,
+                    margin: const EdgeInsets.only(left: 20, top: 10),
+                    child: Text(element.message!, style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: appColors.black
+                    )),
+                  ),
+                  const SizedBox(height: 30,),
+                  Text("${element.invitation!.civility!} ${element.invitation!.name}", style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 10,
+                      fontStyle: FontStyle.italic
+                  ),)
+                ],
+              ),
+            ],
+          ),
+        ));
+      });
+    });
   }
 
   @override
@@ -51,40 +220,9 @@ class _BookScreenState extends State<BookScreen> {
       setState(() {
         loaded = true;
       });
-      widget.event.books?.forEach((element) {
-        books.add(Container(
-          height: MediaQuery.of(context).size.height * 0.6,
-          margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20), right: ResponsiveFlutter.of(context).moderateScale(20), bottom: ResponsiveFlutter.of(context).moderateScale(20)),
-          color: appColors.white,
-          padding: EdgeInsets.symmetric(vertical: ResponsiveFlutter.of(context).moderateScale(40), horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset("assets/images/quote.png", width: 30,),
-                Container(
-                  width: 250,
-                  margin: const EdgeInsets.only(left: 20, top: 10),
-                  child: Text(element.message!, style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: appColors.black
-                  )),
-                ),
-                const SizedBox(height: 30,),
-                Text("${element.invitation!.civility!} ${element.invitation!.name}", style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 10,
-                    fontStyle: FontStyle.italic
-                ),)
-              ],
-            ),
-          ),
-        ));
-      });
+      loadBooks();
     }
-    final List<Widget> _pages = [
+    _pages = [
       Container(
         height: MediaQuery.of(context).size.height * 0.6,
         margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20), right: ResponsiveFlutter.of(context).moderateScale(20), bottom: ResponsiveFlutter.of(context).moderateScale(20)),
@@ -256,8 +394,13 @@ class _BookScreenState extends State<BookScreen> {
             if (widget.event.books!.isNotEmpty)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
-              child: CommonButton(
-                title: "Télécharger",
+              child: GestureDetector(
+                onTap: () {
+                  Utils.flushBarErrorMessage("Fonctionnalité en cours de développement", context);
+                },
+                child: CommonButton(
+                  title: "Télécharger",
+                ),
               ),
             ),
             if (widget.event.books!.isEmpty)

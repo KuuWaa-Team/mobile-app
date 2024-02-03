@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:kuuwaa/model/address/address_model.dart';
 import 'package:kuuwaa/model/book/book_model.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
@@ -7,7 +10,6 @@ class EventModel {
   int? id;
   String? name;
   DateTime? date;
-  String? address;
   int? tablesCount;
   int? invitationsCount;
   bool? shared;
@@ -19,16 +21,19 @@ class EventModel {
   String? adminStatus;
   String? imagePath;
   String? paymentStatus;
+  List? featureslugs;
   EventCategoryModel? category;
   EventPackModel? eventPack;
   bool? paidEvent;
   List<FeatureModel>? features;
   List<BookModel>? books;
+  AddressModel? address;
 
   EventModel({
     this.id,
     this.name,
     this.date,
+    this.featureslugs,
     this.books,
     this.address,
     this.details,
@@ -52,7 +57,6 @@ class EventModel {
     id = json['id'];
     name = json['name'];
     date = DateTime.parse(json['date'].toString());
-    address = json['address'];
     details = json['details'];
     adminStatus = json['adminStatus'];
     paymentStatus = json['paymentStatus'];
@@ -60,6 +64,9 @@ class EventModel {
     imagePath = json['imagePath'];
     paidEvent = json['paidEvent'];
     shared = json['shared'];
+    if (json['featureslugs'] != null) {
+      featureslugs = jsonDecode(json['featureslugs']);
+    }
     tablesCount = json['tablesCount'];
     beveragesCount = json['beveragesCount'];
     adminsCount = json['adminsCount'];
@@ -67,6 +74,9 @@ class EventModel {
     adminId = json['adminId'];
     if (json['category'] != null) {
       category = EventCategoryModel.fromJson(json['category']);
+    }
+    if (json['address'] != null) {
+      address = AddressModel.fromJson(json['address']);
     }
     if (json['eventPack'] != null) {
       eventPack = EventPackModel.fromJson(json['eventPack']);
@@ -91,7 +101,9 @@ class EventModel {
     data['id'] = id;
     data['name'] = name;
     data['date'] = date;
-    data['address'] = address;
+    if (address != null) {
+      data['address'] = address!.toJson();
+    }
     data['details'] = details;
     data['imagePath'] = imagePath;
     data['status'] = status;

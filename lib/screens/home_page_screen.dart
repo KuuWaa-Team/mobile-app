@@ -139,36 +139,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       // SizedBox(
                       //   width: ResponsiveFlutter.of(context).moderateScale(15),
                       // ),
+                      // GestureDetector(
+                      //     onTap: () {
+                      //       Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //           builder: (context) => const ProfileScreen(),
+                      //         ),
+                      //       );
+                      //     },
+                      //     child: SizedBox(
+                      //       height: ResponsiveFlutter.of(context).moderateScale(28),
+                      //       width: ResponsiveFlutter.of(context).moderateScale(28),
+                      //       child: Icon(
+                      //         Icons.search,
+                      //         size: ResponsiveFlutter.of(context).moderateScale(28),
+                      //         color: appColors.lightColor,
+                      //       ),
+                      //     )
+                      // ),
+                      // SizedBox(
+                      //   width: ResponsiveFlutter.of(context).moderateScale(15),
+                      // ),
                       GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProfileScreen(),
-                              ),
-                            );
-                          },
-                          child: SizedBox(
-                            height: ResponsiveFlutter.of(context).moderateScale(28),
-                            width: ResponsiveFlutter.of(context).moderateScale(28),
-                            child: Icon(
-                              Icons.search,
-                              size: ResponsiveFlutter.of(context).moderateScale(28),
-                              color: appColors.lightColor,
-                            ),
-                          )
-                      ),
-                      SizedBox(
-                        width: ResponsiveFlutter.of(context).moderateScale(15),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProfileScreen(),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const ProfileScreen(),
+                            //   ),
+                            // );
                           },
                           child: SizedBox(
                             height: ResponsiveFlutter.of(context).moderateScale(28),

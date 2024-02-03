@@ -12,6 +12,7 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:kuuwaa/screens/invitations/invitation_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/shimmer/circle_image_shimmer.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
@@ -128,20 +129,25 @@ class _InvitationEventScreenState extends State<InvitationEventScreen> {
                                         Flexible(
                                           child: Row(
                                             children: [
-                                              Container(
-                                                width: 50,
-                                                height: 50,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10)
-                                                ),
-                                                margin: const EdgeInsets.only(right: 15),
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(50),
-                                                  child: Image.network(
-                                                    AppUrl.domainName + current.event!.imagePath.toString(),
-                                                    fit: BoxFit.cover,
+                                              Stack(
+                                                children: [
+                                                  CircleImageShimmer(),
+                                                  Container(
+                                                    width: 50,
+                                                    height: 50,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10)
+                                                    ),
+                                                    margin: const EdgeInsets.only(right: 15),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(50),
+                                                      child: Image.network(
+                                                        AppUrl.domainName + current.event!.imagePath.toString(),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
+                                                ],
                                               ),
                                               Column(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

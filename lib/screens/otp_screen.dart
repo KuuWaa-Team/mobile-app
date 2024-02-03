@@ -5,6 +5,7 @@ import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:kuuwaa/screens/auth/login_screen.dart';
 import 'package:kuuwaa/screens/complete_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -85,7 +86,28 @@ class _OtpScreenState extends State<OtpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(25)),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>  LoginScreen(),
+                            ),
+                                (route) => false,
+                          );
+                        },
+                        child: MyTextView(
+                          "Changer de numéro",
+                          textAligntNew: TextAlign.center,
+                          maxLinesNew: 3,
+                          styleNew: MyTextStyle(
+                            colorNew: Colors.white,
+                            size: ResponsiveFlutter.of(context).fontSize(1.6),
+                            fontWeightNew: FontWeight.w400,
+                          ),
+                        )
+                      ),
+                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(5)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

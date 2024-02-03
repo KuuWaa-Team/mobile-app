@@ -32,24 +32,24 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               title: "Mes invitations",
               backArrow: false,
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left : 20,
-                right : 20,
-                bottom : 10,
-              ),
-              child: CupertinoSearchTextField(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                style: TextStyle(
-                    color: appColors.lightColor
-                ),
-                placeholder: "Rechercher",
-                onChanged: (String value) {
-                },
-                onSubmitted: (String value) {
-                },
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //     left : 20,
+            //     right : 20,
+            //     bottom : 10,
+            //   ),
+            //   child: CupertinoSearchTextField(
+            //     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            //     style: TextStyle(
+            //         color: appColors.lightColor
+            //     ),
+            //     placeholder: "Rechercher",
+            //     onChanged: (String value) {
+            //     },
+            //     onSubmitted: (String value) {
+            //     },
+            //   ),
+            // ),
             Expanded(
               child: Container(
                 alignment: Alignment.topCenter,

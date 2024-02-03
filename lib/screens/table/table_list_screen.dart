@@ -66,6 +66,7 @@ class _TableListScreenState extends State<TableListScreen> {
                   onTap: () {
                     showModalBottomSheet(
                         context: context,
+                        isScrollControlled: true,
                         backgroundColor: appColors.appMediumColor,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only( // <-- SEE HERE

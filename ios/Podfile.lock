@@ -268,7 +268,7 @@ SPEC CHECKSUMS:
   SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sms_autofill: c461043483362c3f1709ee76eaae6eb570b31686
-  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
+  sqflite: 50a33e1d72bd59ee092a519a35d107502757ebed
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812

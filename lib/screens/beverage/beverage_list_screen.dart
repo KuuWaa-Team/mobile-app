@@ -67,6 +67,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                     showModalBottomSheet(
                         context: context,
                         backgroundColor: appColors.appMediumColor,
+                        isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only( // <-- SEE HERE
                             topLeft: Radius.circular(30.0),

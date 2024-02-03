@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kuuwaa/common/utils.dart';
@@ -68,10 +69,11 @@ class EventViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
-    }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
-      setLoading(false);
     });
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   setLoading(false);
+    // });
     return true;
   }
 
@@ -145,7 +147,10 @@ class EventViewModel with ChangeNotifier{
       "name": event.name,
       "paid": event.paidEvent,
       "date": event.date.toString(),
-      "address": event.address,
+      "province_id": event.address!.province!.id,
+      "street": event.address!.street,
+      "number": event.address!.number,
+      "ref": event.address!.ref,
       "details": event.details,
       "image": image
     };
@@ -172,18 +177,15 @@ class EventViewModel with ChangeNotifier{
 
     await _repository.createEventApi(context: context, data: data).then((value) {
       if (value['success'] == true  ) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const BottomBarScreen(),
-          ),
-        );
-        Utils.toastMessage("Évenement créé avec succès");
+        // Utils.toastMessage("Évenement créé avec succès");
         setLoading(false);
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
     }).onError((error, stackTrace) {
+      if (kDebugMode) {
+        print(error);
+      }
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
@@ -220,11 +222,10 @@ class EventViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return true;
   }
 
@@ -233,8 +234,11 @@ class EventViewModel with ChangeNotifier{
     Map data = {
       "name": event.name,
       "date": event.date.toString(),
-      "address": event.address,
       "details": event.details,
+      "province_id": event.address!.province!.id,
+      "street": event.address!.street,
+      "number": event.address!.number,
+      "ref": event.address!.ref,
     };
 
     if (event.category!.id != null) {

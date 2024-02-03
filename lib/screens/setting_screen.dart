@@ -16,6 +16,7 @@ import 'package:kuuwaa/screens/privacy_policy_screen.dart';
 import 'package:kuuwaa/screens/terms_and_condition_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -190,13 +191,15 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                          (route) => false,
-                        );
+                        UserViewModel().remove().then((value) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                                (route) => false,
+                          );
+                        });
                       },
                       child: Container(
                         height: ResponsiveFlutter.of(context).scale(40),

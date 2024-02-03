@@ -43,9 +43,10 @@ class _CommonButtonState extends State<CommonButton> {
       child: widget.loading == true ? SizedBox(
         height: 20,
         width: 20,
-        child: CircularProgressIndicator(
-          color: appColors.lightColor.withOpacity(.4),
-          strokeWidth: 2,
+        child:
+        CupertinoActivityIndicator(
+          color: appColors.lightColor,
+          radius: 8,
         ),
       ) :  MyTextView(
         widget.title!,

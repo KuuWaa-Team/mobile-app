@@ -8,6 +8,7 @@ import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/event/feature_model.dart';
@@ -18,11 +19,13 @@ import 'package:flutter/material.dart';
 import 'package:kuuwaa/screens/admin/admin_list_screen.dart';
 import 'package:kuuwaa/screens/beverage/beverage_list_screen.dart';
 import 'package:kuuwaa/screens/book/book_screen.dart';
+import 'package:kuuwaa/screens/bottom_bar_screen.dart';
+import 'package:kuuwaa/screens/chat_screen.dart';
 import 'package:kuuwaa/screens/events/check/check_screen.dart';
 import 'package:kuuwaa/screens/events/edit_event_screen.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
+import 'package:kuuwaa/screens/home_page_screen.dart';
 import 'package:kuuwaa/screens/table/table_list_screen.dart';
-import 'package:kuuwaa/shimmer/event_detail_shimmer.dart';
 import 'package:kuuwaa/shimmer/event_owner_detail_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:provider/provider.dart';
@@ -75,7 +78,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         );
                       case Status.COMPLETED:
                         EventModel event = value.event.data!;
-                        print(event.features);
+                        print(event.paymentStatus);
                         return Stack(
                           children: [
                             imageFile == null || !loadingImage?
@@ -83,7 +86,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               height: MediaQuery.of(context).size.height * 0.32,
                               width: MediaQuery.of(context).size.width,
                               child: InstaImageViewer(
-                                child: Image.network(AppUrl.domainName + event.imagePath.toString()),
+                                child: Image.network(AppUrl.domainName + event.imagePath.toString(), fit: BoxFit.cover,),
                               ),
                             )
                             : Stack(
@@ -123,7 +126,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => BottomBarScreen(),
+                                            ),
+                                          );
                                         },
                                         child: Container(
                                           width: 40,
@@ -236,23 +244,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 right: ResponsiveFlutter.of(context).moderateScale(20),
                                 left: ResponsiveFlutter.of(context).moderateScale(20),
                                 top: MediaQuery.of(context).padding.top + ResponsiveFlutter.of(context).moderateScale(55),
-                                bottom: MediaQuery.of(context).padding.bottom + ResponsiveFlutter.of(context).moderateScale(20),
+                                // bottom: MediaQuery.of(context).padding.bottom + ResponsiveFlutter.of(context).moderateScale(20),
                               ),
                               child: SingleChildScrollView(
                                 child: Column(
                                   children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    Wrap(
+                                      crossAxisAlignment: WrapCrossAlignment.center,
+                                      alignment: WrapAlignment.spaceBetween,
                                       children: [
-                                        MyTextView(
-                                          event.name.toString(),
-                                          textAligntNew: TextAlign.start,
-                                          maxLineWrap: true,
-                                          styleNew: MyTextStyle(
-                                            colorNew: appColors.lightColor,
-                                            fontWeightNew: FontWeight.w600,
-                                            size: ResponsiveFlutter.of(context).fontSize(2),
+                                        SizedBox(
+                                          width: 200,
+                                          child: MyTextView(
+                                            event.name.toString(),
+                                            textAligntNew: TextAlign.start,
+                                            maxLinesNew: 3,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w600,
+                                              size: ResponsiveFlutter.of(context).fontSize(2),
+                                            ),
                                           ),
                                         ),
                                         SizedBox(width: ResponsiveFlutter.of(context).moderateScale(20)),
@@ -282,82 +293,82 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
                                     GestureDetector(
                                       onTap: () {
-                                        if (event.invitationsCount == null || event.invitationsCount! < 1) {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return StatefulBuilder(
-                                                builder: (context, setState) {
-                                                  return Dialog(
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                                                            child:
-                                                            Column(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 60,
-                                                                  width: 60,
-                                                                  child: Center(
-                                                                    child: Icon(
-                                                                      Icons.lightbulb_outline,
-                                                                      color: appColors.btnColor,
-                                                                      size: 50,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(height: 10,),
-                                                                const Column(
-                                                                  mainAxisSize: MainAxisSize.min,
-                                                                  children: [
-                                                                    Text("Aucune invitation n'a encore été enrégistrée pour cet évenement.", style: TextStyle(
-                                                                        fontWeight: FontWeight.bold
-                                                                    ), textAlign: TextAlign.center,),
-                                                                  ],
-                                                                ),
-                                                                const SizedBox(height: 20,),
-                                                                Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                  children: [
-                                                                    GestureDetector(
-                                                                      onTap: () {
-                                                                        Navigator.pop(context);
-                                                                      },
-                                                                      child: CommonButton(
-                                                                        loading: false,
-                                                                        title: "Compris",
-                                                                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          );
-                                        } else {
+                                        // if (event.invitationsCount == null || event.invitationsCount! < 1) {
+                                        //   showDialog(
+                                        //     context: context,
+                                        //     builder: (context) {
+                                        //       return StatefulBuilder(
+                                        //         builder: (context, setState) {
+                                        //           return Dialog(
+                                        //               shape: RoundedRectangleBorder(
+                                        //                 borderRadius: BorderRadius.circular(10),
+                                        //               ),
+                                        //               child: Stack(
+                                        //                 children: [
+                                        //                   Padding(
+                                        //                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                        //                     child:
+                                        //                     Column(
+                                        //                       mainAxisSize: MainAxisSize.min,
+                                        //                       children: [
+                                        //                         SizedBox(
+                                        //                           height: 60,
+                                        //                           width: 60,
+                                        //                           child: Center(
+                                        //                             child: Icon(
+                                        //                               Icons.lightbulb_outline,
+                                        //                               color: appColors.btnColor,
+                                        //                               size: 50,
+                                        //                             ),
+                                        //                           ),
+                                        //                         ),
+                                        //                         const SizedBox(height: 10,),
+                                        //                         const Column(
+                                        //                           mainAxisSize: MainAxisSize.min,
+                                        //                           children: [
+                                        //                             Text("Aucune invitation n'a encore été enrégistrée pour cet évenement.", style: TextStyle(
+                                        //                                 fontWeight: FontWeight.bold
+                                        //                             ), textAlign: TextAlign.center,),
+                                        //                           ],
+                                        //                         ),
+                                        //                         const SizedBox(height: 20,),
+                                        //                         Row(
+                                        //                           mainAxisAlignment: MainAxisAlignment.center,
+                                        //                           children: [
+                                        //                             GestureDetector(
+                                        //                               onTap: () {
+                                        //                                 Navigator.pop(context);
+                                        //                               },
+                                        //                               child: CommonButton(
+                                        //                                 loading: false,
+                                        //                                 title: "Compris",
+                                        //                                 padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        //                               ),
+                                        //                             )
+                                        //                           ],
+                                        //                         )
+                                        //                       ],
+                                        //                     ),
+                                        //                   ),
+                                        //                 ],
+                                        //               )
+                                        //           );
+                                        //         },
+                                        //       );
+                                        //     },
+                                        //   );
+                                        // } else {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => CheckScreen(event: event),
                                             ),
                                           );
-                                        }
+                                        // }
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: event.invitationsCount == null || event.invitationsCount! < 1 ? appColors.appLightColor.withOpacity(.5) : appColors.appLightColor,
+                                          color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -367,7 +378,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             Icon(
                                               CupertinoIcons.qrcode_viewfinder,
                                               size: 15,
-                                              color: event.invitationsCount == null || event.invitationsCount! < 1 ? appColors.lightPinkColor.withOpacity(.3) : appColors.lightPinkColor,
+                                              color: appColors.lightPinkColor,
                                             ),
                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                             MyTextView(
@@ -375,7 +386,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               textAligntNew: TextAlign.start,
                                               maxLineWrap: true,
                                               styleNew: MyTextStyle(
-                                                colorNew: event.invitationsCount == null || event.invitationsCount! < 1 ? appColors.lightColor.withOpacity(.3) : appColors.lightColor,
+                                                colorNew: appColors.lightColor,
                                                 fontWeightNew: FontWeight.w500,
                                                 size: ResponsiveFlutter.of(context).fontSize(1.5),
                                               ),
@@ -493,7 +504,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                       ),
                                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
                                                       Container(
-                                                        height: ResponsiveFlutter.of(context).moderateScale(55),
+                                                        // height: ResponsiveFlutter.of(context).moderateScale(55),
                                                         width: double.infinity,
                                                         padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(10)),
                                                         decoration: BoxDecoration(
@@ -510,30 +521,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                               color: appColors.lightColor,
                                                               height: ResponsiveFlutter.of(context).moderateScale(15),
                                                             ),
-                                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
-                                                            MyTextView(
-                                                              event.address.toString(),
-                                                              textAligntNew: TextAlign.start,
-                                                              maxLineWrap: true,
-                                                              styleNew: MyTextStyle(
-                                                                colorNew: appColors.lightColor,
-                                                                fontWeightNew: FontWeight.w500,
-                                                                size: ResponsiveFlutter.of(context).fontSize(2),
-                                                              ),
-                                                            ),
-                                                            const Spacer(),
-                                                            Container(
-                                                              width: ResponsiveFlutter.of(context).moderateScale(35),
-                                                              height: double.infinity,
-                                                              padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(10)),
-                                                              margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(5)),
-                                                              decoration: BoxDecoration(
-                                                                color: appColors.lightPinkColor,
-                                                                borderRadius: BorderRadius.circular(
-                                                                  ResponsiveFlutter.of(context).moderateScale(13),
+                                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                            Flexible(
+                                                              child: MyTextView(
+                                                                "Numéro " + event.address!.number! + ", avénue " + event.address!.street! + ". " + event.address!.province!.name! + (event.address!.ref == null || event.address!.ref == "null" ? "" : ", réf. " + event.address!.ref!),
+                                                                textAligntNew: TextAlign.start,
+                                                                maxLinesNew: 5,
+                                                                maxLineWrap: true,
+                                                                styleNew: MyTextStyle(
+                                                                  colorNew: appColors.lightColor,
+                                                                  fontWeightNew: FontWeight.w500,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(2),
                                                                 ),
                                                               ),
-                                                              child: Image.asset(ImagePath.mapIcon),
                                                             ),
                                                           ],
                                                         ),
@@ -589,82 +589,82 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
-                                        if (event.tablesCount == null || event.tablesCount! < 1) {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return StatefulBuilder(
-                                                builder: (context, setState) {
-                                                  return Dialog(
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                                                            child:
-                                                            Column(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 60,
-                                                                  width: 60,
-                                                                  child: Center(
-                                                                    child: Icon(
-                                                                      Icons.lightbulb_outline,
-                                                                      color: appColors.btnColor,
-                                                                      size: 50,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(height: 10,),
-                                                                const Column(
-                                                                  mainAxisSize: MainAxisSize.min,
-                                                                  children: [
-                                                                    Text("Vous devez enrégistrer au moins une table avant de gérer les invités", style: TextStyle(
-                                                                        fontWeight: FontWeight.bold
-                                                                    ), textAlign: TextAlign.center,),
-                                                                  ],
-                                                                ),
-                                                                const SizedBox(height: 20,),
-                                                                Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                  children: [
-                                                                    GestureDetector(
-                                                                      onTap: () {
-                                                                        Navigator.pop(context);
-                                                                      },
-                                                                      child: CommonButton(
-                                                                        loading: false,
-                                                                        title: "Compris",
-                                                                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          );
-                                        } else {
+                                        // if (event.tablesCount == null || event.tablesCount! < 1) {
+                                        //   showDialog(
+                                        //     context: context,
+                                        //     builder: (context) {
+                                        //       return StatefulBuilder(
+                                        //         builder: (context, setState) {
+                                        //           return Dialog(
+                                        //               shape: RoundedRectangleBorder(
+                                        //                 borderRadius: BorderRadius.circular(10),
+                                        //               ),
+                                        //               child: Stack(
+                                        //                 children: [
+                                        //                   Padding(
+                                        //                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                        //                     child:
+                                        //                     Column(
+                                        //                       mainAxisSize: MainAxisSize.min,
+                                        //                       children: [
+                                        //                         SizedBox(
+                                        //                           height: 60,
+                                        //                           width: 60,
+                                        //                           child: Center(
+                                        //                             child: Icon(
+                                        //                               Icons.lightbulb_outline,
+                                        //                               color: appColors.btnColor,
+                                        //                               size: 50,
+                                        //                             ),
+                                        //                           ),
+                                        //                         ),
+                                        //                         const SizedBox(height: 10,),
+                                        //                         const Column(
+                                        //                           mainAxisSize: MainAxisSize.min,
+                                        //                           children: [
+                                        //                             Text("Vous devez enrégistrer au moins une table avant de gérer les invités", style: TextStyle(
+                                        //                                 fontWeight: FontWeight.bold
+                                        //                             ), textAlign: TextAlign.center,),
+                                        //                           ],
+                                        //                         ),
+                                        //                         const SizedBox(height: 20,),
+                                        //                         Row(
+                                        //                           mainAxisAlignment: MainAxisAlignment.center,
+                                        //                           children: [
+                                        //                             GestureDetector(
+                                        //                               onTap: () {
+                                        //                                 Navigator.pop(context);
+                                        //                               },
+                                        //                               child: CommonButton(
+                                        //                                 loading: false,
+                                        //                                 title: "Compris",
+                                        //                                 padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        //                               ),
+                                        //                             )
+                                        //                           ],
+                                        //                         )
+                                        //                       ],
+                                        //                     ),
+                                        //                   ),
+                                        //                 ],
+                                        //               )
+                                        //           );
+                                        //         },
+                                        //       );
+                                        //     },
+                                        //   );
+                                        // } else {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => InvitationsListScreen(event: event),
                                             ),
                                           );
-                                        }
+                                        // }
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: event.tablesCount == null || event.tablesCount! < 1 ? appColors.appLightColor.withOpacity(.5) : appColors.appLightColor,
+                                          color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -674,15 +674,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             Icon(
                                               CupertinoIcons.mail_solid, 
                                               size: 15, 
-                                              color: event.tablesCount == null || event.tablesCount! < 1 ? appColors.lightPinkColor.withOpacity(.3) : appColors.lightPinkColor,
+                                              color: appColors.lightPinkColor,
                                             ),
                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                             MyTextView(
-                                              Strings.invites + (event.invitationsCount == null || event.invitationsCount! == 0 ? " (0)" : " (${event.invitationsCount})"),
+                                              Strings.invites,
                                               textAligntNew: TextAlign.start,
                                               maxLineWrap: true,
                                               styleNew: MyTextStyle(
-                                                colorNew: event.tablesCount == null || event.tablesCount! < 1 ? appColors.lightColor.withOpacity(.3) : appColors.lightColor,
+                                                colorNew: appColors.lightColor,
                                                 fontWeightNew: FontWeight.w500,
                                                 size: ResponsiveFlutter.of(context).fontSize(1.5),
                                               ),
@@ -692,7 +692,44 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (!event.featureslugs!.contains("BEVERAGE"))
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => TableListScreen(event: event),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: appColors.appLightColor,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                        child: Row (
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(CupertinoIcons.table_fill, size: 15, color: appColors.lightPinkColor,),
+                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                            MyTextView(
+                                              Strings.tables,
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w500,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    if (event.featureslugs!.contains("BEVERAGE"))
                                     Row(
+                                      mainAxisSize: MainAxisSize.max,
                                       children: [
                                         GestureDetector(
                                           onTap: () {
@@ -716,7 +753,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 Icon(CupertinoIcons.table_fill, size: 15, color: appColors.lightPinkColor,),
                                                 SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                                 MyTextView(
-                                                  Strings.tables  + (event.tablesCount == null || event.tablesCount! == 0 ? " (0)" : " (${event.tablesCount})"),
+                                                  Strings.tables,
                                                   textAligntNew: TextAlign.start,
                                                   maxLineWrap: true,
                                                   styleNew: MyTextStyle(
@@ -752,7 +789,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 Icon(CupertinoIcons.hourglass_bottomhalf_fill, size: 15, color: appColors.lightPinkColor,),
                                                 SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                                 MyTextView(
-                                                  Strings.beverage + (event.beveragesCount == null || event.beveragesCount! == 0 ? " (0)" : " (${event.beveragesCount})"),
+                                                  Strings.beverage,
                                                   textAligntNew: TextAlign.start,
                                                   maxLineWrap: true,
                                                   styleNew: MyTextStyle(
@@ -768,7 +805,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ],
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (event.shared != true)
+                                    if (event.shared != true && event.featureslugs!.contains("BOOK"))
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
@@ -804,16 +841,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                         ),
                                       ),
-                                    if (event.shared != true)
+                                    if (event.shared != true && event.featureslugs!.contains("BOOK"))
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => BookScreen(event: event),
-                                          ),
-                                        );
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => BookScreen(event: event),
+                                        //   ),
+                                        // );
+                                        Utils.flushBarErrorMessage("Fonctionnalité en cours de dévéloppement", context);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -842,41 +880,83 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     if (event.shared != true)
-                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true)
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => AdminListScreen(id: event.id!),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: appColors.appLightColor,
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                        child: Row (
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.admin_panel_settings_rounded, size: 15, color: appColors.lightPinkColor,),
-                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                            MyTextView(
-                                              "Protocoleurs" + (event.adminsCount == null || event.adminsCount! == 0 ? " (0)" : " (${event.adminsCount})"),
-                                              textAligntNew: TextAlign.start,
-                                              maxLineWrap: true,
-                                              styleNew: MyTextStyle(
-                                                colorNew: appColors.lightColor,
-                                                fontWeightNew: FontWeight.w500,
-                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AdminListScreen(id: event.id!),
                                               ),
+                                            );
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: appColors.appLightColor,
+                                              borderRadius: BorderRadius.circular(5),
                                             ),
-                                          ],
+                                            width: (MediaQuery.of(context).size.width / 2) - 25,
+                                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                            child: Row (
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Icon(Icons.admin_panel_settings_rounded, size: 15, color: appColors.lightPinkColor,),
+                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                MyTextView(
+                                                  "Controlleurs",
+                                                  textAligntNew: TextAlign.start,
+                                                  maxLineWrap: true,
+                                                  styleNew: MyTextStyle(
+                                                    colorNew: appColors.lightColor,
+                                                    fontWeightNew: FontWeight.w500,
+                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) => const ChatScreen(),
+                                            //   ),
+                                            // );
+                                            Utils.flushBarErrorMessage("Fonctionnalité en cours de dévéloppement", context);
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: appColors.appLightColor,
+                                              borderRadius: BorderRadius.circular(5),
+                                            ),
+                                            width: (MediaQuery.of(context).size.width / 2) - 30,
+                                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                            child: Row (
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Icon(CupertinoIcons.chat_bubble_2_fill, size: 15, color: appColors.lightPinkColor,),
+                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                MyTextView(
+                                                  "Chat",
+                                                  textAligntNew: TextAlign.start,
+                                                  maxLineWrap: true,
+                                                  styleNew: MyTextStyle(
+                                                    colorNew: appColors.lightColor,
+                                                    fontWeightNew: FontWeight.w500,
+                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     if (event.shared != true)
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
@@ -1025,23 +1105,31 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                             ],
                                                           ),
                                                         ),
+                                                        SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                                         if (event.paymentStatus != 'paid')
-                                                        SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
-                                                        if (event.paymentStatus != 'paid')
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder: (context) => PaymentScreen(event: event,),
-                                                              ),
-                                                            );
-                                                          },
-                                                          child: CommonButton(
-                                                            loading: false,
-                                                            title: "Activer l'évenement",
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => PaymentScreen(event: event,),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: CommonButton(
+                                                              loading: false,
+                                                              title: "Activer l'évenement",
+                                                            ),
                                                           ),
-                                                        ),
+                                                        if (event.paymentStatus == 'paid')
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                            },
+                                                            child: CommonButton(
+                                                              loading: false,
+                                                              title: "Télécharger la facture",
+                                                            ),
+                                                          ),
                                                         SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
                                                       ],
                                                     ),
@@ -1099,8 +1187,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                         ),
                                       ),
-                                    if (event.shared != true)
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(15)),
                                   ],
                                 ),
                               ),

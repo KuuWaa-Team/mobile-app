@@ -176,37 +176,37 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                               ),
                             ],
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ChatScreen(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: ResponsiveFlutter.of(context).moderateScale(70),
-                              height: ResponsiveFlutter.of(context).moderateScale(35),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: appColors.lightPinkColor,
-                                borderRadius: BorderRadius.circular(
-                                  ResponsiveFlutter.of(context).moderateScale(20),
-                                ),
-                              ),
-                              child: MyTextView(
-                                Strings.chat,
-                                textAligntNew: TextAlign.start,
-                                maxLineWrap: true,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.black,
-                                  fontWeightNew: FontWeight.w600,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => ChatScreen(event: event,),
+                          //       ),
+                          //     );
+                          //   },
+                          //   child: Container(
+                          //     width: ResponsiveFlutter.of(context).moderateScale(70),
+                          //     height: ResponsiveFlutter.of(context).moderateScale(35),
+                          //     alignment: Alignment.center,
+                          //     decoration: BoxDecoration(
+                          //       color: appColors.lightPinkColor,
+                          //       borderRadius: BorderRadius.circular(
+                          //         ResponsiveFlutter.of(context).moderateScale(20),
+                          //       ),
+                          //     ),
+                          //     child: MyTextView(
+                          //       Strings.chat,
+                          //       textAligntNew: TextAlign.start,
+                          //       maxLineWrap: true,
+                          //       styleNew: MyTextStyle(
+                          //         colorNew: appColors.black,
+                          //         fontWeightNew: FontWeight.w600,
+                          //         size: ResponsiveFlutter.of(context).fontSize(1.6),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

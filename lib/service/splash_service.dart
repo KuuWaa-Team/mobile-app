@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/screens/auth/login_screen.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
+import 'package:kuuwaa/screens/complete_profile_screen.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class SplashService {
@@ -10,11 +11,34 @@ class SplashService {
 
   void checkAuthentication(BuildContext context) async {
     getUserData().then((value) {
-      if (value.token.toString() == 'null' || value.token == '' || value.token == null || value.otpVerified != true) {
+      if (
+        value.token.toString() == 'null' ||
+        value.token == '' ||
+        value.token == null ||
+        value.otpVerified != true
+      ) {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const LoginScreen(),
+          ),
+              (route) => false,
+        );
+      } else if (
+        value.firstname == null ||
+        value.firstname == 'null' ||
+        value.firstname == '' ||
+        value.lastname == null ||
+        value.lastname == 'null' ||
+        value.lastname == '' ||
+        value.address == null ||
+        value.address == 'null' ||
+        value.address == ''
+      ) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CompleteProfileScreen(),
           ),
               (route) => false,
         );

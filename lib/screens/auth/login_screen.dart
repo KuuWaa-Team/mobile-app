@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   var maskFormatter = MaskTextInputFormatter(
       mask: '*## ### ###',
-      filter: { "#": RegExp(r'\d'), "*": RegExp(r'[1-9]') },
+      filter: { "#": RegExp(r'\d'), "*": RegExp(r'[7-9]') },
       type: MaskAutoCompletionType.lazy
   );
 

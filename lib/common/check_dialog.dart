@@ -12,7 +12,7 @@ class CheckDialog extends StatelessWidget {
   final void Function()? onClose;
   final void Function()? onValidate;
   final String btnTitle;
-  List? data;
+  List<Widget>? data;
 
   CheckDialog({
     Key? key,
@@ -24,7 +24,7 @@ class CheckDialog extends StatelessWidget {
     required this.onClose,
     required this.onValidate,
     this.btnTitle = "",
-    List? data
+    this.data
   }) : super(key: key);
 
   @override
@@ -75,6 +75,10 @@ class CheckDialog extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
+                if (data != null)
+                const SizedBox(height: 10),
+                if (data != null)
+                  ...data!,
                 const SizedBox(height: 20),
                 if (btnTitle != "")
                   Row(
@@ -89,8 +93,6 @@ class CheckDialog extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (data != null)
-                  ...data!
               ],
             ),
           ),

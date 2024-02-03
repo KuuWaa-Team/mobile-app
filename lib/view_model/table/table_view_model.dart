@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/api_response.dart';
-import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/table/table_model.dart';
 import 'package:kuuwaa/repository/table/table_repository.dart';
-import 'package:kuuwaa/view_model/event/event_view_model.dart';
 
 class TableViewModel with ChangeNotifier{
   final _repository = TableRepository();

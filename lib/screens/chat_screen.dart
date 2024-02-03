@@ -1,375 +1,78 @@
-import 'package:kuuwaa/common/app_colors.dart';
-import 'package:kuuwaa/common/common_widget.dart';
-import 'package:kuuwaa/common/image_path.dart';
-import 'package:kuuwaa/common/strings.dart';
-import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:kuuwaa/screens/all_friends_screen.dart';
-import 'package:kuuwaa/screens/friends_screen.dart';
-import 'package:kuuwaa/screens/invite_friends_screen.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:mime/mime.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({super.key});
+
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  AppColors appColors = AppColors();
-  TabController? tabController;
-  int tab = 0;
+  List<types.Message> _messages = [];
+  final _user = const types.User(
+    id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
+  );
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          backgroundColor: appColors.appMediumColor,
-          body: Column(
-            children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.42,
-                    width: double.infinity,
-                    alignment: Alignment.bottomCenter,
-                    decoration: BoxDecoration(
-                      color: appColors.appDarkColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                        bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                        bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                      ),
-                      child: Image.asset(
-                        ImagePath.image_4,
-                        fit: BoxFit.fitWidth,
-                        alignment: Alignment.bottomCenter,
-                        width: double.infinity,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: ResponsiveFlutter.of(context).moderateScale(300),
-                    width: double.infinity,
-                    alignment: Alignment.bottomCenter,
-                    decoration: BoxDecoration(
-                      color: appColors.appDarkColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                        bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                      ),
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          appColors.appDarkColor,
-                          Colors.transparent,
-                        ],
-                        stops: const [0.3, 0.8],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: ResponsiveFlutter.of(context).moderateScale(20),
-                      horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: appColors.lightColor,
-                                size: ResponsiveFlutter.of(context).moderateScale(23),
-                              ),
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(70),
-                        ),
-                        Row(
-                          children: [
-                            MyTextView(
-                              Strings.welcomeParty,
-                              textAligntNew: TextAlign.start,
-                              maxLineWrap: true,
-                              styleNew: MyTextStyle(
-                                colorNew: appColors.lightColor,
-                                fontWeightNew: FontWeight.w600,
-                                size: ResponsiveFlutter.of(context).fontSize(3.3),
-                              ),
-                            ),
-                            SizedBox(
-                              width: ResponsiveFlutter.of(context).moderateScale(15),
-                            ),
-                            Container(
-                              height: ResponsiveFlutter.of(context).moderateScale(30),
-                              width: ResponsiveFlutter.of(context).moderateScale(60),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: appColors.blurBtnColor,
-                                borderRadius: BorderRadius.circular(
-                                  ResponsiveFlutter.of(context).moderateScale(20),
-                                ),
-                              ),
-                              child: MyTextView(
-                                Strings.dance,
-                                textAligntNew: TextAlign.center,
-                                maxLineWrap: true,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.lightPinkColor,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(15),
-                        ),
-                        Row(
-                          children: [
-                            Image.asset(
-                              ImagePath.calender,
-                              color: appColors.lightColor,
-                              height: ResponsiveFlutter.of(context).moderateScale(15),
-                            ),
-                            SizedBox(
-                              width: ResponsiveFlutter.of(context).moderateScale(6),
-                            ),
-                            MyTextView(
-                              Strings.dummyText22,
-                              textAligntNew: TextAlign.start,
-                              maxLineWrap: true,
-                              styleNew: MyTextStyle(
-                                colorNew: appColors.lightColor,
-                                fontWeightNew: FontWeight.w500,
-                                size: ResponsiveFlutter.of(context).fontSize(1.5),
-                              ),
-                            ),
-                            SizedBox(
-                              width: ResponsiveFlutter.of(context).moderateScale(10),
-                            ),
-                            Image.asset(
-                              ImagePath.time,
-                              color: appColors.lightColor,
-                              height: ResponsiveFlutter.of(context).moderateScale(15),
-                            ),
-                            SizedBox(
-                              width: ResponsiveFlutter.of(context).moderateScale(6),
-                            ),
-                            MyTextView(
-                              Strings.dummyText23,
-                              textAligntNew: TextAlign.start,
-                              maxLineWrap: true,
-                              styleNew: MyTextStyle(
-                                colorNew: appColors.lightColor,
-                                fontWeightNew: FontWeight.w500,
-                                size: ResponsiveFlutter.of(context).fontSize(1.5),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(15),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                Container(
-                                  height: ResponsiveFlutter.of(context).moderateScale(30),
-                                  width: ResponsiveFlutter.of(context).moderateScale(30),
-                                  decoration: BoxDecoration(
-                                    color: appColors.appLightColor,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: appColors.appMediumColor,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: Image.asset(
-                                    ImagePath.image_5,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Container(
-                                  height: ResponsiveFlutter.of(context).moderateScale(30),
-                                  width: ResponsiveFlutter.of(context).moderateScale(30),
-                                  margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20)),
-                                  decoration: BoxDecoration(
-                                    color: appColors.appLightColor,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: appColors.appMediumColor,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: Image.asset(
-                                    ImagePath.image_5,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Container(
-                                  height: ResponsiveFlutter.of(context).moderateScale(30),
-                                  width: ResponsiveFlutter.of(context).moderateScale(30),
-                                  margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(40)),
-                                  decoration: BoxDecoration(
-                                    color: appColors.appLightColor,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: appColors.appMediumColor,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: Image.asset(
-                                    ImagePath.image_5,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: ResponsiveFlutter.of(context).moderateScale(10),
-                            ),
-                            MyTextView(
-                              "26 " + Strings.participate,
-                              textAligntNew: TextAlign.start,
-                              maxLineWrap: true,
-                              styleNew: MyTextStyle(
-                                colorNew: appColors.lightPinkColor,
-                                fontWeightNew: FontWeight.w500,
-                                size: ResponsiveFlutter.of(context).fontSize(1.8),
-                              ),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const InviteFriendsScreen(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: ResponsiveFlutter.of(context).moderateScale(35),
-                                width: ResponsiveFlutter.of(context).moderateScale(66),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: appColors.lightPinkColor,
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveFlutter.of(context).moderateScale(20),
-                                  ),
-                                ),
-                                child: MyTextView(
-                                  Strings.invite,
-                                  textAligntNew: TextAlign.center,
-                                  maxLineWrap: true,
-                                  styleNew: MyTextStyle(
-                                    colorNew: appColors.black,
-                                    fontWeightNew: FontWeight.w500,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(15),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TabBar(
-                                controller: tabController,
-                                indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                  ), // Creates border
-                                  color: appColors.btnColor,
-                                ),
-                                onTap: (value) {
-                                  tab = value;
-                                  setState(() {});
-                                  debugPrint("value ------>> $value");
-                                },
-                                tabs: [
-                                  Container(
-                                    height: ResponsiveFlutter.of(context).moderateScale(45),
-                                    alignment: Alignment.center,
-                                    child: MyTextView(
-                                      Strings.all,
-                                      textAligntNew: TextAlign.start,
-                                      maxLineWrap: true,
-                                      styleNew: MyTextStyle(
-                                        colorNew: tab == 0 ? appColors.white : appColors.darkGreyText,
-                                        fontWeightNew: FontWeight.w600,
-                                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: ResponsiveFlutter.of(context).moderateScale(45),
-                                    alignment: Alignment.center,
-                                    child: MyTextView(
-                                      Strings.friends,
-                                      textAligntNew: TextAlign.start,
-                                      maxLineWrap: true,
-                                      styleNew: MyTextStyle(
-                                        colorNew: tab == 1 ? appColors.white : appColors.darkGreyText,
-                                        fontWeightNew: FontWeight.w600,
-                                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: ResponsiveFlutter.of(context).moderateScale(80),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  void _addMessage(types.Message message) {
+    setState(() {
+      _messages.insert(0, message);
+    });
+  }
+
+  void _handleAttachmentPressed() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => SafeArea(
+        child: SizedBox(
+          height: 144,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _handleImageSelection();
+                },
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Photo'),
+                ),
               ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: TabBarView(
-                    controller: tabController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: const [
-                      AllFriendsScreen(),
-                      FriendsScreen(),
-                    ],
-                  ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _handleFileSelection();
+                },
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('File'),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Cancel'),
                 ),
               ),
             ],
@@ -378,4 +81,145 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
+  void _handleFileSelection() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+    );
+
+    if (result != null && result.files.single.path != null) {
+      final message = types.FileMessage(
+        author: _user,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        id: const Uuid().v4(),
+        mimeType: lookupMimeType(result.files.single.path!),
+        name: result.files.single.name,
+        size: result.files.single.size,
+        uri: result.files.single.path!,
+      );
+
+      _addMessage(message);
+    }
+  }
+
+  void _handleImageSelection() async {
+    final result = await ImagePicker().pickImage(
+      imageQuality: 70,
+      maxWidth: 1440,
+      source: ImageSource.gallery,
+    );
+
+    if (result != null) {
+      final bytes = await result.readAsBytes();
+      final image = await decodeImageFromList(bytes);
+
+      final message = types.ImageMessage(
+        author: _user,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        height: image.height.toDouble(),
+        id: const Uuid().v4(),
+        name: result.name,
+        size: bytes.length,
+        uri: result.path,
+        width: image.width.toDouble(),
+      );
+
+      _addMessage(message);
+    }
+  }
+
+  void _handleMessageTap(BuildContext _, types.Message message) async {
+    if (message is types.FileMessage) {
+      var localPath = message.uri;
+
+      if (message.uri.startsWith('http')) {
+        try {
+          final index =
+          _messages.indexWhere((element) => element.id == message.id);
+          final updatedMessage =
+          (_messages[index] as types.FileMessage).copyWith(
+            isLoading: true,
+          );
+
+          setState(() {
+            _messages[index] = updatedMessage;
+          });
+
+          final client = http.Client();
+          final request = await client.get(Uri.parse(message.uri));
+          final bytes = request.bodyBytes;
+          final documentsDir = (await getApplicationDocumentsDirectory()).path;
+          localPath = '$documentsDir/${message.name}';
+
+          if (!File(localPath).existsSync()) {
+            final file = File(localPath);
+            await file.writeAsBytes(bytes);
+          }
+        } finally {
+          final index =
+          _messages.indexWhere((element) => element.id == message.id);
+          final updatedMessage =
+          (_messages[index] as types.FileMessage).copyWith(
+            isLoading: null,
+          );
+
+          setState(() {
+            _messages[index] = updatedMessage;
+          });
+        }
+      }
+
+      await OpenFilex.open(localPath);
+    }
+  }
+
+  void _handlePreviewDataFetched(
+      types.TextMessage message,
+      types.PreviewData previewData,
+      ) {
+    final index = _messages.indexWhere((element) => element.id == message.id);
+    final updatedMessage = (_messages[index] as types.TextMessage).copyWith(
+      previewData: previewData,
+    );
+
+    setState(() {
+      _messages[index] = updatedMessage;
+    });
+  }
+
+  void _handleSendPressed(types.PartialText message) {
+    final textMessage = types.TextMessage(
+      author: _user,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      id: const Uuid().v4(),
+      text: message.text,
+    );
+
+    _addMessage(textMessage);
+  }
+
+  void _loadMessages() async {
+    final response = await rootBundle.loadString('assets/messages.json');
+    final messages = (jsonDecode(response) as List)
+        .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    setState(() {
+      _messages = messages;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: Chat(
+      messages: _messages,
+      onAttachmentPressed: _handleAttachmentPressed,
+      onMessageTap: _handleMessageTap,
+      onPreviewDataFetched: _handlePreviewDataFetched,
+      onSendPressed: _handleSendPressed,
+      showUserAvatars: true,
+      showUserNames: true,
+      user: _user,
+    ),
+  );
 }

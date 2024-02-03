@@ -9,8 +9,11 @@ class InvitationModel {
   String? status;
   int? count;
   String? phoneNumber;
+  String? message;
   bool? bookSent;
   String? codePath;
+  String? code;
+  String? decryptKey;
   TableModel? table;
   EventModel? event;
 
@@ -19,9 +22,12 @@ class InvitationModel {
     this.name,
     this.phoneNumber,
     this.bookSent,
+    this.message,
+    this.decryptKey,
     this.count,
     this.civility,
     this.table,
+    this.code,
     this.codePath,
     this.event
   });
@@ -31,7 +37,10 @@ class InvitationModel {
     name = json['name'];
     civility = json['civility'];
     bookSent = json['bookSent'];
+    decryptKey = json['decryptKey'];
     count = json['count'];
+    code = json['code'];
+    message = json['message'];
     status = json['status'];
     codePath = json['codePath'];
     phoneNumber = json['phoneNumber'];
@@ -48,11 +57,14 @@ class InvitationModel {
     data['id'] = id;
     data['name'] = name;
     data['civility'] = civility;
+    data['code'] = code;
     data['bookSent'] = bookSent;
+    data['decryptKey'] = decryptKey;
     data['codePath'] = codePath;
     data['count'] = count;
     data['status'] = status;
     data['phoneNumber'] = phoneNumber;
+    data['message'] = message;
 
     return data;
   }

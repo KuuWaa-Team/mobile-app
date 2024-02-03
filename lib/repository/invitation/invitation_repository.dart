@@ -51,6 +51,15 @@ class InvitationRepository {
     }
   }
 
+  Future<dynamic> editInvitationsApi ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$id/edit", data, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> checkInvitationsCodeApi ({required BuildContext context, required Map data}) async {
     try  {
       dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/check-code", data, context: context, auth: true);

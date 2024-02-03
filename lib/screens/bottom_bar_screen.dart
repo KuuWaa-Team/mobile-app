@@ -1,6 +1,7 @@
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/common/image_path.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/invitations/my_invitations_screen.dart';
 import 'package:kuuwaa/screens/home_page_screen.dart';
@@ -159,14 +160,15 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            setState(() {
-                              tabBar = const WalletScreen();
-                              home = false;
-                              favorites = false;
-                              create = false;
-                              wallet = true;
-                              setting = false;
-                            });
+                            Utils.flushBarErrorMessage("Cette fonctionnalité est encours de developpement", context);
+                            // setState(() {
+                            //   tabBar = const WalletScreen();
+                            //   home = false;
+                            //   favorites = false;
+                            //   create = false;
+                            //   wallet = true;
+                            //   setting = false;
+                            // });
                           },
                           child: Container(
                             height: ResponsiveFlutter.of(context).verticalScale(40),

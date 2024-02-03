@@ -54,7 +54,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
           children: [
             commonAppBar(
               context: context,
-              title: "Protocoleurs",
+              title: "Controlleurs",
               backArrow: true,
             ),
             Row(
@@ -63,6 +63,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                   onTap: () {
                     showModalBottomSheet(
                         context: context,
+                        isScrollControlled: true,
                         backgroundColor: appColors.appMediumColor,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only( // <-- SEE HERE
@@ -79,7 +80,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                     child: Column(
                                       children: [
                                         MyTextView(
-                                          "Ajouter un Protocoleurs",
+                                          "Ajouter un Controlleur",
                                           textAligntNew: TextAlign.center,
                                           styleNew: MyTextStyle(
                                             colorNew: appColors.lightColor,
@@ -104,7 +105,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                           child: commonTestField(
                                             context: context,
                                             controller: _nameController,
-                                            hintText: "Nom du protocoleur",
+                                            hintText: "Nom du controlleur",
                                             keyboardType: TextInputType.text,
                                             icon: true,
                                           ),
@@ -135,9 +136,9 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                         GestureDetector(
                                           onTap: () {
                                             if (_nameController.text == "") {
-                                              Utils.flushBarErrorMessage("Vous devez enter le nom du protocoleur", context);
+                                              Utils.flushBarErrorMessage("Vous devez enter le nom du controlleur", context);
                                             } else if (_phoneController.text == "") {
-                                              Utils.flushBarErrorMessage("Vous devez enter le numéro de téléphone du protocoleur", context);
+                                              Utils.flushBarErrorMessage("Vous devez enter le numéro de téléphone du controlleur", context);
                                             } else {
                                               setState(() {
                                                 loading = true;
@@ -257,7 +258,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                   Icon(Icons.block_outlined, color: appColors.lightColor.withOpacity(.2),),
                                   const SizedBox(width: 10,),
                                   MyTextView(
-                                    "Vous n'avez ajouté aucun protocoleur",
+                                    "Vous n'avez ajouté aucun controlleur",
                                     textAligntNew: TextAlign.start,
                                     maxLinesNew: 3,
                                     styleNew: MyTextStyle(

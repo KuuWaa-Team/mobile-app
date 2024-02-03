@@ -140,7 +140,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                                   Map data = {
                                                     "code": _codeController.text
                                                   };
-                                                  await invitationViewModel.checkInvitation(context, data).then((value) {
+                                                  await invitationViewModel.checkInvitation(context, data, widget.event).then((value) {
                                                     setState(() {
                                                       loadingCode = false;
                                                     });
@@ -257,26 +257,51 @@ class _CheckScreenState extends State<CheckScreen> {
                 return  CheckDialog(
                   context: context,
                   color: Colors.red,
-                  message: "Vous essayez de vérifier une invitation d'un évenement auquel vous n'êtes pas protocoleur.",
+                  message: "Vous essayez de vérifier une invitation d'un évenement auquel vous n'êtes pas controlleur.",
                   status: "Vérification non autorisée",
                   icon: CupertinoIcons.nosign,
                   onClose: () {
                     Navigator.pop(context);
                   },
                   onValidate: () {
-                    if (result['status'] == 'verified') {
-                      Navigator.pop(context);
-                      setState(() {
-                        checked = false;
-                      });
-                    } else {
-                      // validate
-                      setState(() {
-                        checked = false;
-                      });
-                    }
+                    Navigator.pop(context);
+                    setState(() {
+                      checked = false;
+                    });
                   },
-                  btnTitle: result['status'] == 'verified' ? "D'accord" : "Valider",
+                  btnTitle: "D'accord",
+                );
+              },
+            );
+          } else {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return CheckDialog(
+                  context: context,
+                  color: result["status"] == "verified" ? Colors.red : Colors.green,
+                  message: result["status"] == "verified"
+                      ? "Cette invitation a été déjà vérifié par un controlleur. "
+                      "L'invité doit déjà être dans la salle."
+                      : "L'invitation est valide. L'invité peut accéder à la salle. "
+                      "Vérifiez l'invitation pour qu'elle ne soit plus utilisée."
+                  ,
+                  status: result["status"] == "verified" ? "Invitation déjà vérifiée" : "Invitation valide",
+                  icon: result["status"] == "verified" ? CupertinoIcons.xmark_circle_fill: CupertinoIcons.check_mark_circled_solid,
+                  onClose: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      checked = false;
+                    });
+                  },
+                  onValidate: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      checked = false;
+                    });
+                  },
+                  btnTitle: result['status'] == 'verified' ? "D'accord" : "Vérifier",
                   data: result['status'] == 'verified' ? null :
                   [
                     Container(
@@ -311,7 +336,7 @@ class _CheckScreenState extends State<CheckScreen> {
                           Text("Table", style: TextStyle(
                               color: Colors.black.withOpacity(.5)
                           ),),
-                          Text(result['table'], style: const TextStyle(
+                          Text(result['table'] ?? "-", style: const TextStyle(
                               fontWeight: FontWeight.bold
                           ),),
                         ],
@@ -338,39 +363,6 @@ class _CheckScreenState extends State<CheckScreen> {
                         ),
                       ),
                   ]
-                  ,
-                );
-              },
-            );
-          } else {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return CheckDialog(
-                  context: context,
-                  color: result["status"] == "verified" ? Colors.red : Colors.green,
-                  message: result["status"] == "verified"
-                      ? "Cette invitation a été déjà vérifié par un protocoleur. "
-                      "L'invité doit déjà être dans la salle."
-                      : "L'invitation est valide. L'invité peut accéder à la salle. "
-                      "Vérifiez l'invitation pour qu'elle ne soit plus utilisée."
-                  ,
-                  status: result["status"] == "verified" ? "Invitation déjà vérifiée" : "Invitation valide",
-                  icon: result["status"] == "verified" ? CupertinoIcons.xmark_circle_fill: CupertinoIcons.check_mark_circled_solid,
-                  onClose: () {
-                    Navigator.pop(context);
-                    setState(() {
-                      checked = false;
-                    });
-                  },
-                  onValidate: () {
-                    Navigator.pop(context);
-                    setState(() {
-                      checked = false;
-                    });
-                  },
-                  btnTitle: "D'accord",
                 );
               },
             );

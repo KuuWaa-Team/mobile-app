@@ -20,9 +20,6 @@ class UserViewModel with ChangeNotifier {
     if (user.token != null) {
       sp.setString('user__token', user.token.toString());
     }
-    if (user.otpVerified != null) {
-      sp.setBool('user__otp_verified', user.otpVerified == true);
-    }
     if (user.firstname != null) {
       sp.setString('user__firstname', user.firstname.toString());
     }

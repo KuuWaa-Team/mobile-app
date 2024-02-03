@@ -40,11 +40,10 @@ class AuthViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return true;
   }
 
