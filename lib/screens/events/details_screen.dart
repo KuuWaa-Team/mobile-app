@@ -692,7 +692,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (!event.featureslugs!.contains("BEVERAGE"))
+                                    if (event.featureslugs == null || !event.featureslugs!.contains("BEVERAGE"))
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -727,7 +727,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    if (event.featureslugs!.contains("BEVERAGE"))
+                                    if (event.featureslugs != null && event.featureslugs!.contains("BEVERAGE"))
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
@@ -805,7 +805,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ],
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (event.shared != true && event.featureslugs!.contains("BOOK"))
+                                    if (event.shared != true && event.featureslugs != null && event.featureslugs!.contains("BOOK"))
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
@@ -841,7 +841,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                         ),
                                       ),
-                                    if (event.shared != true && event.featureslugs!.contains("BOOK"))
+                                    if (event.shared != true && event.featureslugs != null && event.featureslugs!.contains("BOOK"))
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
@@ -1140,7 +1140,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: event.paymentStatus == 'paid' ? Colors.green.withOpacity(.08) : Colors.orange.withOpacity(.08),
+                                            color: event.paymentStatus == 'paid' ? Colors.green.withOpacity(.08) : Colors.red.withOpacity(.08),
                                             borderRadius: BorderRadius.circular(5),
                                           ),
                                           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -1169,7 +1169,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               Container(
                                                 decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(10),
-                                                    color: Colors.orange
+                                                    color: Colors.red
                                                   ),
                                                   padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                                                   child: MyTextView(

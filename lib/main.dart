@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/screens/invitations/invitation_details_screen.dart';
@@ -21,6 +22,7 @@ void main() async {
   if (initScreen != true) {
     await preferences.setBool('initScreen', true);
   }
+
   runApp(const MyApp());
 }
 

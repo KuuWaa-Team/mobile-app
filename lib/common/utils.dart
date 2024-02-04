@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_dialog.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:crypto/crypto.dart';
@@ -16,6 +18,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:kuuwaa/screens/events/details_screen.dart';
+import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
@@ -360,5 +364,121 @@ class Utils {
       }
     }
     return time;
+  }
+
+  static Future<bool> checkPaymentResponse(BuildContext context, String orderNumber, EventModel event) async {
+    EventViewModel eventViewModel3 = EventViewModel();
+    var value;
+
+    do {
+      value = await eventViewModel3.checkPayStatus(context, orderNumber, event);
+      print(value);
+      final success = value['success'];
+      final waiting = value['waiting'];
+
+      if (waiting) {
+        // Attendre un certain délai avant de vérifier à nouveau
+        await Future.delayed(const Duration(seconds: 1));
+      } else {
+        if (success == true) {
+          Navigator.pop(context);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                            child:
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: 10,),
+                                const Icon(CupertinoIcons.check_mark_circled, color: Colors.green, size: 60),
+                                const SizedBox(height: 10,),
+                                const Text("Paiement éffectué avec succès", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green
+                                ), textAlign: TextAlign.center,),
+                                const SizedBox(height: 20,),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailsScreen(id: event.id!),
+                                      ),
+                                    );
+                                  },
+                                  child: CommonButton(
+                                    title: "Continuer",
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                  );
+                },
+              );
+            },
+          );
+        } else {
+          Navigator.pop(context);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                            child:
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: 10,),
+                                const Icon(CupertinoIcons.xmark_circle, color: Colors.red, size: 60),
+                                const SizedBox(height: 10,),
+                                const Text("Paiement échoué", style: TextStyle(
+                                    fontWeight: FontWeight.bold, color: Colors.red
+                                ), textAlign: TextAlign.center,),
+                                const SizedBox(height: 20,),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: CommonButton(
+                                    title: "OK",
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                  );
+                },
+              );
+            },
+          );
+        }
+      }
+    } while (value['waiting']);
+    return true;
   }
 }

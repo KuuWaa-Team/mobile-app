@@ -239,10 +239,12 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
-  Future<bool> payPackApi (BuildContext context, Map data, EventModel event) async {
+  Future<dynamic> payPackApi (BuildContext context, Map data, EventModel event) async {
     setLoading(true);
+    dynamic response;
     await _repository.payPackApi(context: context, data: data, id: event.id!).then((value) {
       if (value['success'] == true  ) {
+        response = value;
         // setLoading(false);
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
@@ -251,7 +253,20 @@ class EventViewModel with ChangeNotifier{
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
-    return true;
+    return response;
+  }
+
+  Future<dynamic> checkPayStatus (BuildContext context, String orderNumber, EventModel event) async {
+    setLoading(true);
+    dynamic response;
+    await _repository.checkPayStatus(context: context, id: event.id!, orderNumber: orderNumber).then((value) {
+      response = value;
+    });
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   setLoading(false);
+    // });
+    return response;
   }
 
   Future<bool> editEventApi (BuildContext context, EventModel event, int id) async {

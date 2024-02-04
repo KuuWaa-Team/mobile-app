@@ -89,6 +89,15 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> checkPayStatus ({required BuildContext context, required String orderNumber, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id/check-pay?on=$orderNumber", context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> getEventDetailApi ({required BuildContext context, required int id}) async {
     try  {
       dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id", context: context, auth: true);

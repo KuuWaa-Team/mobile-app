@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
@@ -20,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
+import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -2168,6 +2171,54 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                                                               setState(() {
                                                                                 paying = false;
                                                                               });
+                                                                              if (value != null && value.containsKey('success') && value['success']) {
+                                                                                Navigator.pop(context);
+                                                                                showDialog(
+                                                                                  context: context,
+                                                                                  barrierDismissible: false,
+                                                                                  builder: (context) {
+                                                                                    Utils.checkPaymentResponse(context, value['orderNumber'], event);
+                                                                                    return StatefulBuilder(
+                                                                                      builder: (context, setState) {
+                                                                                        return Dialog(
+                                                                                            shape: RoundedRectangleBorder(
+                                                                                              borderRadius: BorderRadius.circular(10),
+                                                                                            ),
+                                                                                            child: Stack(
+                                                                                              children: [
+                                                                                                Padding(
+                                                                                                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                                                                  child:
+                                                                                                  Column(
+                                                                                                    mainAxisSize: MainAxisSize.min,
+                                                                                                    children: [
+                                                                                                      const SizedBox(height: 10,),
+                                                                                                      const CupertinoActivityIndicator(color: Colors.black, radius: 20,),
+                                                                                                      const SizedBox(height: 10,),
+                                                                                                      Text(value['message'].toString(), style: const TextStyle(
+                                                                                                          fontWeight: FontWeight.bold
+                                                                                                      ), textAlign: TextAlign.center,),
+                                                                                                      const SizedBox(height: 10,),
+                                                                                                      const Text("Veuillez patienter", style: TextStyle(
+                                                                                                        fontSize: 11
+                                                                                                      ), textAlign: TextAlign.center,),
+                                                                                                      const SizedBox(height: 10,),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            )
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  },
+                                                                                );
+                                                                              } else {
+                                                                                Utils.flushBarErrorMessage(Utils.errorMessage, context);
+                                                                                setState(() {
+                                                                                  paying = false;
+                                                                                });
+                                                                              }
                                                                             });
                                                                           },
                                                                           child: CommonButton(
