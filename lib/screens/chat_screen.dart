@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -211,7 +210,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: Chat(
+    body: Container()
+    /* Chat(
       messages: _messages,
       onAttachmentPressed: _handleAttachmentPressed,
       onMessageTap: _handleMessageTap,
@@ -220,6 +220,6 @@ class _ChatScreenState extends State<ChatScreen> {
       showUserAvatars: true,
       showUserNames: true,
       user: _user,
-    ),
+    ),*/
   );
 }

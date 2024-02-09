@@ -42,6 +42,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   int step = 0;
   int maxStep = 4;
   bool loading = false;
+  bool loadingCreation = false;
   bool loadingNext = false;
   bool paying = false;
 
@@ -848,28 +849,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                     child: commonTestField(
                                       context: context,
                                       controller: _streetController,
-                                      hintText: "Rue",
-                                      keyboardType: TextInputType.text,
-                                      icon: true,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: ResponsiveFlutter.of(context).verticalScale(40),
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: ResponsiveFlutter.of(context).moderateScale(6),
-                                      horizontal: ResponsiveFlutter.of(context).moderateScale(15),
-                                    ),
-                                    margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    decoration: BoxDecoration(
-                                      color: appColors.appLightColor,
-                                      borderRadius: BorderRadius.circular(
-                                        ResponsiveFlutter.of(context).moderateScale(25),
-                                      ),
-                                    ),
-                                    child: commonTestField(
-                                      context: context,
-                                      controller: _numberController,
-                                      hintText: "Numéro",
+                                      hintText: "Adresse complète",
                                       keyboardType: TextInputType.text,
                                       icon: true,
                                     ),
@@ -890,7 +870,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                     child: commonTestField(
                                       context: context,
                                       controller: _refController,
-                                      hintText: "Réference",
+                                      hintText: "Lieu de l'évenement (optionnel)",
                                       keyboardType: TextInputType.text,
                                       icon: true,
                                     ),
@@ -960,7 +940,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   MyTextView(
-                    selectedProvince["id"] == null || _streetController.text == "" || _numberController.text == "" ? "Adresse" :_numberController.text + ", " + _streetController.text + ". " +  selectedProvince["name"],
+                    selectedProvince["id"] == null || _streetController.text == "" || _numberController.text == "" ? "Adresse" : _streetController.text + ". " +  selectedProvince["name"],
                     textAligntNew: TextAlign.center,
                     styleNew: MyTextStyle(
                       colorNew: appColors.lightColor,
@@ -1831,7 +1811,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       Utils.flushBarErrorMessage("Vous devez entrer la date de l'évenement", context);
                     } else if (_detailsController.text == "") {
                       Utils.flushBarErrorMessage("Vous devez entrer un message description de l'évenement", context);
-                    } else if (selectedProvince["id"] == null || _streetController.text == "" || _numberController.text == "") {
+                    } else if (selectedProvince["id"] == null || _streetController.text == "") {
                       Utils.flushBarErrorMessage("Vous devez compléter les informations de l'adress", context);
                     } else {
                       event.date = date;
@@ -2003,30 +1983,33 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () async {
-                                                    setState(() {
-                                                      event.features = selectedFeatures;
-                                                      total += event.eventPack!.price!;
-                                                      event.features?.forEach((element) {
-                                                        total += element.price!;
-                                                      });
-                                                    });
-
-                                                    EventViewModel eventViewModel2 = EventViewModel();
-                                                    await eventViewModel2.createEventApi(context, event, image).then((value) {
-                                                      Navigator.pop(context);
-                                                      if (value.runtimeType == int) {
-                                                        setState(() {
-                                                          event.id = value;
+                                                    if (!loadingCreation) {
+                                                      setState(() {
+                                                        event.features = selectedFeatures;
+                                                        loading = true;
+                                                        total += event.eventPack!.price!;
+                                                        event.features?.forEach((element) {
+                                                          total += element.price!;
                                                         });
-                                                      }
-                                                      _controller.nextPage(
-                                                        duration: const Duration(milliseconds: 300),
-                                                        curve: Curves.linear
-                                                      );
-                                                    });
+                                                      });
+
+                                                      EventViewModel eventViewModel2 = EventViewModel();
+                                                      await eventViewModel2.createEventApi(context, event, image).then((value) {
+                                                        Navigator.pop(context);
+                                                        if (value.runtimeType == int) {
+                                                          setState(() {
+                                                            event.id = value;
+                                                          });
+                                                        }
+                                                        _controller.nextPage(
+                                                            duration: const Duration(milliseconds: 300),
+                                                            curve: Curves.linear
+                                                        );
+                                                      });
+                                                    }
                                                   },
                                                   child: CommonButton(
-                                                    loading: loading,
+                                                    loading: loadingCreation,
                                                     title: "Continuer",
                                                     padding: const EdgeInsets.symmetric(horizontal: 20),
                                                   ),
@@ -2324,11 +2307,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (loading)
+                    if (loadingNext)
                     CupertinoActivityIndicator(color: appColors.lightColor, animating: true, radius: 8),
-                    if (loading)
+                    if (loadingNext)
                     const SizedBox(width: 10,),
-                    if (!loading)
+                    if (!loadingNext)
                     MyTextView(
                       "Ignorer pour le moment",
                       textAligntNew: TextAlign.start,

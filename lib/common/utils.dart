@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -368,117 +369,108 @@ class Utils {
 
   static Future<bool> checkPaymentResponse(BuildContext context, String orderNumber, EventModel event) async {
     EventViewModel eventViewModel3 = EventViewModel();
-    var value;
+    dynamic value;
+    value = await eventViewModel3.checkPayStatus(context, orderNumber, event);
+    final success = value['success'];
 
-    do {
-      value = await eventViewModel3.checkPayStatus(context, orderNumber, event);
-      print(value);
-      final success = value['success'];
-      final waiting = value['waiting'];
-
-      if (waiting) {
-        // Attendre un certain délai avant de vérifier à nouveau
-        await Future.delayed(const Duration(seconds: 1));
-      } else {
-        if (success == true) {
-          Navigator.pop(context);
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                            child:
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(height: 10,),
-                                const Icon(CupertinoIcons.check_mark_circled, color: Colors.green, size: 60),
-                                const SizedBox(height: 10,),
-                                const Text("Paiement éffectué avec succès", style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green
-                                ), textAlign: TextAlign.center,),
-                                const SizedBox(height: 20,),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailsScreen(id: event.id!),
-                                      ),
-                                    );
-                                  },
-                                  child: CommonButton(
-                                    title: "Continuer",
+    if (success == true) {
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                        child:
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 10,),
+                            const Icon(CupertinoIcons.check_mark_circled, color: Colors.green, size: 60),
+                            const SizedBox(height: 10,),
+                            const Text("Paiement éffectué avec succès", style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green
+                            ), textAlign: TextAlign.center,),
+                            const SizedBox(height: 20,),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailsScreen(id: event.id!),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                  );
-                },
+                                );
+                              },
+                              child: CommonButton(
+                                title: "Continuer",
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
               );
             },
           );
-        } else {
-          Navigator.pop(context);
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+        },
+      );
+    } else {
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                        child:
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 10,),
+                            const Icon(CupertinoIcons.xmark_circle, color: Colors.red, size: 60),
+                            const SizedBox(height: 10,),
+                            const Text("Paiement échoué", style: TextStyle(
+                                fontWeight: FontWeight.bold, color: Colors.red
+                            ), textAlign: TextAlign.center,),
+                            const SizedBox(height: 20,),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: CommonButton(
+                                title: "OK",
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                            child:
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(height: 10,),
-                                const Icon(CupertinoIcons.xmark_circle, color: Colors.red, size: 60),
-                                const SizedBox(height: 10,),
-                                const Text("Paiement échoué", style: TextStyle(
-                                    fontWeight: FontWeight.bold, color: Colors.red
-                                ), textAlign: TextAlign.center,),
-                                const SizedBox(height: 20,),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: CommonButton(
-                                    title: "OK",
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                  );
-                },
+                    ],
+                  )
               );
             },
           );
-        }
-      }
-    } while (value['waiting']);
+        },
+      );
+    }
+
     return true;
   }
 }

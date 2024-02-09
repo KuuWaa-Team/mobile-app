@@ -35,7 +35,7 @@ class NetworkApiService extends BaseApiServices {
       var response = await http.get(
         Uri.parse(url),
         headers: auth ? headerAuth : header,
-      ).timeout(const Duration(seconds: 120));
+      ).timeout(const Duration(seconds: 600));
       responseJson = returnResponse(response, context);
     } on SocketException {
       Navigator.pushNamed(context, RoutesName.networkError);
@@ -66,7 +66,7 @@ class NetworkApiService extends BaseApiServices {
         Uri.parse(url),
         body: jsonEncode(data),
         headers: auth? headerAuth: header,
-      ).timeout(const Duration(seconds: 120));
+      ).timeout(const Duration(seconds: 600));
 
       // if (response.body.runtimeType == String && response.body.split(']}').length > 1) {
       //   Map responseMap = json.decode(response.body.split(']}')[1]);
@@ -105,7 +105,7 @@ class NetworkApiService extends BaseApiServices {
       http.Response response = await http.delete(
         Uri.parse(url),
         headers: auth? headerAuth: header,
-      ).timeout(const Duration(seconds: 120));
+      ).timeout(const Duration(seconds: 600));
       responseJson = returnResponse(response, context);
     } on SocketException {
       Navigator.pushNamed(context, RoutesName.networkError);
@@ -127,7 +127,7 @@ class NetworkApiService extends BaseApiServices {
         Uri.parse(url),
         body: jsonEncode(data),
         headers: header,
-      ).timeout(const Duration(seconds: 60));
+      ).timeout(const Duration(seconds: 600));
 
       responseJson = returnResponse(response, context);
     } on SocketException {

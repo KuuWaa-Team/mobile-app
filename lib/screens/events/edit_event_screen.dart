@@ -653,28 +653,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                                                   child: commonTestField(
                                                                     context: context,
                                                                     controller: _streetController,
-                                                                    hintText: "Rue",
-                                                                    keyboardType: TextInputType.text,
-                                                                    icon: true,
-                                                                  ),
-                                                                ),
-                                                                Container(
-                                                                  height: ResponsiveFlutter.of(context).verticalScale(40),
-                                                                  padding: EdgeInsets.symmetric(
-                                                                    vertical: ResponsiveFlutter.of(context).moderateScale(6),
-                                                                    horizontal: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  ),
-                                                                  margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                  decoration: BoxDecoration(
-                                                                    color: appColors.appLightColor,
-                                                                    borderRadius: BorderRadius.circular(
-                                                                      ResponsiveFlutter.of(context).moderateScale(25),
-                                                                    ),
-                                                                  ),
-                                                                  child: commonTestField(
-                                                                    context: context,
-                                                                    controller: _numberController,
-                                                                    hintText: "Numéro",
+                                                                    hintText: "Adresse complète",
                                                                     keyboardType: TextInputType.text,
                                                                     icon: true,
                                                                   ),
@@ -695,7 +674,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                                                   child: commonTestField(
                                                                     context: context,
                                                                     controller: _refController,
-                                                                    hintText: "Réference",
+                                                                    hintText: "Lieu de l'évenement (Optionnel)",
                                                                     keyboardType: TextInputType.text,
                                                                     icon: true,
                                                                   ),
@@ -766,7 +745,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               MyTextView(
-                                                _numberController.text + ", " + _streetController.text + ". " +  selectedProvince["name"],
+                                                _numberController.text + ", " + _refController.text,
                                                 textAligntNew: TextAlign.center,
                                                 styleNew: MyTextStyle(
                                                   colorNew: appColors.lightColor,

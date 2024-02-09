@@ -261,11 +261,10 @@ class EventViewModel with ChangeNotifier{
     dynamic response;
     await _repository.checkPayStatus(context: context, id: event.id!, orderNumber: orderNumber).then((value) {
       response = value;
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return response;
   }
 
