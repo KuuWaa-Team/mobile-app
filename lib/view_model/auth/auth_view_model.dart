@@ -24,6 +24,7 @@ class AuthViewModel with ChangeNotifier{
     setLoading(true);
     await _repository.loginApi(data, context: context).then((value) {
       setLoading(false);
+      print(value);
       if (value['success'] == true  ) {
         UserModel user = UserModel.fromJson(value['user']);
         user.token = value['token'];

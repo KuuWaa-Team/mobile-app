@@ -8,6 +8,7 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/view_model/auth/auth_view_model.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -103,8 +104,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 setState(() {
                                   loading = true;
                                 });
+                                String? appSignature;
+                                await SmsAutoFill().getAppSignature.then((value) {
+                                  setState(() {
+                                    appSignature = value;
+                                  });
+                                });
+                                print("*************************");
+                                print(appSignature);
                                 await authViewModel.loginApi({
-                                  "phoneNumber": _phoneController.text
+                                  "phoneNumber": _phoneController.text,
+                                  "signature": appSignature
                                 }, context).then((value) {
                                   setState(() {
                                     loading = false;

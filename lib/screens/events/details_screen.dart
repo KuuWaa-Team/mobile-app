@@ -47,6 +47,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   XFile? image;
   File? imageFile;
   bool loadingImage = false;
+  bool loadingDelete = false;
 
   @override
   void initState() {
@@ -176,31 +177,139 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     if (event.shared != true)
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          imagePick(event);
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        margin: EdgeInsets.only(
-                                          top: MediaQuery.of(context).size.height * 0.25,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: appColors.appDarkColor,
-                                          borderRadius: BorderRadius.circular(40),
-                                        ),
-                                        child: Center(
-                                          child: Icon(
-                                            CupertinoIcons.photo,
-                                            color: appColors.lightColor,
-                                            size: ResponsiveFlutter.of(context).moderateScale(15),
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            imagePick(event);
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 40,
+                                          height: 40,
+                                          margin: EdgeInsets.only(
+                                            top: MediaQuery.of(context).size.height * 0.25,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: appColors.appDarkColor,
+                                            borderRadius: BorderRadius.circular(40),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              CupertinoIcons.photo,
+                                              color: appColors.lightColor,
+                                              size: ResponsiveFlutter.of(context).moderateScale(15),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    if (event.shared != true && event.paymentStatus != 'paid')
+                                      GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (context) {
+                                              return StatefulBuilder(
+                                                builder: (context, setState) {
+                                                  return Dialog(
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      child: Stack(
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                            child:
+                                                            Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 60,
+                                                                  width: 60,
+                                                                  child: Center(
+                                                                    child: Icon(
+                                                                      CupertinoIcons.question_circle,
+                                                                      color: appColors.btnColor,
+                                                                      size: 50,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(height: 10,),
+                                                                const Column(
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  children: [
+                                                                    Text("Êtes vous sûr de vouloir supprimer cet évenement ?", style: TextStyle(
+                                                                        fontWeight: FontWeight.bold
+                                                                    ), textAlign: TextAlign.center,),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(height: 20,),
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    GestureDetector(
+                                                                      onTap: () {
+                                                                        if (!loadingDelete) {
+                                                                          setState(() {
+                                                                            loadingDelete = true;
+                                                                          });
+                                                                          EventViewModel eventViewModel4 = EventViewModel();
+                                                                          eventViewModel4.deleteEventApi(context, event);
+                                                                        }
+                                                                      },
+                                                                      child: CommonButton(
+                                                                        loading: loadingDelete,
+                                                                        title: "Supprimer",
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                                      ),
+                                                                    ),
+                                                                    if (!loadingDelete)
+                                                                    const SizedBox(width: 5,),
+                                                                    if (!loadingDelete)
+                                                                    GestureDetector(
+                                                                      onTap: () {
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      child: CommonButton(
+                                                                        loading: false,
+                                                                        btnColor: appColors.appLightColor,
+                                                                        title: "Annuler",
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                          width: 40,
+                                          height: 40,
+                                          margin: EdgeInsets.only(
+                                            top: MediaQuery.of(context).size.height * 0.25,
+                                            left: ResponsiveFlutter.of(context).moderateScale(10),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: appColors.appDarkColor,
+                                            borderRadius: BorderRadius.circular(40),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              CupertinoIcons.trash_fill,
+                                              color: appColors.lightColor,
+                                              size: ResponsiveFlutter.of(context).moderateScale(15),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     if (event.shared == true)
                                     Container(
                                       margin: EdgeInsets.only(

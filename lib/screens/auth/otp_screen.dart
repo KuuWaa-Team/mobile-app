@@ -6,11 +6,11 @@ import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/auth/login_screen.dart';
-import 'package:kuuwaa/screens/auth/complete_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kuuwaa/view_model/auth/auth_view_model.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class OtpScreen extends StatefulWidget {
   OtpScreen({Key? key, this.message}) : super(key: key);
@@ -28,6 +28,7 @@ class _OtpScreenState extends State<OtpScreen> {
   TextEditingController otp3Controller = TextEditingController();
   TextEditingController otp4Controller = TextEditingController();
   TextEditingController otp5Controller = TextEditingController();
+  String otp = "";
 
   AuthViewModel authViewModel = AuthViewModel();
   bool loading = false;
@@ -40,7 +41,18 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
+    listenOtp();
     super.initState();
+  }
+
+  void listenOtp() async {
+    await SmsAutoFill().listenForCode();
+  }
+
+  @override
+  void dispose() {
+    SmsAutoFill().unregisterListener();
+    super.dispose();
   }
 
   @override
@@ -108,228 +120,248 @@ class _OtpScreenState extends State<OtpScreen> {
                         )
                       ),
                       SizedBox(height: ResponsiveFlutter.of(context).verticalScale(5)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: ResponsiveFlutter.of(context).scale(50),
-                            height: ResponsiveFlutter.of(context).verticalScale(50),
-                            decoration: BoxDecoration(
-                              color: appColors.appLightColor,
-                              borderRadius: BorderRadius.circular(
-                                ResponsiveFlutter.of(context).moderateScale(15),
-                              ),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                controller: otp1Controller,
-                                keyboardType: TextInputType.number,
-                                maxLength: 1,
-                                style: MyTextStyle(
-                                  colorNew: appColors.lightColor,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                ),
-                                cursorColor: appColors.lightColor,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(1),
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                onChanged: (value) {
-                                  if (value.length == 1) {
-                                    FocusScope.of(context).nextFocus();
-                                  }
-                                },
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintStyle: MyTextStyle(
-                                    colorNew: appColors.mediumLightColor,
-                                    fontWeightNew: FontWeight.w400,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                  ),
-                                ),
-                              ),
-                            ),
+                      PinFieldAutoFill(
+                        cursor: Cursor(color: appColors.lightColor, width: 2, height: 16, enabled: true),
+                        currentCode: otp,
+                        codeLength: 5,
+                        decoration: BoxLooseDecoration(
+                          strokeColorBuilder: PinListenColorBuilder(appColors.appLightColor, appColors.appLightColor,),
+                          bgColorBuilder: FixedColorBuilder(appColors.appLightColor),
+                          strokeWidth: 0,
+                          textStyle: TextStyle(
+                            fontSize: 18,
+                            color: appColors.lightColor
                           ),
-                          Container(
-                            width: ResponsiveFlutter.of(context).scale(50),
-                            height: ResponsiveFlutter.of(context).verticalScale(50),
-                            decoration: BoxDecoration(
-                              color: appColors.appLightColor,
-                              borderRadius: BorderRadius.circular(
-                                ResponsiveFlutter.of(context).moderateScale(15),
-                              ),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                controller: otp2Controller,
-                                keyboardType: TextInputType.number,
-                                maxLength: 1,
-                                style: MyTextStyle(
-                                  colorNew: appColors.lightColor,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                ),
-                                cursorColor: appColors.lightColor,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(1),
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                onChanged: (value) {
-                                  if (value.length == 1) {
-                                    FocusScope.of(context).nextFocus();
-                                  }
-                                },
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintStyle: MyTextStyle(
-                                    colorNew: appColors.mediumLightColor,
-                                    fontWeightNew: FontWeight.w400,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: ResponsiveFlutter.of(context).scale(50),
-                            height: ResponsiveFlutter.of(context).verticalScale(50),
-                            decoration: BoxDecoration(
-                              color: appColors.appLightColor,
-                              borderRadius: BorderRadius.circular(
-                                ResponsiveFlutter.of(context).moderateScale(15),
-                              ),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                controller: otp3Controller,
-                                keyboardType: TextInputType.number,
-                                maxLength: 1,
-                                style: MyTextStyle(
-                                  colorNew: appColors.lightColor,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                ),
-                                cursorColor: appColors.lightColor,
-                                textAlign: TextAlign.center,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(1),
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                onChanged: (value) {
-                                  if (value.length == 1) {
-                                    FocusScope.of(context).nextFocus();
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintStyle: MyTextStyle(
-                                    colorNew: appColors.mediumLightColor,
-                                    fontWeightNew: FontWeight.w400,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: ResponsiveFlutter.of(context).scale(50),
-                            height: ResponsiveFlutter.of(context).verticalScale(50),
-                            decoration: BoxDecoration(
-                              color: appColors.appLightColor,
-                              borderRadius: BorderRadius.circular(
-                                ResponsiveFlutter.of(context).moderateScale(15),
-                              ),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                controller: otp4Controller,
-                                keyboardType: TextInputType.number,
-                                maxLength: 1,
-                                style: MyTextStyle(
-                                  colorNew: appColors.lightColor,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                ),
-                                cursorColor: appColors.lightColor,
-                                textAlign: TextAlign.center,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(1),
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                onChanged: (value) {
-                                  if (value.length == 1) {
-                                    FocusScope.of(context).nextFocus();
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintStyle: MyTextStyle(
-                                    colorNew: appColors.mediumLightColor,
-                                    fontWeightNew: FontWeight.w400,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: ResponsiveFlutter.of(context).scale(50),
-                            height: ResponsiveFlutter.of(context).verticalScale(50),
-                            decoration: BoxDecoration(
-                              color: appColors.appLightColor,
-                              borderRadius: BorderRadius.circular(
-                                ResponsiveFlutter.of(context).moderateScale(15),
-                              ),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                controller: otp5Controller,
-                                keyboardType: TextInputType.number,
-                                maxLength: 1,
-                                style: MyTextStyle(
-                                  colorNew: appColors.lightColor,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                ),
-                                cursorColor: appColors.lightColor,
-                                textAlign: TextAlign.center,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(1),
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintStyle: MyTextStyle(
-                                    colorNew: appColors.mediumLightColor,
-                                    fontWeightNew: FontWeight.w400,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.9),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ]
+                          radius: Radius.circular(ResponsiveFlutter.of(context).moderateScale(15))
+                        ),
+                        onCodeChanged: (code) {
+                          setState(() {
+                            otp = code ?? '';
+                          });
+                        },
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Container(
+                      //       width: ResponsiveFlutter.of(context).scale(50),
+                      //       height: ResponsiveFlutter.of(context).verticalScale(50),
+                      //       decoration: BoxDecoration(
+                      //         color: appColors.appLightColor,
+                      //         borderRadius: BorderRadius.circular(
+                      //           ResponsiveFlutter.of(context).moderateScale(15),
+                      //         ),
+                      //       ),
+                      //       child: Center(
+                      //         child: TextField(
+                      //           controller: otp1Controller,
+                      //           keyboardType: TextInputType.number,
+                      //           maxLength: 1,
+                      //           style: MyTextStyle(
+                      //             colorNew: appColors.lightColor,
+                      //             fontWeightNew: FontWeight.w500,
+                      //             size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //           ),
+                      //           cursorColor: appColors.lightColor,
+                      //           inputFormatters: [
+                      //             LengthLimitingTextInputFormatter(1),
+                      //             FilteringTextInputFormatter.digitsOnly
+                      //           ],
+                      //           onChanged: (value) {
+                      //             if (value.length == 1) {
+                      //               FocusScope.of(context).nextFocus();
+                      //             }
+                      //           },
+                      //           textAlign: TextAlign.center,
+                      //           decoration: InputDecoration(
+                      //             counterText: "",
+                      //             border: InputBorder.none,
+                      //             isDense: true,
+                      //             hintStyle: MyTextStyle(
+                      //               colorNew: appColors.mediumLightColor,
+                      //               fontWeightNew: FontWeight.w400,
+                      //               size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: ResponsiveFlutter.of(context).scale(50),
+                      //       height: ResponsiveFlutter.of(context).verticalScale(50),
+                      //       decoration: BoxDecoration(
+                      //         color: appColors.appLightColor,
+                      //         borderRadius: BorderRadius.circular(
+                      //           ResponsiveFlutter.of(context).moderateScale(15),
+                      //         ),
+                      //       ),
+                      //       child: Center(
+                      //         child: TextField(
+                      //           controller: otp2Controller,
+                      //           keyboardType: TextInputType.number,
+                      //           maxLength: 1,
+                      //           style: MyTextStyle(
+                      //             colorNew: appColors.lightColor,
+                      //             fontWeightNew: FontWeight.w500,
+                      //             size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //           ),
+                      //           cursorColor: appColors.lightColor,
+                      //           inputFormatters: [
+                      //             LengthLimitingTextInputFormatter(1),
+                      //             FilteringTextInputFormatter.digitsOnly
+                      //           ],
+                      //           onChanged: (value) {
+                      //             if (value.length == 1) {
+                      //               FocusScope.of(context).nextFocus();
+                      //             }
+                      //           },
+                      //           textAlign: TextAlign.center,
+                      //           decoration: InputDecoration(
+                      //             counterText: "",
+                      //             border: InputBorder.none,
+                      //             isDense: true,
+                      //             hintStyle: MyTextStyle(
+                      //               colorNew: appColors.mediumLightColor,
+                      //               fontWeightNew: FontWeight.w400,
+                      //               size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: ResponsiveFlutter.of(context).scale(50),
+                      //       height: ResponsiveFlutter.of(context).verticalScale(50),
+                      //       decoration: BoxDecoration(
+                      //         color: appColors.appLightColor,
+                      //         borderRadius: BorderRadius.circular(
+                      //           ResponsiveFlutter.of(context).moderateScale(15),
+                      //         ),
+                      //       ),
+                      //       child: Center(
+                      //         child: TextField(
+                      //           controller: otp3Controller,
+                      //           keyboardType: TextInputType.number,
+                      //           maxLength: 1,
+                      //           style: MyTextStyle(
+                      //             colorNew: appColors.lightColor,
+                      //             fontWeightNew: FontWeight.w500,
+                      //             size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //           ),
+                      //           cursorColor: appColors.lightColor,
+                      //           textAlign: TextAlign.center,
+                      //           inputFormatters: [
+                      //             LengthLimitingTextInputFormatter(1),
+                      //             FilteringTextInputFormatter.digitsOnly
+                      //           ],
+                      //           onChanged: (value) {
+                      //             if (value.length == 1) {
+                      //               FocusScope.of(context).nextFocus();
+                      //             }
+                      //           },
+                      //           decoration: InputDecoration(
+                      //             counterText: "",
+                      //             border: InputBorder.none,
+                      //             isDense: true,
+                      //             hintStyle: MyTextStyle(
+                      //               colorNew: appColors.mediumLightColor,
+                      //               fontWeightNew: FontWeight.w400,
+                      //               size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: ResponsiveFlutter.of(context).scale(50),
+                      //       height: ResponsiveFlutter.of(context).verticalScale(50),
+                      //       decoration: BoxDecoration(
+                      //         color: appColors.appLightColor,
+                      //         borderRadius: BorderRadius.circular(
+                      //           ResponsiveFlutter.of(context).moderateScale(15),
+                      //         ),
+                      //       ),
+                      //       child: Center(
+                      //         child: TextField(
+                      //           controller: otp4Controller,
+                      //           keyboardType: TextInputType.number,
+                      //           maxLength: 1,
+                      //           style: MyTextStyle(
+                      //             colorNew: appColors.lightColor,
+                      //             fontWeightNew: FontWeight.w500,
+                      //             size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //           ),
+                      //           cursorColor: appColors.lightColor,
+                      //           textAlign: TextAlign.center,
+                      //           inputFormatters: [
+                      //             LengthLimitingTextInputFormatter(1),
+                      //             FilteringTextInputFormatter.digitsOnly
+                      //           ],
+                      //           onChanged: (value) {
+                      //             if (value.length == 1) {
+                      //               FocusScope.of(context).nextFocus();
+                      //             }
+                      //           },
+                      //           decoration: InputDecoration(
+                      //             counterText: "",
+                      //             border: InputBorder.none,
+                      //             isDense: true,
+                      //             hintStyle: MyTextStyle(
+                      //               colorNew: appColors.mediumLightColor,
+                      //               fontWeightNew: FontWeight.w400,
+                      //               size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: ResponsiveFlutter.of(context).scale(50),
+                      //       height: ResponsiveFlutter.of(context).verticalScale(50),
+                      //       decoration: BoxDecoration(
+                      //         color: appColors.appLightColor,
+                      //         borderRadius: BorderRadius.circular(
+                      //           ResponsiveFlutter.of(context).moderateScale(15),
+                      //         ),
+                      //       ),
+                      //       child: Center(
+                      //         child: TextField(
+                      //           controller: otp5Controller,
+                      //           keyboardType: TextInputType.number,
+                      //           maxLength: 1,
+                      //           style: MyTextStyle(
+                      //             colorNew: appColors.lightColor,
+                      //             fontWeightNew: FontWeight.w500,
+                      //             size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //           ),
+                      //           cursorColor: appColors.lightColor,
+                      //           textAlign: TextAlign.center,
+                      //           inputFormatters: [
+                      //             LengthLimitingTextInputFormatter(1),
+                      //             FilteringTextInputFormatter.digitsOnly
+                      //           ],
+                      //           decoration: InputDecoration(
+                      //             counterText: "",
+                      //             border: InputBorder.none,
+                      //             isDense: true,
+                      //             hintStyle: MyTextStyle(
+                      //               colorNew: appColors.mediumLightColor,
+                      //               fontWeightNew: FontWeight.w400,
+                      //               size: ResponsiveFlutter.of(context).fontSize(1.9),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ]
+                      // ),
                       SizedBox(height: ResponsiveFlutter.of(context).verticalScale(25)),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(55)),
                         child: GestureDetector(
                           onTap: () async {
                             if (!loading) {
-                              if (otp1Controller.text == "" || otp2Controller.text == "" || otp3Controller.text == "" || otp4Controller.text == "" || otp5Controller.text == "") {
+                              if (otp.length < 5) {
                                 Utils.flushBarErrorMessage("Le code est incomplet", context);
                               } else {
                                 setState(() {
@@ -337,7 +369,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                 });
                                 await authViewModel.otpVerificationApi(
                                     {
-                                      "otp": otp1Controller.text + otp2Controller.text + otp3Controller.text + otp4Controller.text + otp5Controller.text
+                                      "otp": otp
                                     }, context).then((value) {
                                   setState(() {
                                     loading = false;

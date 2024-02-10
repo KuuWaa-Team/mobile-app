@@ -717,6 +717,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                 ),
                 if (widget.event.shared != true)
                 const SizedBox(width: 10,),
+                if (widget.event.shared != true)
                 GestureDetector(
                   onTap: () {
                     showDialog(
@@ -1031,7 +1032,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                               //   ),
                                                               // ),
                                                             // if (invitation.status == 'sent')
-                                                            // if (invitation.status == 'created' && widget.event.shared != true)
+                                                            if (widget.event.shared != true)
                                                             GestureDetector(
                                                               onTap: () {
                                                                 showShareDialog(invitation);
@@ -1060,7 +1061,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            // if (invitation.status == 'created' && widget.event.shared != true)
+                                                            if (widget.event.shared != true)
                                                             GestureDetector(
                                                               onTap: () {
                                                                 setState(() {
@@ -1370,7 +1371,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            if (widget.event.paymentStatus == 'paid')
+                                                            if (widget.event.paymentStatus == 'paid' && widget.event.shared != true)
                                                             GestureDetector(
                                                               onTap: () {
                                                                 String url = "http://kuuwaa.com/invitations/" + invitation.code.toString();

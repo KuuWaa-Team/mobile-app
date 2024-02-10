@@ -229,7 +229,7 @@ class _CheckScreenState extends State<CheckScreen> {
                 context: context,
                 color: Colors.red,
                 message: "Ce codeQR n'est pas reconnu par KuuWaa. Veuillez utiliser le code à 6 chiffres si vous avez des doutes",
-                status: "Invitation valide",
+                status: "Invitation invalide",
                 icon: CupertinoIcons.xmark_circle_fill,
                 onClose: () {
                   Navigator.pop(context);

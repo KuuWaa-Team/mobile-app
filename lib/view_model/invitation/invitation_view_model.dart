@@ -425,7 +425,7 @@ class InvitationViewModel with ChangeNotifier{
             context: context,
             color: value['success'] ? Colors.green: Colors.red,
             message: value['message'],
-            status: "Invitation valide",
+            status: value['success'] ? "Invitation valide" : "Invitation invalide",
             icon: value['success'] ? CupertinoIcons.check_mark_circled_solid: CupertinoIcons.xmark_circle_fill,
             onClose: () {
               Navigator.pop(context);

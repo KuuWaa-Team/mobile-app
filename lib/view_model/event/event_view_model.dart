@@ -256,6 +256,31 @@ class EventViewModel with ChangeNotifier{
     return response;
   }
 
+  Future<dynamic> deleteEventApi (BuildContext context, EventModel event) async {
+    setLoading(true);
+    dynamic response;
+    await _repository.deleteEventApi(context: context, id: event.id!).then((value) {
+      if (value['success'] == true  ) {
+        response = value;
+        Utils.toastMessage(value['message']);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>  BottomBarScreen(),
+          ),
+              (route) => false,
+        );
+        // setLoading(false);
+      } else {
+        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return response;
+  }
+
   Future<dynamic> checkPayStatus (BuildContext context, String orderNumber, EventModel event) async {
     setLoading(true);
     dynamic response;
