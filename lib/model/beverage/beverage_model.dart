@@ -1,7 +1,3 @@
-import 'package:kuuwaa/model/event/event_category_model.dart';
-import 'package:kuuwaa/model/event/event_pack_model.dart';
-import 'package:kuuwaa/model/event/feature_model.dart';
-
 import '../invitation/invitation_model.dart';
 
 class BeverageModel {
@@ -24,7 +20,13 @@ class BeverageModel {
     if (json['invitations'] != null) {
       json['invitations'].forEach((element) {
         invitations ??= [];
-        invitations?.add(InvitationModel.fromJson(element));
+        if (element.runtimeType != String) {
+          invitations?.add(InvitationModel.fromJson(element));
+        } else {
+          invitations?.add(InvitationModel(
+            name: element
+          ));
+        }
       });
     }
   }

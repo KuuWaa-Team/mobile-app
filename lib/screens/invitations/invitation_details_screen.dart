@@ -6,6 +6,7 @@ import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
+import 'package:kuuwaa/model/beverage/beverage_model.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
@@ -27,6 +28,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
   AppColors appColors = AppColors();
   InvitationViewModel invitationViewModel = InvitationViewModel();
   bool loadingBook = false;
+  bool loadingBeverage = false;
 
   EventViewModel eventViewModel = EventViewModel();
 
@@ -60,10 +62,6 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                         );
                       case Status.COMPLETED:
                         InvitationModel invitation = value.invitation.data!;
-                        print("***************************");
-                        print("***************************");
-                        print("***************************");
-                        print(invitation.event!.beveragesCount);
                         return Stack(
                           children: [
                             Container(
@@ -303,7 +301,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                           ),
                                           SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
                                           Flexible(
-                                            child: MyTextView(invitation.event!.address!.street.toString(),
+                                            child: MyTextView(invitation.event!.address!.province!.name! + ", " + invitation.event!.address!.street.toString(),
                                               textAligntNew: TextAlign.start,
                                               maxLinesNew: 5,
                                               styleNew: MyTextStyle(
@@ -316,9 +314,8 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                         ],
                                       ),
                                     ),
-                                    if (invitation.bookSent != true && (invitation.event!.featureslugs == null || !invitation.event!.featureslugs!.contains("BEVERAGE")))
                                     const SizedBox(height: 10,),
-                                    if (invitation.bookSent != true)
+                                    if (invitation.bookSent != true && (invitation.event!.featureslugs != null || invitation.event!.featureslugs!.contains("BOOK")))
                                     GestureDetector(
                                       onTap: () {
                                         showDialog(
@@ -461,265 +458,97 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    if (invitation.event!.featureslugs != null && !invitation.event!.featureslugs!.contains("BEVERAGE"))
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            showModalBottomSheet(
-                                                context: context,
-                                                backgroundColor: appColors.appMediumColor,
-                                                isScrollControlled: true,
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.only( // <-- SEE HERE
-                                                    topLeft: Radius.circular(30.0),
-                                                    topRight: Radius.circular(30.0),
-                                                  ),
-                                                ),
-                                                builder: (context) {
-                                                  return Padding(
-                                                    padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-                                                    child: SingleChildScrollView(
-                                                      child: Column(
-                                                        children: [
-                                                          MyTextView(
-                                                            "Quelle boisson allez-vous prendre ?",
-                                                            textAligntNew: TextAlign.center,
-                                                            styleNew: MyTextStyle(
-                                                              colorNew: appColors.lightColor,
-                                                              fontWeightNew: FontWeight.w400,
-                                                              size: ResponsiveFlutter.of(context).fontSize(2),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(height: 30,),
-                                                          Column(
-                                                            children: [
-                                                              Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                ),
-                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                decoration: BoxDecoration(
-                                                                  color: appColors.appLightColor,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                                                  ),
-                                                                ),
-                                                                child: MyTextView(
-                                                                  "Castel Beer",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                ),
-                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                decoration: BoxDecoration(
-                                                                  color: appColors.appLightColor,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                                                  ),
-                                                                ),
-                                                                child: MyTextView(
-                                                                  "Turbo King",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                ),
-                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                decoration: BoxDecoration(
-                                                                  color: appColors.appLightColor,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                                                  ),
-                                                                ),
-                                                                child: MyTextView(
-                                                                  "Heineken",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                ),
-                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                decoration: BoxDecoration(
-                                                                  color: appColors.appLightColor,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                                                  ),
-                                                                ),
-                                                                child: MyTextView(
-                                                                  "Maltina",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                ),
-                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                decoration: BoxDecoration(
-                                                                  color: appColors.appLightColor,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                                                  ),
-                                                                ),
-                                                                child: MyTextView(
-                                                                  "Coca cola",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                ),
-                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                decoration: BoxDecoration(
-                                                                  color: appColors.appLightColor,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                                                  ),
-                                                                ),
-                                                                child: MyTextView(
-                                                                  "Energy malt",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: EdgeInsets.symmetric(
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                ),
-                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                                decoration: BoxDecoration(
-                                                                  color: appColors.appLightColor,
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                                                  ),
-                                                                ),
-                                                                child: MyTextView(
-                                                                  "Vital'o",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                            );
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context).size.width - 45,
-                                            height: ResponsiveFlutter.of(context).moderateScale(40),
-                                            margin: EdgeInsets.only(
-                                              bottom: ResponsiveFlutter.of(context).moderateScale(10),
-                                            ),
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(
-                                                ResponsiveFlutter.of(context).moderateScale(25),
-                                              ), // Creates border
-                                              color: appColors.appLightColor,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                MyTextView(
-                                                  "Choix de boisson",
-                                                  textAligntNew: TextAlign.start,
-                                                  maxLineWrap: true,
-                                                  styleNew: MyTextStyle(
-                                                    colorNew: appColors.white,
-                                                    fontWeightNew: FontWeight.w600,
-                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    if (invitation.bookSent == true)
-                                    // Container(
-                                    //   height: ResponsiveFlutter.of(context).scale(40),
-                                    //   decoration: BoxDecoration(
-                                    //       color: appColors.appLightColor,
-                                    //       borderRadius: BorderRadius.circular(10)
-                                    //   ),
-                                    //   width: MediaQuery.of(context).size.width,
-                                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    //   child: Row(
-                                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                                    //     children: [
-                                    //       Icon(Icons.check_circle_outline_rounded, color: appColors.lightColor.withOpacity(.2),),
-                                    //       const SizedBox(width: 10,),
-                                    //       MyTextView(
-                                    //         "Message envoyé avec succès",
-                                    //         textAligntNew: TextAlign.start,
-                                    //         maxLinesNew: 3,
-                                    //         styleNew: MyTextStyle(
-                                    //           colorNew: appColors.lightColor.withOpacity(.2),
-                                    //           fontWeightNew: FontWeight.w400,
-                                    //           size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                    //         ),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    if (invitation.event!.beveragesCount != null && invitation.event!.beveragesCount! > 0)
+                                    if (invitation.event!.featureslugs != null && invitation.event!.featureslugs!.contains("BEVERAGE") && invitation.event!.beveragesCount != null && invitation.event!.beveragesCount! > 0 && invitation.beverage == null)
                                     GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                            context: context,
+                                            backgroundColor: appColors.appMediumColor,
+                                            isScrollControlled: true,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only( // <-- SEE HERE
+                                                topLeft: Radius.circular(30.0),
+                                                topRight: Radius.circular(30.0),
+                                              ),
+                                            ),
+                                            builder: (context) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      MyTextView(
+                                                        "Quelle boisson allez-vous prendre ?",
+                                                        textAligntNew: TextAlign.center,
+                                                        styleNew: MyTextStyle(
+                                                          colorNew: appColors.lightColor,
+                                                          fontWeightNew: FontWeight.w400,
+                                                          size: ResponsiveFlutter.of(context).fontSize(2),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 30,),
+                                                      ListView.builder(
+                                                        shrinkWrap: true,
+                                                        itemCount: invitation.event!.beverages!.length,
+                                                        itemBuilder: (context, index) {
+                                                          BeverageModel current = invitation.event!.beverages![index];
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              if (!loadingBeverage) {
+                                                                setState(() {
+                                                                  loadingBeverage = true;
+                                                                });
+                                                                InvitationViewModel invitationVM = InvitationViewModel();
+                                                                invitationVM.selectInvitation(context, invitation.id!, {
+                                                                  'id': current.id
+                                                                }).then((value) {
+                                                                  setState(() {
+                                                                    invitation.beverage = BeverageModel(
+                                                                      name: current.name,
+                                                                      id: current.id,
+                                                                    );
+                                                                  });
+                                                                });
+                                                                setState(() {
+                                                                  loadingBeverage = false;
+                                                                });
+                                                              }
+                                                            },
+                                                            child: Container(
+                                                              padding: EdgeInsets.symmetric(
+                                                                vertical: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+                                                              ),
+                                                              margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                              decoration: BoxDecoration(
+                                                                color: appColors.appLightColor,
+                                                                borderRadius: BorderRadius.circular(
+                                                                  ResponsiveFlutter.of(context).moderateScale(25),
+                                                                ),
+                                                              ),
+                                                              child: MyTextView(
+                                                                current.name.toString(),
+                                                                textAligntNew: TextAlign.center,
+                                                                styleNew: MyTextStyle(
+                                                                  colorNew: appColors.lightColor,
+                                                                  fontWeightNew: FontWeight.w400,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                        );
+                                      },
                                       child: Container(
+                                        width: MediaQuery.of(context).size.width - 45,
                                         height: ResponsiveFlutter.of(context).moderateScale(40),
                                         margin: EdgeInsets.only(
                                           bottom: ResponsiveFlutter.of(context).moderateScale(10),
@@ -729,7 +558,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                           borderRadius: BorderRadius.circular(
                                             ResponsiveFlutter.of(context).moderateScale(25),
                                           ), // Creates border
-                                          color: appColors.appLightColor,
+                                          color: appColors.btnColor,
                                         ),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -741,14 +570,13 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                               styleNew: MyTextStyle(
                                                 colorNew: appColors.white,
                                                 fontWeightNew: FontWeight.w600,
-                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                size: ResponsiveFlutter.of(context).fontSize(1.8),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: MediaQuery.of(context).size.height * 0.17,),
                                   ],
                                 ),
                               ),

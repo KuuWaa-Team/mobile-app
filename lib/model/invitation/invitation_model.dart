@@ -1,3 +1,4 @@
+import 'package:kuuwaa/model/beverage/beverage_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 
 import '../table/table_model.dart';
@@ -14,6 +15,7 @@ class InvitationModel {
   String? codePath;
   String? code;
   String? decryptKey;
+  BeverageModel? beverage;
   TableModel? table;
   EventModel? event;
 
@@ -22,6 +24,7 @@ class InvitationModel {
     this.name,
     this.phoneNumber,
     this.bookSent,
+    this.beverage,
     this.message,
     this.decryptKey,
     this.count,
@@ -37,6 +40,9 @@ class InvitationModel {
     name = json['name'];
     civility = json['civility'];
     bookSent = json['bookSent'];
+    if (json['beverage'] != null) {
+      beverage = BeverageModel.fromJson(json['beverage']);
+    }
     decryptKey = json['decryptKey'];
     count = json['count'];
     code = json['code'];

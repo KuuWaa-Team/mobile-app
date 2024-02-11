@@ -732,71 +732,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
-                                        // if (event.tablesCount == null || event.tablesCount! < 1) {
-                                        //   showDialog(
-                                        //     context: context,
-                                        //     builder: (context) {
-                                        //       return StatefulBuilder(
-                                        //         builder: (context, setState) {
-                                        //           return Dialog(
-                                        //               shape: RoundedRectangleBorder(
-                                        //                 borderRadius: BorderRadius.circular(10),
-                                        //               ),
-                                        //               child: Stack(
-                                        //                 children: [
-                                        //                   Padding(
-                                        //                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                                        //                     child:
-                                        //                     Column(
-                                        //                       mainAxisSize: MainAxisSize.min,
-                                        //                       children: [
-                                        //                         SizedBox(
-                                        //                           height: 60,
-                                        //                           width: 60,
-                                        //                           child: Center(
-                                        //                             child: Icon(
-                                        //                               Icons.lightbulb_outline,
-                                        //                               color: appColors.btnColor,
-                                        //                               size: 50,
-                                        //                             ),
-                                        //                           ),
-                                        //                         ),
-                                        //                         const SizedBox(height: 10,),
-                                        //                         const Column(
-                                        //                           mainAxisSize: MainAxisSize.min,
-                                        //                           children: [
-                                        //                             Text("Vous devez enrégistrer au moins une table avant de gérer les invités", style: TextStyle(
-                                        //                                 fontWeight: FontWeight.bold
-                                        //                             ), textAlign: TextAlign.center,),
-                                        //                           ],
-                                        //                         ),
-                                        //                         const SizedBox(height: 20,),
-                                        //                         Row(
-                                        //                           mainAxisAlignment: MainAxisAlignment.center,
-                                        //                           children: [
-                                        //                             GestureDetector(
-                                        //                               onTap: () {
-                                        //                                 Navigator.pop(context);
-                                        //                               },
-                                        //                               child: CommonButton(
-                                        //                                 loading: false,
-                                        //                                 title: "Compris",
-                                        //                                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        //                               ),
-                                        //                             )
-                                        //                           ],
-                                        //                         )
-                                        //                       ],
-                                        //                     ),
-                                        //                   ),
-                                        //                 ],
-                                        //               )
-                                        //           );
-                                        //         },
-                                        //       );
-                                        //     },
-                                        //   );
-                                        // } else {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -835,7 +770,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (event.featureslugs == null || !event.featureslugs!.contains("BEVERAGE"))
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -870,82 +804,41 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.featureslugs != null && event.featureslugs!.contains("BEVERAGE"))
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => TableListScreen(event: event),
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: appColors.appLightColor,
-                                              borderRadius: BorderRadius.circular(5),
-                                            ),
-                                            width: (MediaQuery.of(context).size.width / 2) - 25,
-                                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                            child: Row (
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(CupertinoIcons.table_fill, size: 15, color: appColors.lightPinkColor,),
-                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                MyTextView(
-                                                  Strings.tables,
-                                                  textAligntNew: TextAlign.start,
-                                                  maxLineWrap: true,
-                                                  styleNew: MyTextStyle(
-                                                    colorNew: appColors.lightColor,
-                                                    fontWeightNew: FontWeight.w500,
-                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BeverageListScreen(event: event),
                                           ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: appColors.appLightColor,
+                                          borderRadius: BorderRadius.circular(5),
                                         ),
-                                        SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => BeverageListScreen(event: event),
+                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                        child: Row (
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(CupertinoIcons.hourglass_bottomhalf_fill, size: 15, color: appColors.lightPinkColor,),
+                                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                            MyTextView(
+                                              Strings.beverage,
+                                              textAligntNew: TextAlign.start,
+                                              maxLineWrap: true,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.lightColor,
+                                                fontWeightNew: FontWeight.w500,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.5),
                                               ),
-                                            );
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: appColors.appLightColor,
-                                              borderRadius: BorderRadius.circular(5),
                                             ),
-                                            width: (MediaQuery.of(context).size.width / 2) - 30,
-                                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                            child: Row (
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(CupertinoIcons.hourglass_bottomhalf_fill, size: 15, color: appColors.lightPinkColor,),
-                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                MyTextView(
-                                                  Strings.beverage,
-                                                  textAligntNew: TextAlign.start,
-                                                  maxLineWrap: true,
-                                                  styleNew: MyTextStyle(
-                                                    colorNew: appColors.lightColor,
-                                                    fontWeightNew: FontWeight.w500,
-                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true && event.featureslugs != null && event.featureslugs!.contains("BOOK"))
@@ -986,15 +879,53 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     if (event.shared != true && event.featureslugs != null && event.featureslugs!.contains("BOOK"))
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     // Navigator.push(
+                                    //     //   context,
+                                    //     //   MaterialPageRoute(
+                                    //     //     builder: (context) => BookScreen(event: event),
+                                    //     //   ),
+                                    //     // );
+                                    //     Utils.flushBarErrorMessage("Fonctionnalité en cours de dévéloppement", context);
+                                    //   },
+                                    //   child: Container(
+                                    //     decoration: BoxDecoration(
+                                    //       color: appColors.appLightColor,
+                                    //       borderRadius: BorderRadius.circular(5),
+                                    //     ),
+                                    //     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                    //     child: Row (
+                                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                                    //       children: [
+                                    //         Icon(CupertinoIcons.bell_fill, size: 15, color: appColors.lightPinkColor,),
+                                    //         SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    //         MyTextView(
+                                    //           "Save the date",
+                                    //           textAligntNew: TextAlign.start,
+                                    //           maxLineWrap: true,
+                                    //           styleNew: MyTextStyle(
+                                    //             colorNew: appColors.lightColor,
+                                    //             fontWeightNew: FontWeight.w500,
+                                    //             size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                    //           ),
+                                    //         ),
+                                    //         const SizedBox(width: 10,),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    // if (event.shared != true)
+                                    // SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true)
                                     GestureDetector(
                                       onTap: () {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => BookScreen(event: event),
-                                        //   ),
-                                        // );
-                                        Utils.flushBarErrorMessage("Fonctionnalité en cours de dévéloppement", context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AdminListScreen(event: event),
+                                          ),
+                                        );
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -1003,12 +934,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row (
+                                          mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Icon(CupertinoIcons.bell_fill, size: 15, color: appColors.lightPinkColor,),
+                                            Icon(Icons.admin_panel_settings_rounded, size: 15, color: appColors.lightPinkColor,),
                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                             MyTextView(
-                                              "Save the date",
+                                              "Controlleurs",
                                               textAligntNew: TextAlign.start,
                                               maxLineWrap: true,
                                               styleNew: MyTextStyle(
@@ -1017,89 +949,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 size: ResponsiveFlutter.of(context).fontSize(1.5),
                                               ),
                                             ),
-                                            const SizedBox(width: 10,),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    if (event.shared != true)
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (event.shared != true)
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => AdminListScreen(id: event.id!),
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: appColors.appLightColor,
-                                              borderRadius: BorderRadius.circular(5),
-                                            ),
-                                            width: (MediaQuery.of(context).size.width / 2) - 25,
-                                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                            child: Row (
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(Icons.admin_panel_settings_rounded, size: 15, color: appColors.lightPinkColor,),
-                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                MyTextView(
-                                                  "Controlleurs",
-                                                  textAligntNew: TextAlign.start,
-                                                  maxLineWrap: true,
-                                                  styleNew: MyTextStyle(
-                                                    colorNew: appColors.lightColor,
-                                                    fontWeightNew: FontWeight.w500,
-                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                        GestureDetector(
-                                          onTap: () {
-                                            // Navigator.push(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) => const ChatScreen(),
-                                            //   ),
-                                            // );
-                                            Utils.flushBarErrorMessage("Fonctionnalité en cours de dévéloppement", context);
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: appColors.appLightColor,
-                                              borderRadius: BorderRadius.circular(5),
-                                            ),
-                                            width: (MediaQuery.of(context).size.width / 2) - 30,
-                                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                            child: Row (
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(CupertinoIcons.chat_bubble_2_fill, size: 15, color: appColors.lightPinkColor,),
-                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                MyTextView(
-                                                  "Chat",
-                                                  textAligntNew: TextAlign.start,
-                                                  maxLineWrap: true,
-                                                  styleNew: MyTextStyle(
-                                                    colorNew: appColors.lightColor,
-                                                    fontWeightNew: FontWeight.w500,
-                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                     if (event.shared != true)
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),

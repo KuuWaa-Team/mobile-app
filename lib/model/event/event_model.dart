@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:kuuwaa/model/address/address_model.dart';
+import 'package:kuuwaa/model/beverage/beverage_model.dart';
 import 'package:kuuwaa/model/book/book_model.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
@@ -26,6 +27,7 @@ class EventModel {
   EventPackModel? eventPack;
   bool? paidEvent;
   List<FeatureModel>? features;
+  List<BeverageModel>? beverages;
   List<BookModel>? books;
   AddressModel? address;
 
@@ -33,6 +35,7 @@ class EventModel {
     this.id,
     this.name,
     this.date,
+    this.beverages,
     this.featureslugs,
     this.books,
     this.address,
@@ -81,10 +84,17 @@ class EventModel {
     if (json['eventPack'] != null) {
       eventPack = EventPackModel.fromJson(json['eventPack']);
     }
+
     if (json['features'] != null) {
       features = [];
       json['features'].forEach((element) {
         features!.add(FeatureModel.fromJson(element));
+      });
+    }
+    if (json['beverages'] != null) {
+      beverages = [];
+      json['beverages'].forEach((element) {
+        beverages!.add(BeverageModel.fromJson(element));
       });
     }
 

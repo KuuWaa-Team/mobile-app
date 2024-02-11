@@ -11,6 +11,7 @@ import 'package:kuuwaa/model/invitation/invitation_model.dart';
 import 'package:kuuwaa/repository/invitation/invitation_repository.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
+import 'package:kuuwaa/screens/invitations/invitation_details_screen.dart';
 
 class InvitationViewModel with ChangeNotifier{
   final _repository = InvitationRepository();
@@ -56,10 +57,11 @@ class InvitationViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
-    }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
-      setLoading(false);
     });
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   setLoading(false);
+    // });
     return true;
   }
 
@@ -154,7 +156,7 @@ class InvitationViewModel with ChangeNotifier{
                                   ),
                                 ),
                                 const SizedBox(height: 10,),
-                            Column(
+                                Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const Text("Vous ne pouvez pas ajouter une invitation", style: TextStyle(
@@ -225,8 +227,32 @@ class InvitationViewModel with ChangeNotifier{
         }
       }
     }).onError((error, stackTrace) {
-       Utils.flushBarErrorMessage(Utils.errorMessage, context);
-       setLoading(false);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
+  Future<bool> selectInvitation(BuildContext context, int id, Map data) async {
+    setLoading(true);
+    await _repository.selectInvitationsApi(context: context, data: data, id: id).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        Navigator.pop(context);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => InvitationDetailsScreen(id: id,),
+        //   ),
+        // );
+        Utils.toastMessage("Préférence envoyée avec succès");
+        setInvitation(ApiResponse.completed(InvitationModel.fromJson(value['invitation'])));
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
     return true;
   }

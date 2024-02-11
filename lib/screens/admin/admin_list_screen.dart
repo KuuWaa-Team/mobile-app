@@ -5,17 +5,19 @@ import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
+import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/eventAdmin/event_admin_controller.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/eventAdmin/event_admin_view_model.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AdminListScreen extends StatefulWidget {
-  int id;
-  AdminListScreen({Key? key, required this.id}) : super(key: key);
+  EventModel event;
+  AdminListScreen({Key? key, required this.event}) : super(key: key);
 
   @override
   _AdminListScreenState createState() => _AdminListScreenState();
@@ -39,7 +41,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
 
   @override
   void initState() {
-    adminViewModel.listingApi(context, widget.id);
+    adminViewModel.listingApi(context, widget.event.id!);
     super.initState();
   }
 
@@ -61,115 +63,221 @@ class _AdminListScreenState extends State<AdminListScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    showModalBottomSheet(
+                    if (widget.event.paymentStatus != "paid") {
+                      showDialog(
                         context: context,
-                        isScrollControlled: true,
-                        backgroundColor: appColors.appMediumColor,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only( // <-- SEE HERE
-                            topLeft: Radius.circular(30.0),
-                            topRight: Radius.circular(30.0),
-                          ),
-                        ),
                         builder: (context) {
-                          return StatefulBuilder(
-                              builder: (context, setState) {
-                                return Padding(
-                                  padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-                                  child: SingleChildScrollView(
-                                    child: Column(
+                          return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      right: 0,
+                                      top: 0,
+                                      child: IconButton(onPressed: (){
+                                        Navigator.pop(context);
+                                      }, icon: const Icon(Icons.close)
+                                      )
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                    child:
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        MyTextView(
-                                          "Ajouter un Controlleur",
-                                          textAligntNew: TextAlign.center,
-                                          styleNew: MyTextStyle(
-                                            colorNew: appColors.lightColor,
-                                            fontWeightNew: FontWeight.w600,
-                                            size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                        const SizedBox(
+                                          height: 60,
+                                          width: 60,
+                                          child: Center(
+                                            child: Icon(
+                                              CupertinoIcons.xmark_circle,
+                                              color: Colors.red,
+                                              size: 50,
+                                            ),
                                           ),
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        const Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text("Cet évenement n'est pas activé", style: TextStyle(
+                                                fontWeight: FontWeight.bold, color: Colors.red
+                                            ), textAlign: TextAlign.center,),
+                                            SizedBox(height: 10,),
+                                            Text("Vous ne pouvez pas ajouter des controlleurs à un évenement non activé.", style: TextStyle(
+                                                fontSize: 12
+                                            ), textAlign: TextAlign.center,),
+                                            Divider(),
+                                            Text("Pour activer l'évenement, vous devez payer les frais d'abonnement.", style: TextStyle(
+                                                fontSize: 12
+                                            ), textAlign: TextAlign.center,),
+                                          ],
                                         ),
                                         const SizedBox(height: 20,),
-                                        Container(
-                                          height: ResponsiveFlutter.of(context).verticalScale(40),
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: ResponsiveFlutter.of(context).moderateScale(6),
-                                            horizontal: ResponsiveFlutter.of(context).moderateScale(15),
-                                          ),
-                                          margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                          decoration: BoxDecoration(
-                                            color: appColors.appLightColor,
-                                            borderRadius: BorderRadius.circular(
-                                              ResponsiveFlutter.of(context).moderateScale(25),
-                                            ),
-                                          ),
-                                          child: commonTestField(
-                                            context: context,
-                                            controller: _nameController,
-                                            hintText: "Nom du controlleur",
-                                            keyboardType: TextInputType.text,
-                                            icon: true,
-                                          ),
-                                        ),
-                                        Container(
-                                          height: ResponsiveFlutter.of(context).verticalScale(40),
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: ResponsiveFlutter.of(context).moderateScale(5),
-                                            horizontal: ResponsiveFlutter.of(context).moderateScale(25),
-                                          ),
-                                          margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(25)),
-                                          decoration: BoxDecoration(
-                                            color: appColors.appLightColor,
-                                            borderRadius: BorderRadius.circular(
-                                              ResponsiveFlutter.of(context).moderateScale(25),
-                                            ),
-                                          ),
-                                          child: commonTestField(
-                                            context: context,
-                                            controller: _phoneController,
-                                            initial: "+243 ",
-                                            hintText: Strings.yourPhoneNumber,
-                                            keyboardType: TextInputType.phone,
-                                            inputFormatters: [maskFormatter],
-                                            icon: true,
-                                          ),
-                                        ),
                                         GestureDetector(
-                                          onTap: () {
-                                            if (_nameController.text == "") {
-                                              Utils.flushBarErrorMessage("Vous devez enter le nom du controlleur", context);
-                                            } else if (_phoneController.text == "") {
-                                              Utils.flushBarErrorMessage("Vous devez enter le numéro de téléphone du controlleur", context);
-                                            } else {
-                                              setState(() {
-                                                loading = true;
-                                              });
-                                              Map data = {
-                                                "name": _nameController.text,
-                                                "phoneNumber": _phoneController.text,
-                                                "eventId": widget.id
-                                              };
-
-                                              adminViewModel.addAdmin(context, data).then((value) {
-                                                setState(() {
-                                                  loading = false;
-                                                });
-                                              });
-                                            }
+                                          onTap: () async {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => PaymentScreen(event: widget.event),
+                                              ),
+                                            );
                                           },
-                                          child: CommonButton(
-                                            title: "Enrégistrer",
-                                            loading: loading,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
+                                                borderRadius: BorderRadius.circular(10)
+                                            ),
+                                            margin: const EdgeInsets.only(bottom: 10),
+                                            width: MediaQuery.of(context).size.width,
+                                            padding: const EdgeInsets.all(10),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: [
+                                                    const Icon(CupertinoIcons.check_mark_circled, size: 20,),
+                                                    const SizedBox(width: 7,),
+                                                    MyTextView(
+                                                      "Activer l'évenement",
+                                                      textAligntNew: TextAlign.start,
+                                                      maxLineWrap: true,
+                                                      styleNew: MyTextStyle(
+                                                        colorNew: appColors.black,
+                                                        fontWeightNew: FontWeight.w500,
+                                                        size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
                                       ],
                                     ),
                                   ),
-                                );
-                              }
+                                ],
+                              )
                           );
-                        }
-                    );
+                        },
+                      );
+                    } else {
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: appColors.appMediumColor,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only( // <-- SEE HERE
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+                          ),
+                          builder: (context) {
+                            return StatefulBuilder(
+                                builder: (context, setState) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          MyTextView(
+                                            "Ajouter un Controlleur",
+                                            textAligntNew: TextAlign.center,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w600,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20,),
+                                          Container(
+                                            height: ResponsiveFlutter.of(context).verticalScale(40),
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                              horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                            ),
+                                            margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                            decoration: BoxDecoration(
+                                              color: appColors.appLightColor,
+                                              borderRadius: BorderRadius.circular(
+                                                ResponsiveFlutter.of(context).moderateScale(25),
+                                              ),
+                                            ),
+                                            child: commonTestField(
+                                              context: context,
+                                              controller: _nameController,
+                                              hintText: "Nom du controlleur",
+                                              keyboardType: TextInputType.text,
+                                              icon: true,
+                                            ),
+                                          ),
+                                          Container(
+                                            height: ResponsiveFlutter.of(context).verticalScale(40),
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: ResponsiveFlutter.of(context).moderateScale(5),
+                                              horizontal: ResponsiveFlutter.of(context).moderateScale(25),
+                                            ),
+                                            margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(25)),
+                                            decoration: BoxDecoration(
+                                              color: appColors.appLightColor,
+                                              borderRadius: BorderRadius.circular(
+                                                ResponsiveFlutter.of(context).moderateScale(25),
+                                              ),
+                                            ),
+                                            child: commonTestField(
+                                              context: context,
+                                              controller: _phoneController,
+                                              initial: "+243 ",
+                                              hintText: Strings.yourPhoneNumber,
+                                              keyboardType: TextInputType.phone,
+                                              inputFormatters: [maskFormatter],
+                                              icon: true,
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (_nameController.text == "") {
+                                                Utils.flushBarErrorMessage("Vous devez enter le nom du controlleur", context);
+                                              } else if (_phoneController.text == "") {
+                                                Utils.flushBarErrorMessage("Vous devez enter le numéro de téléphone du controlleur", context);
+                                              } else {
+                                                setState(() {
+                                                  loading = true;
+                                                });
+                                                Map data = {
+                                                  "name": _nameController.text,
+                                                  "phoneNumber": _phoneController.text,
+                                                  "eventId": widget.event.id!
+                                                };
+
+                                                adminViewModel.addAdmin(context, data).then((value) {
+                                                  setState(() {
+                                                    loading = false;
+                                                  });
+                                                });
+                                              }
+                                            },
+                                            child: CommonButton(
+                                              title: "Enrégistrer",
+                                              loading: loading,
+                                            ),
+                                          ),
+                                          SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            );
+                          }
+                      );
+                    }
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 20, right: 10),
@@ -199,7 +307,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    adminViewModel.listingApi(context, widget.id);
+                    adminViewModel.listingApi(context, widget.event.id!);
                   },
                   child: Container(
                     width: 50,

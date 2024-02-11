@@ -1498,7 +1498,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                        const SizedBox(height: 10,),
+                                                        if (widget.event.featureslugs != null && widget.event.featureslugs!.contains("BEVERAGE"))
+                                                          const SizedBox(height: 10,),
+                                                        if (widget.event.featureslugs != null && widget.event.featureslugs!.contains("BEVERAGE"))
                                                         Container(
                                                           decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(5),
@@ -1518,7 +1520,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                 ),
                                                               ),
                                                               MyTextView(
-                                                                " - ",
+                                                                invitation.beverage == null ? "-" : invitation.beverage!.name!,
                                                                 textAligntNew: TextAlign.center,
                                                                 styleNew: MyTextStyle(
                                                                   colorNew: appColors.lightColor,
