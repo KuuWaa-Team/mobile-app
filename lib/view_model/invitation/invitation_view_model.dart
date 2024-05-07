@@ -457,6 +457,9 @@ class InvitationViewModel with ChangeNotifier{
               Navigator.pop(context);
             },
             onValidate: () {
+              if (value['success'] && dataInvitation != null) {
+                validateInvitation(context, dataInvitation.id!);
+              }
               Navigator.pop(context);
             },
             btnTitle: value['success'] ? "Valider" : "D'accord",
@@ -530,6 +533,11 @@ class InvitationViewModel with ChangeNotifier{
       setLoading(false);
     });
     return null;
+  }
+
+  Future<void> validateInvitation(BuildContext context, int id) async {
+    setLoading(true);
+    await _repository.validateInvitationApi(context: context, id: id);
   }
 
   Future<bool> sendAllInvitations(BuildContext context, Map data, EventModel event) async {

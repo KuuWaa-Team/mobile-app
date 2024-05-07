@@ -31,6 +31,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
   String? selectedTime = "Select time";
   bool loading = false;
   bool loaded = false;
+  String street = "";
+  bool loadedStreet = false;
 
   List<Map<String, dynamic>> provinces = [
     {
@@ -273,6 +275,10 @@ class _EditEventScreenState extends State<EditEventScreen> {
                             );
                           case Status.COMPLETED:
                             EventModel event = value.event.data!;
+                            if (!loadedStreet) {
+                              loadedStreet = true;
+                              street = event.address!.street ?? "";
+                            }
                             paid = event.paidEvent == true;
                             if (!loaded) {
                               loaded = true;
@@ -682,7 +688,9 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                                                 const SizedBox(height: 10,),
                                                                 GestureDetector(
                                                                   onTap: () {
-                                                                    setState(() {});
+                                                                    setState(() {
+                                                                      street = _streetController.text;
+                                                                    });
                                                                     Navigator.pop(context);
                                                                   },
                                                                   child: Container(
@@ -726,37 +734,36 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                           );
                                         },
                                         child: Container(
-                                          height: ResponsiveFlutter.of(context).verticalScale(50),
+                                          // height: ResponsiveFlutter.of(context).moderateScale(55),
                                           width: double.infinity,
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                          ),
+                                          padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(10)),
                                           decoration: BoxDecoration(
                                             color: appColors.appLightColor,
                                             borderRadius: BorderRadius.circular(
                                               ResponsiveFlutter.of(context).moderateScale(20),
                                             ),
-                                            border: Border.all(
-                                              color: appColors.borderColor,
-                                              width: 1.5,
-                                            ),
                                           ),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              MyTextView(
-                                                _numberController.text + ", " + _refController.text,
-                                                textAligntNew: TextAlign.center,
-                                                styleNew: MyTextStyle(
-                                                  colorNew: appColors.lightColor,
-                                                  fontWeightNew: FontWeight.w400,
-                                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                ),
-                                              ),
+                                              SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                               Image.asset(
-                                                ImagePath.pinkLocation,
-                                                color: appColors.lightPinkColor,
-                                                height: ResponsiveFlutter.of(context).moderateScale(23),
+                                                ImagePath.location,
+                                                color: appColors.lightColor,
+                                                height: ResponsiveFlutter.of(context).moderateScale(15),
+                                              ),
+                                              SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                              Flexible(
+                                                child: MyTextView(
+                                                  selectedProvince["id"] == null || street == "" ? "Adresse" : street + ". " +  selectedProvince["name"] + " (" + event.address!.ref.toString() + ")",
+                                                  textAligntNew: TextAlign.start,
+                                                  maxLinesNew: 5,
+                                                  maxLineWrap: true,
+                                                  styleNew: MyTextStyle(
+                                                    colorNew: appColors.lightColor,
+                                                    fontWeightNew: FontWeight.w500,
+                                                    size: ResponsiveFlutter.of(context).fontSize(2),
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),

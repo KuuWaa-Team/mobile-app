@@ -667,7 +667,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                                             Flexible(
                                                               child: MyTextView(
-                                                                event.address!.street!,
+                                                                event.address!.street! + ". " + event.address!.province!.name.toString() + " (" + event.address!.ref.toString() + ")",
                                                                 textAligntNew: TextAlign.start,
                                                                 maxLinesNew: 5,
                                                                 maxLineWrap: true,
@@ -816,6 +816,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         );
                                       },
                                       child: Container(
+                                        margin: const EdgeInsets.only(bottom: 10),
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
@@ -840,7 +841,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true && event.featureslugs != null && event.featureslugs!.contains("BOOK"))
                                       GestureDetector(
                                         onTap: () {
@@ -852,6 +852,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           );
                                         },
                                         child: Container(
+                                          margin: const EdgeInsets.only(bottom: 10),
                                           decoration: BoxDecoration(
                                             color: appColors.appLightColor,
                                             borderRadius: BorderRadius.circular(5),
@@ -877,8 +878,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                         ),
                                       ),
-                                    if (event.shared != true && event.featureslugs != null && event.featureslugs!.contains("BOOK"))
-                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     // GestureDetector(
                                     //   onTap: () {
                                     //     // Navigator.push(
@@ -1116,15 +1115,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                               title: "Activer l'évenement",
                                                             ),
                                                           ),
-                                                        if (event.paymentStatus == 'paid')
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                            },
-                                                            child: CommonButton(
-                                                              loading: false,
-                                                              title: "Télécharger la facture",
-                                                            ),
-                                                          ),
+                                                        // if (event.paymentStatus == 'paid')
+                                                        //   GestureDetector(
+                                                        //     onTap: () {
+                                                        //     },
+                                                        //     child: CommonButton(
+                                                        //       loading: false,
+                                                        //       title: "Télécharger la facture",
+                                                        //     ),
+                                                        //   ),
                                                         SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
                                                       ],
                                                     ),

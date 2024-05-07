@@ -86,4 +86,13 @@ class InvitationRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> validateInvitationApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$id/validate", {}, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
 }

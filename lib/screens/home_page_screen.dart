@@ -8,7 +8,7 @@ import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/create_event_screen.dart';
 import 'package:kuuwaa/screens/events/my_events_screen.dart';
 import 'package:kuuwaa/screens/notification_screen.dart';
-import 'package:kuuwaa/screens/profile_screen.dart';
+import 'package:kuuwaa/screens/settings/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
@@ -163,28 +163,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       // ),
                       GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => const ProfileScreen(),
-                            //   ),
-                            // );
-                          },
-                          child: SizedBox(
-                            height: ResponsiveFlutter.of(context).moderateScale(28),
-                            width: ResponsiveFlutter.of(context).moderateScale(28),
-                            child: Icon(
-                              Icons.person,
-                              size: ResponsiveFlutter.of(context).moderateScale(28),
-                              color: appColors.lightColor,
-                            ),
-                          )
-                      ),
-                      SizedBox(
-                        width: ResponsiveFlutter.of(context).moderateScale(15),
-                      ),
-                      GestureDetector(
-                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -196,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: ResponsiveFlutter.of(context).moderateScale(28),
                             width: ResponsiveFlutter.of(context).moderateScale(28),
                             child: Icon(
-                              Icons.refresh,
+                              CupertinoIcons.refresh,
                               size: ResponsiveFlutter.of(context).moderateScale(28),
                               color: appColors.lightColor,
                             ),

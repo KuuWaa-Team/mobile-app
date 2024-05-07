@@ -143,6 +143,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                                   await invitationViewModel.checkInvitation(context, data, widget.event).then((value) {
                                                     setState(() {
                                                       loadingCode = false;
+                                                      _codeController.text = "";
                                                     });
                                                   });
                                                 }
@@ -296,6 +297,9 @@ class _CheckScreenState extends State<CheckScreen> {
                     });
                   },
                   onValidate: () {
+                    if (result["status"] != 'verified') {
+                      invitationViewModel.validateInvitation(context, result['id']);
+                    }
                     Navigator.pop(context);
                     setState(() {
                       checked = false;

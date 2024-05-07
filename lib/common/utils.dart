@@ -279,6 +279,11 @@ class Utils {
     );
   }
 
+
+  static Future<void> openUrl(String url) async {
+    await launchUrl(Uri.parse(url));
+  }
+
   /// Get Current Time ------------>>
   String currentTime() {
     String month = DateFormat.M().format(DateTime.now().toUtc());

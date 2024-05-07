@@ -1,12 +1,17 @@
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:kuuwaa/screens/edit_profile_screen.dart';
+import 'package:kuuwaa/screens/settings/edit_profile_screen.dart';
 import 'package:kuuwaa/screens/my_booking_screen.dart';
 import 'package:kuuwaa/screens/my_events_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -18,128 +23,116 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AppColors appColors = AppColors();
   TabController? tabController;
   int tab = 0;
+  UserModel user = UserModel();
+
+  @override
+  void initState() {
+    UserViewModel().getUser().then((value) {
+      print(value);
+      setState(() {
+        user = value;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       bottom: false,
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          backgroundColor: appColors.appMediumColor,
-          body: Column(
-            children: [
-              Stack(
+      child: Scaffold(
+        backgroundColor: appColors.appMediumColor,
+        body: Column(
+          children: [
+            commonAppBar(
+              context: context,
+              //backArrow: true,
+              title: Strings.profile,
+              appBarColor: appColors.appDarkColor,
+              edit: true,
+              editClick: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditProfileScreen(),
+                  ),
+                );
+              },
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              padding: EdgeInsets.symmetric(
+                vertical: ResponsiveFlutter.of(context).moderateScale(20),
+                horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
+                  bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    height: ResponsiveFlutter.of(context).moderateScale(330),
-                    width: double.infinity,
-                    alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.symmetric(
-                      vertical: ResponsiveFlutter.of(context).moderateScale(20),
-                      horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                    ),
-                    decoration: BoxDecoration(
-                      color: appColors.appDarkColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                        bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          height: ResponsiveFlutter.of(context).moderateScale(120),
-                          width: ResponsiveFlutter.of(context).moderateScale(120),
-                          decoration: BoxDecoration(
-                            color: appColors.appMediumColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.asset(
-                            ImagePath.image_3,
-                          ),
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(5),
-                        ),
-                        MyTextView(
-                          Strings.dummyText37,
-                          textAligntNew: TextAlign.start,
-                          maxLineWrap: true,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
-                            fontWeightNew: FontWeight.w600,
-                            size: ResponsiveFlutter.of(context).fontSize(3.2),
-                          ),
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(15),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TabBar(
-                                controller: tabController,
-                                indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveFlutter.of(context).moderateScale(25),
-                                  ), // Creates border
-                                  color: appColors.btnColor,
-                                ),
-                                onTap: (value) {
-                                  tab = value;
-                                  setState(() {});
-                                  debugPrint("value ------>> $value");
-                                },
-                                tabs: [
-                                  Container(
-                                    height: ResponsiveFlutter.of(context).moderateScale(45),
-                                    alignment: Alignment.center,
-                                    child: MyTextView(
-                                      Strings.myEvents,
-                                      textAligntNew: TextAlign.start,
-                                      maxLineWrap: true,
-                                      styleNew: MyTextStyle(
-                                        colorNew: tab == 0 ? appColors.white : appColors.darkGreyText,
-                                        fontWeightNew: FontWeight.w600,
-                                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: ResponsiveFlutter.of(context).moderateScale(45),
-                                    alignment: Alignment.center,
-                                    child: MyTextView(
-                                      Strings.myBooking,
-                                      textAligntNew: TextAlign.start,
-                                      maxLineWrap: true,
-                                      styleNew: MyTextStyle(
-                                        colorNew: tab == 1 ? appColors.white : appColors.darkGreyText,
-                                        fontWeightNew: FontWeight.w600,
-                                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: ResponsiveFlutter.of(context).moderateScale(80),
-                            ),
-                          ],
-                        ),
-                      ],
+                  CircularProfileAvatar( //sets image path, it should be a URL string. default value is empty string, if path is empty it will display only initials
+                    ''
+                    ,radius: 50, // sets radius, default 50.0
+                    backgroundColor: appColors.btnColor, // sets background color, default Colors.white
+                    initialsText: Text(
+                      user.firstname.toString()[0] + "" + user.lastname.toString()[0],
+                      style: const TextStyle(fontSize: 30, color: Colors.white),
+                    ),  // sets initials text, set your own style, default Text('')
+                    borderColor: Colors.brown, // sets border color, default Colors.white
+                    elevation: 5.0, // sets elevation (shadow of the profile picture), default value is 0.0
+                    foregroundColor: Colors.brown, //sets foreground colour, it works if showInitialTextAbovePicture = true , default Colors.transparent
+                    cacheImage: true, // allow widget to cache image against provided url
+                    imageFit: BoxFit.cover,
+                    onTap: () {
+                      print('adil');
+                    }, // sets on tap
+                    showInitialTextAbovePicture: true, // setting it true will show initials text above profile picture, default false
+                  ),
+                  SizedBox(
+                    height: ResponsiveFlutter.of(context).moderateScale(10),
+                  ),
+                  MyTextView(
+                    user.firstname.toString() + " " + user.lastname.toString(),
+                    textAligntNew: TextAlign.start,
+                    maxLineWrap: true,
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.lightColor,
+                      fontWeightNew: FontWeight.w600,
+                      size: ResponsiveFlutter.of(context).fontSize(2.6),
                     ),
                   ),
-                  commonAppBar(
-                    context: context,
-                    backArrow: true,
-                    title: Strings.profile,
-                    appBarColor: appColors.appDarkColor,
-                    edit: true,
-                    editClick: () {
+                  MyTextView(
+                    "+243 " + user.phoneNumber.toString(),
+                    textAligntNew: TextAlign.start,
+                    maxLineWrap: true,
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.lightColor.withOpacity(.5),
+                      fontWeightNew: FontWeight.w400,
+                      size: ResponsiveFlutter.of(context).fontSize(1.7),
+                    ),
+                  ),
+                  Divider(),
+                  MyTextView(
+                    user.address.toString(),
+                    textAligntNew: TextAlign.start,
+                    maxLineWrap: true,
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.lightColor.withOpacity(.5),
+                      fontWeightNew: FontWeight.w400,
+                      size: ResponsiveFlutter.of(context).fontSize(1.7),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ResponsiveFlutter.of(context).moderateScale(15),
+                  ),
+                  GestureDetector(
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -147,24 +140,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       );
                     },
-                  ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: appColors.btnColor,
+                        borderRadius: BorderRadius.circular(5)
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.edit, size: 15, color: Colors.white,),
+                          SizedBox(width: 5,),
+                          Text(
+                            "Modifier",
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: TabBarView(
-                    controller: tabController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: const [
-                      MyEventsScreen(),
-                      MyBookingScreen(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

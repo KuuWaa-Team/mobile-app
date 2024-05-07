@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
@@ -39,12 +40,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   AppColors appColors = AppColors();
   String? selectedDate = "Select date";
   String? selectedTime = "Select time";
-  int step = 0;
+  int step = 1;
   int maxStep = 4;
   bool loading = false;
   bool loadingCreation = false;
   bool loadingNext = false;
   bool paying = false;
+
+  String street = "";
+  String ref = "";
 
   List<Map<String, dynamic>> provinces = [
     {
@@ -214,12 +218,25 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   _onChanged(int index) {
     setState(() {
-      step = index;
+      step = index + 1;
     });
   }
 
   @override
   void initState() {
+    List<dynamic> fetchedCategories = [dropDownValue];
+    eventViewModel.getCategories(context, event.paidEvent == true).then((value) {
+      for (var element in eventViewModel.categories) {
+        fetchedCategories.add(element);
+      }
+      fetchedCategories.add(EventCategoryModel(
+          id: null,
+          name: "Autre (À préciser)"
+      ));
+      setState(() {
+        items = fetchedCategories;
+      });
+    });
     super.initState();
   }
 
@@ -242,161 +259,161 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     List<Widget> featuresWidget = [];
 
     final List<Widget> _pages = [
-      ListView(
-        padding: EdgeInsets.symmetric(
-          vertical: ResponsiveFlutter.of(context).moderateScale(15),
-          horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-        ),
-        children: [
-          GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = 1;
-                  event.paidEvent = false;
-                });
-              },
-              child: Container(
-                  height: ResponsiveFlutter.of(context).verticalScale(130),
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(
-                        ResponsiveFlutter.of(context).moderateScale(20),
-                      ),
-                      border: selected == 1 ? Border.all(color: appColors.btnColor, width: 3) : null
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.mail_outlined, color: selected == 1 ?  appColors.btnColor : appColors.lightColor, size: 20,),
-                          const SizedBox(width: 10,),
-                          MyTextView(
-                            "Évenement à invitations",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: selected == 1 ?  appColors.btnColor : appColors.lightColor,
-                              fontWeightNew: FontWeight.w400,
-                              size: ResponsiveFlutter.of(context).fontSize(2),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15,),
-                      Row(
-                        children: [
-                          Icon(Icons.circle, color: appColors.lightColor, size: 10,),
-                          const SizedBox(width: 10,),
-                          MyTextView(
-                            "Accès gratuit",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.lightColor,
-                              fontWeightNew: FontWeight.w400,
-                              size: ResponsiveFlutter.of(context).fontSize(1.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5,),
-                      Row(
-                        children: [
-                          Icon(Icons.circle, color: appColors.lightColor, size: 10,),
-                          const SizedBox(width: 10,),
-                          MyTextView(
-                            "Adapté pour : mariage, aniversaire, ...",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.lightColor,
-                              fontWeightNew: FontWeight.w400,
-                              size: ResponsiveFlutter.of(context).fontSize(1.6),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-              )
-          ),
-          const SizedBox(height: 20,),
-          GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = 2;
-                  event.paidEvent = true;
-                });
-              },
-              child: Container(
-                  height: ResponsiveFlutter.of(context).verticalScale(130),
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(
-                        ResponsiveFlutter.of(context).moderateScale(20),
-                      ),
-                      border:  selected == 2 ? Border.all(color:  appColors.btnColor, width: 3) : null
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.mail_outlined, color: selected == 2 ?  appColors.btnColor : appColors.lightColor, size: 20,),
-                          const SizedBox(width: 10,),
-                          MyTextView(
-                            "Évenement à ticket (billeterie)",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: selected == 2 ?  appColors.btnColor : appColors.lightColor,
-                              fontWeightNew: FontWeight.w400,
-                              size: ResponsiveFlutter.of(context).fontSize(2),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15,),
-                      Row(
-                        children: [
-                          Icon(Icons.circle, color: appColors.lightColor, size: 10,),
-                          const SizedBox(width: 10,),
-                          MyTextView(
-                            "Accès payant",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.lightColor,
-                              fontWeightNew: FontWeight.w400,
-                              size: ResponsiveFlutter.of(context).fontSize(1.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5,),
-                      Row(
-                        children: [
-                          Icon(Icons.circle, color: appColors.lightColor, size: 10,),
-                          const SizedBox(width: 10,),
-                          MyTextView(
-                            "Adapté pour : concert, formation ...",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.lightColor,
-                              fontWeightNew: FontWeight.w400,
-                              size: ResponsiveFlutter.of(context).fontSize(1.6),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-              )
-          ),
-        ],
-      ),
+      // ListView(
+      //   padding: EdgeInsets.symmetric(
+      //     vertical: ResponsiveFlutter.of(context).moderateScale(15),
+      //     horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+      //   ),
+      //   children: [
+      //     GestureDetector(
+      //         onTap: () {
+      //           setState(() {
+      //             selected = 1;
+      //             event.paidEvent = false;
+      //           });
+      //         },
+      //         child: Container(
+      //             height: ResponsiveFlutter.of(context).verticalScale(130),
+      //             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      //             width: double.infinity,
+      //             decoration: BoxDecoration(
+      //                 color: appColors.appLightColor,
+      //                 borderRadius: BorderRadius.circular(
+      //                   ResponsiveFlutter.of(context).moderateScale(20),
+      //                 ),
+      //                 border: selected == 1 ? Border.all(color: appColors.btnColor, width: 3) : null
+      //             ),
+      //             child: Column(
+      //               mainAxisAlignment: MainAxisAlignment.center,
+      //               crossAxisAlignment: CrossAxisAlignment.start,
+      //               children: [
+      //                 Row(
+      //                   children: [
+      //                     Icon(Icons.mail_outlined, color: selected == 1 ?  appColors.btnColor : appColors.lightColor, size: 20,),
+      //                     const SizedBox(width: 10,),
+      //                     MyTextView(
+      //                       "Évenement à invitations",
+      //                       textAligntNew: TextAlign.center,
+      //                       styleNew: MyTextStyle(
+      //                         colorNew: selected == 1 ?  appColors.btnColor : appColors.lightColor,
+      //                         fontWeightNew: FontWeight.w400,
+      //                         size: ResponsiveFlutter.of(context).fontSize(2),
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 const SizedBox(height: 15,),
+      //                 Row(
+      //                   children: [
+      //                     Icon(Icons.circle, color: appColors.lightColor, size: 10,),
+      //                     const SizedBox(width: 10,),
+      //                     MyTextView(
+      //                       "Accès gratuit",
+      //                       textAligntNew: TextAlign.center,
+      //                       styleNew: MyTextStyle(
+      //                         colorNew: appColors.lightColor,
+      //                         fontWeightNew: FontWeight.w400,
+      //                         size: ResponsiveFlutter.of(context).fontSize(1.6),
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 const SizedBox(height: 5,),
+      //                 Row(
+      //                   children: [
+      //                     Icon(Icons.circle, color: appColors.lightColor, size: 10,),
+      //                     const SizedBox(width: 10,),
+      //                     MyTextView(
+      //                       "Adapté pour : mariage, aniversaire, ...",
+      //                       textAligntNew: TextAlign.center,
+      //                       styleNew: MyTextStyle(
+      //                         colorNew: appColors.lightColor,
+      //                         fontWeightNew: FontWeight.w400,
+      //                         size: ResponsiveFlutter.of(context).fontSize(1.6),
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 )
+      //               ],
+      //             )
+      //         )
+      //     ),
+      //     // const SizedBox(height: 20,),
+      //     // GestureDetector(
+      //     //     onTap: () {
+      //     //       setState(() {
+      //     //         selected = 2;
+      //     //         event.paidEvent = true;
+      //     //       });
+      //     //     },
+      //     //     child: Container(
+      //     //         height: ResponsiveFlutter.of(context).verticalScale(130),
+      //     //         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      //     //         width: double.infinity,
+      //     //         decoration: BoxDecoration(
+      //     //             color: appColors.appLightColor,
+      //     //             borderRadius: BorderRadius.circular(
+      //     //               ResponsiveFlutter.of(context).moderateScale(20),
+      //     //             ),
+      //     //             border:  selected == 2 ? Border.all(color:  appColors.btnColor, width: 3) : null
+      //     //         ),
+      //     //         child: Column(
+      //     //           mainAxisAlignment: MainAxisAlignment.center,
+      //     //           crossAxisAlignment: CrossAxisAlignment.start,
+      //     //           children: [
+      //     //             Row(
+      //     //               children: [
+      //     //                 Icon(Icons.mail_outlined, color: selected == 2 ?  appColors.btnColor : appColors.lightColor, size: 20,),
+      //     //                 const SizedBox(width: 10,),
+      //     //                 MyTextView(
+      //     //                   "Évenement à ticket (billeterie)",
+      //     //                   textAligntNew: TextAlign.center,
+      //     //                   styleNew: MyTextStyle(
+      //     //                     colorNew: selected == 2 ?  appColors.btnColor : appColors.lightColor,
+      //     //                     fontWeightNew: FontWeight.w400,
+      //     //                     size: ResponsiveFlutter.of(context).fontSize(2),
+      //     //                   ),
+      //     //                 ),
+      //     //               ],
+      //     //             ),
+      //     //             const SizedBox(height: 15,),
+      //     //             Row(
+      //     //               children: [
+      //     //                 Icon(Icons.circle, color: appColors.lightColor, size: 10,),
+      //     //                 const SizedBox(width: 10,),
+      //     //                 MyTextView(
+      //     //                   "Accès payant",
+      //     //                   textAligntNew: TextAlign.center,
+      //     //                   styleNew: MyTextStyle(
+      //     //                     colorNew: appColors.lightColor,
+      //     //                     fontWeightNew: FontWeight.w400,
+      //     //                     size: ResponsiveFlutter.of(context).fontSize(1.6),
+      //     //                   ),
+      //     //                 ),
+      //     //               ],
+      //     //             ),
+      //     //             const SizedBox(height: 5,),
+      //     //             Row(
+      //     //               children: [
+      //     //                 Icon(Icons.circle, color: appColors.lightColor, size: 10,),
+      //     //                 const SizedBox(width: 10,),
+      //     //                 MyTextView(
+      //     //                   "Adapté pour : concert, formation ...",
+      //     //                   textAligntNew: TextAlign.center,
+      //     //                   styleNew: MyTextStyle(
+      //     //                     colorNew: appColors.lightColor,
+      //     //                     fontWeightNew: FontWeight.w400,
+      //     //                     size: ResponsiveFlutter.of(context).fontSize(1.6),
+      //     //                   ),
+      //     //                 ),
+      //     //               ],
+      //     //             )
+      //     //           ],
+      //     //         )
+      //     //     )
+      //     // ),
+      //   ],
+      // ),
       ListView(
         padding: EdgeInsets.symmetric(
           vertical: ResponsiveFlutter.of(context).moderateScale(15),
@@ -579,33 +596,42 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           ),
           GestureDetector(
             onTap: () async {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only( // <-- SEE HERE
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                  ),
-                  context: context,
-                  builder: (context) {
-                    return SizedBox(
-                      height: 250,
-                      child: CupertinoDatePicker(
-                        dateOrder: DatePickerDateOrder.dmy,
-                        onDateTimeChanged: (DateTime value) {
-                          setState(() {
-                            date = value;
-                          });
-                        },
-                        use24hFormat: true,
-                        // initialDateTime: date ?? DateTime.now(),
-                        minimumDate: DateTime.now(),
-                        mode: CupertinoDatePickerMode.dateAndTime,
-                      ),
-                    );
-                  }
-              );
+              DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: DateTime.now(),
+                  onConfirm: (value) {
+                    setState(() {
+                      date = value;
+                    });
+                  }, currentTime: DateTime.now(), locale: LocaleType.fr);
+              // showModalBottomSheet(
+              //     isScrollControlled: true,
+              //     shape: const RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.only( // <-- SEE HERE
+              //         topLeft: Radius.circular(10.0),
+              //         topRight: Radius.circular(10.0),
+              //       ),
+              //     ),
+              //     context: context,
+              //     builder: (context) {
+              //       return SizedBox(
+              //         height: 250,
+              //         child: CupertinoDatePicker(
+              //           dateOrder: DatePickerDateOrder.dmy,
+              //           onDateTimeChanged: (DateTime value) {
+              //             setState(() {
+              //               date = value;
+              //             });
+              //           },
+              //           use24hFormat: true,
+              //           // initialDateTime: date ?? DateTime.now(),
+              //           minimumDate: DateTime.now(),
+              //           mode: CupertinoDatePickerMode.dateAndTime,
+              //         ),
+              //       );
+              //     }
+              // );
             },
             child: Container  (
               height: ResponsiveFlutter.of(context).verticalScale(50),
@@ -878,6 +904,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                   const SizedBox(height: 10,),
                                   GestureDetector(
                                     onTap: () {
+                                      setState(() {
+                                        street = _streetController.text;
+                                        ref = _refController.text;
+                                      });
                                       Navigator.pop(context);
                                     },
                                     child: Container(
@@ -921,37 +951,36 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               );
             },
             child: Container(
-              height: ResponsiveFlutter.of(context).verticalScale(50),
+              // height: ResponsiveFlutter.of(context).moderateScale(55),
               width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-              ),
+              padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(10)),
               decoration: BoxDecoration(
                 color: appColors.appLightColor,
                 borderRadius: BorderRadius.circular(
                   ResponsiveFlutter.of(context).moderateScale(20),
                 ),
-                border: Border.all(
-                  color: appColors.borderColor,
-                  width: 1.5,
-                ),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MyTextView(
-                    selectedProvince["id"] == null || _streetController.text == "" || _numberController.text == "" ? "Adresse" : _streetController.text + ". " +  selectedProvince["name"],
-                    textAligntNew: TextAlign.center,
-                    styleNew: MyTextStyle(
-                      colorNew: appColors.lightColor,
-                      fontWeightNew: FontWeight.w400,
-                      size: ResponsiveFlutter.of(context).fontSize(1.8),
-                    ),
-                  ),
+                  SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                   Image.asset(
-                    ImagePath.pinkLocation,
-                    color: appColors.lightPinkColor,
-                    height: ResponsiveFlutter.of(context).moderateScale(23),
+                    ImagePath.location,
+                    color: appColors.lightColor,
+                    height: ResponsiveFlutter.of(context).moderateScale(15),
+                  ),
+                  SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                  Flexible(
+                    child: MyTextView(
+                      selectedProvince["id"] == null || street == "" ? "Adresse" : street + ". " +  selectedProvince["name"] + " (" + ref + ")",
+                      textAligntNew: TextAlign.start,
+                      maxLinesNew: 5,
+                      maxLineWrap: true,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.lightColor,
+                        fontWeightNew: FontWeight.w500,
+                        size: ResponsiveFlutter.of(context).fontSize(2),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -1772,6 +1801,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               ),
             ),
             const SizedBox(height: 20,),
+
             GestureDetector(
               onTap: () async {
                 if (! loadingNext) {
@@ -1983,8 +2013,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () async {
-                                                    if (!loadingCreation) {
+                                                    if (loadingCreation != true) {
                                                       setState(() {
+                                                        loadingCreation = true;
                                                         event.features = selectedFeatures;
                                                         loading = true;
                                                         total += event.eventPack!.price!;
@@ -2001,10 +2032,22 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                                             event.id = value;
                                                           });
                                                         }
-                                                        _controller.nextPage(
-                                                            duration: const Duration(milliseconds: 300),
-                                                            curve: Curves.linear
+                                                        setState(() {
+                                                          loadingCreation = false;
+                                                        });
+
+                                                        // remove when handle payment
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => const BottomBarScreen(),
+                                                          ),
                                                         );
+
+                                                        // _controller.nextPage(
+                                                        //     duration: const Duration(milliseconds: 300),
+                                                        //     curve: Curves.linear
+                                                        // );
                                                       });
                                                     }
                                                   },
@@ -2279,7 +2322,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 ),
               )
             ),
-            if (step == 3)
             if (step == 3)
             GestureDetector(
               onTap: ()  {

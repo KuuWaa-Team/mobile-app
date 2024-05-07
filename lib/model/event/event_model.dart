@@ -21,6 +21,7 @@ class EventModel {
   String? status;
   String? adminStatus;
   String? imagePath;
+  String? thumbPath;
   String? paymentStatus;
   List? featureslugs;
   EventCategoryModel? category;
@@ -50,6 +51,7 @@ class EventModel {
     this.adminsCount,
     this.paidEvent,
     this.imagePath,
+    this.thumbPath,
     this.features,
     this.invitationsCount,
     this.beveragesCount,
@@ -65,6 +67,7 @@ class EventModel {
     paymentStatus = json['paymentStatus'];
     status = json['status'];
     imagePath = json['imagePath'];
+    thumbPath = json['thumbPath'];
     paidEvent = json['paidEvent'];
     shared = json['shared'];
     if (json['featureslugs'] != null) {
@@ -116,6 +119,7 @@ class EventModel {
     }
     data['details'] = details;
     data['imagePath'] = imagePath;
+    data['thumbPath'] = thumbPath;
     data['status'] = status;
     data['status'] = paymentStatus;
     data['paidEvent'] = paidEvent;

@@ -30,7 +30,7 @@ class _SettingScreenState extends State<SettingScreen> {
   SharedPref pref = SharedPref();
 
   List<CommonModel>? settingsList = [
-    CommonModel(image: ImagePath.notifications, title: Strings.notificationSettings),
+    // CommonModel(image: ImagePath.notifications, title: Strings.notificationSettings),
     CommonModel(image: ImagePath.privacy, title: Strings.changePassword),
     CommonModel(image: ImagePath.question, title: Strings.helpAndSupport),
     CommonModel(image: ImagePath.lock, title: Strings.privacyPolicy),

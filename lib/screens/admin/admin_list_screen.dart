@@ -241,7 +241,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                             ),
                                           ),
                                           GestureDetector(
-                                            onTap: () {
+                                            onTap: () async {
                                               if (_nameController.text == "") {
                                                 Utils.flushBarErrorMessage("Vous devez enter le nom du controlleur", context);
                                               } else if (_phoneController.text == "") {
@@ -256,9 +256,11 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                                   "eventId": widget.event.id!
                                                 };
 
-                                                adminViewModel.addAdmin(context, data).then((value) {
+                                                await adminViewModel.addAdmin(context, data).then((value) {
                                                   setState(() {
                                                     loading = false;
+                                                    _nameController.text = "";
+                                                    _phoneController.text = "";
                                                   });
                                                 });
                                               }

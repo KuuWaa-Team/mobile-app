@@ -33,6 +33,15 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> downloadBookApi ({required BuildContext context, required int id}) async {
+    try  {
+      //dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/generate-book", {}, context: context, auth: false);
+      return true;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> getFeaturesPacksApi ({required BuildContext context}) async {
     try  {
       dynamic response = await _apiServices.getGetResponse(AppUrl.featureEndPoint, context: context, auth: false);

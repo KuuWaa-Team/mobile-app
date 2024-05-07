@@ -136,11 +136,11 @@ class Strings {
   static const String clearAll = "Clear All";
   static const String join = "Join";
 
-  static const String profile = "Profile";
+  static const String profile = "Profil";
   static const String myBooking = "My Booking";
   static const String chat = "Chat";
 
-  static const String editProfile = "Edit PROFILE";
+  static const String editProfile = "Modifier le profil";
   static const String yourName = "Votre nom";
   static const String yourFirstName = "Votre prénom";
   static const String enterYourName = "Enter your Name";

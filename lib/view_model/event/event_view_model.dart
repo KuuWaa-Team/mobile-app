@@ -120,6 +120,19 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> downloadBookApi (BuildContext context, int id) async {
+    setPacksList(ApiResponse.loading());
+    setLoading(true);
+    await _repository.downloadBookApi(context: context, id: id).then((value) {
+      print("****************************************");
+      print("****************************************");
+      print("****************************************");
+      print("****************************************");
+      print(value);
+    });
+    return true;
+  }
+
   Future<bool> getFeaturesApi (BuildContext context) async {
     setLoading(true);
     await _repository.getFeaturesPacksApi(context: context).then((value) {
@@ -249,10 +262,11 @@ class EventViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
-    }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
-      setLoading(false);
     });
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   setLoading(false);
+    // });
     return response;
   }
 

@@ -136,7 +136,7 @@ class _TableListScreenState extends State<TableListScreen> {
                                         ),
                                         const SizedBox(height: 10,),
                                         GestureDetector(
-                                          onTap: () {
+                                          onTap: () async {
                                             if (_nameController.text == "") {
                                               Utils.flushBarErrorMessage("Vous devez enter le nom de la table", context);
                                             } else if (_countController.text == "") {
@@ -151,9 +151,11 @@ class _TableListScreenState extends State<TableListScreen> {
                                                 "eventId": widget.event.id
                                               };
 
-                                              tableViewModel.addTable(context, data).then((value) {
+                                              await tableViewModel.addTable(context, data).then((value) {
                                                 setState(() {
                                                   loading = false;
+                                                  _nameController.text = "";
+                                                  _countController.text = "";
                                                 });
                                               });
                                             }

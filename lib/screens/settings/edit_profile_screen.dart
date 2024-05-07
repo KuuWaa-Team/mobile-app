@@ -23,73 +23,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         backgroundColor: appColors.appMediumColor,
         body: Column(
           children: [
-            Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      height: ResponsiveFlutter.of(context).moderateScale(170),
-                      width: double.infinity,
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.symmetric(
-                        vertical: ResponsiveFlutter.of(context).moderateScale(20),
-                        horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                      ),
-                      margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(50)),
-                      decoration: BoxDecoration(
-                        color: appColors.appDarkColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                          bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
-                        ),
-                      ),
-                    ),
-                    commonAppBar(
-                      context: context,
-                      backArrow: true,
-                      title: Strings.editProfile,
-                      appBarColor: appColors.appDarkColor,
-                      edit: false,
-                      editClick: () {},
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: ResponsiveFlutter.of(context).moderateScale(125),
-                  width: ResponsiveFlutter.of(context).moderateScale(125),
-                  child: Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: ResponsiveFlutter.of(context).moderateScale(120),
-                          width: ResponsiveFlutter.of(context).moderateScale(120),
-                          decoration: BoxDecoration(
-                            color: appColors.appMediumColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.asset(
-                            ImagePath.image_3,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: ResponsiveFlutter.of(context).moderateScale(37),
-                        width: ResponsiveFlutter.of(context).moderateScale(37),
-                        decoration: BoxDecoration(
-                          color: appColors.appMediumColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.asset(
-                          ImagePath.camera,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            commonAppBar(
+              context: context,
+              backArrow: true,
+              title: Strings.editProfile,
+              appBarColor: appColors.appDarkColor,
+              edit: false,
+              editClick: () {},
             ),
             ListView(
               shrinkWrap: true,
@@ -143,7 +83,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MyTextView(
-                        Strings.yourEmail,
+                        Strings.yourFirstName,
                         textAligntNew: TextAlign.center,
                         styleNew: MyTextStyle(
                           colorNew: appColors.transactionText,
@@ -154,7 +94,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(5)),
                       commonTestField(
                         context: context,
-                        hintText: Strings.enterYourEmail,
+                        hintText: Strings.enterYourName,
+                        icon: false,
+                        keyboardType: TextInputType.number,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(20)),
+                  decoration: BoxDecoration(
+                    color: appColors.appLightColor,
+                    borderRadius: BorderRadius.circular(
+                      ResponsiveFlutter.of(context).moderateScale(20),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyTextView(
+                        Strings.yourAddress,
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.transactionText,
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.8),
+                        ),
+                      ),
+                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(5)),
+                      commonTestField(
+                        context: context,
+                        hintText: Strings.yourAddress,
                         icon: false,
                         keyboardType: TextInputType.number,
                       ),

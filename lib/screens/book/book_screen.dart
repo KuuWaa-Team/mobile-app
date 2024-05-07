@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/view_model/book/book_view_model.dart';
+import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
 import 'package:kuuwaa/view_model/table/table_view_model.dart';
 
@@ -23,6 +24,7 @@ class BookScreen extends StatefulWidget {
 class _BookScreenState extends State<BookScreen> {
   AppColors appColors = AppColors();
   InvitationViewModel invitationViewModel = InvitationViewModel();
+  EventViewModel eventViewModel = EventViewModel();
   bool loaded = false;
 
   bool loadingDelete = false;
@@ -244,7 +246,7 @@ class _BookScreenState extends State<BookScreen> {
             SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10),),
             SizedBox(
               width: ResponsiveFlutter.of(context).moderateScale(200),
-              child: Text("Ils étaient là et vous ont laissé un mot en guise de leur amour pour vous.", style: TextStyle(
+              child: Text("Vous leur avez invité à votre évenement, ils vous ont laissé un mot en guise de leur reconnaissance et amour", style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 10,
                   color: appColors.black.withOpacity(.4)
@@ -396,9 +398,10 @@ class _BookScreenState extends State<BookScreen> {
               padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
               child: GestureDetector(
                 onTap: () {
-                  Utils.flushBarErrorMessage("Fonctionnalité en cours de développement", context);
+                  Utils.openUrl("https://api.whatsapp.com/send?phone=+243820793972&text=Bonjour KuuWaa,\nNous souhaitons avoir en PDF notre livre d'or pour l'évenement *${widget.event.category!.name} ${widget.event.name}*.\nMerci");
                 },
                 child: CommonButton(
+                  loading: loading,
                   title: "Télécharger",
                 ),
               ),

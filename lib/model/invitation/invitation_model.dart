@@ -10,6 +10,7 @@ class InvitationModel {
   String? status;
   int? count;
   String? phoneNumber;
+  String? slug;
   String? message;
   bool? bookSent;
   String? codePath;
@@ -23,6 +24,7 @@ class InvitationModel {
     this.id,
     this.name,
     this.phoneNumber,
+    this.slug,
     this.bookSent,
     this.beverage,
     this.message,
@@ -38,6 +40,7 @@ class InvitationModel {
   InvitationModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    slug = json['slug'];
     civility = json['civility'];
     bookSent = json['bookSent'];
     if (json['beverage'] != null) {
@@ -63,6 +66,7 @@ class InvitationModel {
     data['id'] = id;
     data['name'] = name;
     data['civility'] = civility;
+    data['slug'] = slug;
     data['code'] = code;
     data['bookSent'] = bookSent;
     data['decryptKey'] = decryptKey;

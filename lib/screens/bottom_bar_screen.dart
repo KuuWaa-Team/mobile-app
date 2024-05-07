@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/common/image_path.dart';
@@ -5,6 +6,7 @@ import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/invitations/my_invitations_screen.dart';
 import 'package:kuuwaa/screens/home_page_screen.dart';
+import 'package:kuuwaa/screens/settings/profile_screen.dart';
 import 'package:kuuwaa/screens/setting_screen.dart';
 import 'package:kuuwaa/screens/wallet_screen.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +124,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             alignment: Alignment.center,
                             child: Column(
                               children: [
-                                Icon(home! ? Icons.event_note_rounded : Icons.event_note_outlined, color: home! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
+                                Icon(home! ? CupertinoIcons.square_split_2x2_fill : CupertinoIcons.square_split_2x2, color: home! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
                                 const SizedBox(height: 8,),
                                 Text("Evenements", style: TextStyle(
                                   color: appColors.lightColor,
@@ -148,7 +150,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             alignment: Alignment.center,
                             child: Column(
                               children: [
-                                Icon(favorites! ? Icons.message : Icons.message_outlined, color: favorites! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
+                                Icon(favorites! ? CupertinoIcons.mail_solid : CupertinoIcons.mail, color: favorites! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
                                 const SizedBox(height: 8,),
                                 Text("Invitations", style: TextStyle(
                                     color: appColors.lightColor,
@@ -160,24 +162,23 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Utils.flushBarErrorMessage("Cette fonctionnalité est encours de developpement", context);
-                            // setState(() {
-                            //   tabBar = const WalletScreen();
-                            //   home = false;
-                            //   favorites = false;
-                            //   create = false;
-                            //   wallet = true;
-                            //   setting = false;
-                            // });
+                            setState(() {
+                               tabBar = const ProfileScreen();
+                               home = false;
+                               favorites = false;
+                               create = false;
+                               wallet = true;
+                               setting = false;
+                             });
                           },
                           child: Container(
                             height: ResponsiveFlutter.of(context).verticalScale(40),
                             alignment: Alignment.center,
                             child: Column(
                               children: [
-                                Icon(wallet! ? Icons.card_membership : Icons.card_membership_outlined, color: wallet! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
+                                Icon(wallet! ? CupertinoIcons.person_alt_circle_fill : CupertinoIcons.person_alt_circle, color: wallet! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
                                 const SizedBox(height: 8,),
-                                Text("Tickets", style: TextStyle(
+                                Text("Mon compte", style: TextStyle(
                                     color: appColors.lightColor,
                                     fontSize: 9
                                 ),)
@@ -201,7 +202,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             alignment: Alignment.center,
                             child: Column(
                               children: [
-                                Icon(setting! ? Icons.settings : Icons.settings_outlined, color: setting! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
+                                Icon(setting! ? CupertinoIcons.gear_solid : CupertinoIcons.gear, color: setting! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
                                 const SizedBox(height: 8,),
                                 Text("Paramètres", style: TextStyle(
                                     color: appColors.lightColor,
