@@ -27,12 +27,10 @@ class _SettingScreenState extends State<SettingScreen> {
   SharedPref pref = SharedPref();
 
   List<CommonModel>? settingsList = [
-    // CommonModel(image: ImagePath.notifications, title: Strings.notificationSettings),
-    // CommonModel(image: ImagePath.privacy, title: Strings.changePassword),
     CommonModel(image: ImagePath.question, title: Strings.helpAndSupport),
     CommonModel(image: ImagePath.lock, title: Strings.privacyPolicy),
-    CommonModel(image: ImagePath.question, title: Strings.termsAndCondition),
-    CommonModel(image: ImagePath.info, title: Strings.aboutUs),
+    // CommonModel(image: ImagePath.question, title: Strings.termsAndCondition),
+    // CommonModel(image: ImagePath.info, title: Strings.aboutUs),
   ];
   @override
   Widget build(BuildContext context) {
@@ -79,28 +77,29 @@ class _SettingScreenState extends State<SettingScreen> {
                               builder: (context) => const HelpAndSupportScreen(),
                             ),
                           );
-                        } else if (index == 3) {
+                        } else if (index == 1) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const PrivacyPolicyScreen(),
                             ),
                           );
-                        } else if (index == 1) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TermsAndConditionScreen(),
-                            ),
-                          );
-                        } else if (index == 2) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AboutUsScreen(),
-                            ),
-                          );
                         }
+                        // else if (index == 2) {
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => const TermsAndConditionScreen(),
+                        //     ),
+                        //   );
+                        // } else if (index == 3) {
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => const AboutUsScreen(),
+                        //     ),
+                        //   );
+                        // }
                       },
                       child: Stack(
                         alignment: Alignment.centerLeft,

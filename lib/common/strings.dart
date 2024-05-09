@@ -160,9 +160,9 @@ class Strings {
 
   /*<------------------- Dummy Text ------------------->*/
 
-  static const String dummyText1 = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet.";
-  static const String dummyText2 = "(+243) 814 063 056";
-  static const String dummyText3 = "support@kuuwaa.com";
+  static const String dummyText1 = "Veuillez nous contacter si vous rencontrez des soucis avec la plateforme KuuWaa";
+  static const String dummyText2 = "+243 820 793 972";
+  static const String dummyText3 = "contact@kuuwaa.com";
   static const String dummyText4 =
       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet. mpor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.";
   static const String dummyText5 =
