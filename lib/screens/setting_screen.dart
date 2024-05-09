@@ -7,11 +7,8 @@ import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/model/common_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/about_us_screen.dart';
-import 'package:kuuwaa/screens/bottom_bar_screen.dart';
-import 'package:kuuwaa/screens/change_password_screen.dart';
 import 'package:kuuwaa/screens/help_and_support_screen.dart';
 import 'package:kuuwaa/screens/auth/login_screen.dart';
-import 'package:kuuwaa/screens/notification_settings_screen.dart';
 import 'package:kuuwaa/screens/privacy_policy_screen.dart';
 import 'package:kuuwaa/screens/terms_and_condition_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +28,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   List<CommonModel>? settingsList = [
     // CommonModel(image: ImagePath.notifications, title: Strings.notificationSettings),
-    CommonModel(image: ImagePath.privacy, title: Strings.changePassword),
+    // CommonModel(image: ImagePath.privacy, title: Strings.changePassword),
     CommonModel(image: ImagePath.question, title: Strings.helpAndSupport),
     CommonModel(image: ImagePath.lock, title: Strings.privacyPolicy),
     CommonModel(image: ImagePath.question, title: Strings.termsAndCondition),
@@ -79,20 +76,6 @@ class _SettingScreenState extends State<SettingScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const NotificationSettingsScreen(),
-                            ),
-                          );
-                        } else if (index == 1) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ChangePasswordScreen(),
-                            ),
-                          );
-                        } else if (index == 2) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
                               builder: (context) => const HelpAndSupportScreen(),
                             ),
                           );
@@ -103,14 +86,14 @@ class _SettingScreenState extends State<SettingScreen> {
                               builder: (context) => const PrivacyPolicyScreen(),
                             ),
                           );
-                        } else if (index == 4) {
+                        } else if (index == 1) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const TermsAndConditionScreen(),
                             ),
                           );
-                        } else if (index == 5) {
+                        } else if (index == 2) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(

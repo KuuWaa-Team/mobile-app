@@ -1681,15 +1681,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                   size: ResponsiveFlutter.of(context).fontSize(1.5),
                                 ),
                               ),
-                              MyTextView(
-                                "+" + element.price!.toInt().toString() + "\$",
-                                textAligntNew: TextAlign.center,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.green,
-                                  fontWeightNew: FontWeight.w600,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                ),
-                              ),
+                              // MyTextView(
+                              //   "+" + element.price!.toInt().toString() + "\$",
+                              //   textAligntNew: TextAlign.center,
+                              //   styleNew: MyTextStyle(
+                              //     colorNew: appColors.green,
+                              //     fontWeightNew: FontWeight.w600,
+                              //     size: ResponsiveFlutter.of(context).fontSize(1.5),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],
@@ -1977,17 +1977,17 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            const SizedBox(width: 10,),
-                                                            MyTextView(
-                                                              "+${element.price?.toInt()}\$",
-                                                              textAligntNew: TextAlign.start,
-                                                              maxLineWrap: true,
-                                                              styleNew: MyTextStyle(
-                                                                colorNew: appColors.btnColor,
-                                                                fontWeightNew: FontWeight.w700,
-                                                                size: ResponsiveFlutter.of(context).fontSize(1.3),
-                                                              ),
-                                                            ),
+                                                            // const SizedBox(width: 10,),
+                                                            // MyTextView(
+                                                            //   "+${element.price?.toInt()}\$",
+                                                            //   textAligntNew: TextAlign.start,
+                                                            //   maxLineWrap: true,
+                                                            //   styleNew: MyTextStyle(
+                                                            //     colorNew: appColors.btnColor,
+                                                            //     fontWeightNew: FontWeight.w700,
+                                                            //     size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                                            //   ),
+                                                            // ),
                                                           ],
                                                         ),
                                                         const SizedBox(height: 5,),

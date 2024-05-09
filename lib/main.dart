@@ -45,7 +45,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
@@ -53,10 +52,10 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => InvitationViewModel()),
       ],
       child: MaterialApp(
-        supportedLocales: const [
-          Locale('fr', 'FR')
-        ],
-        locale: const Locale('fr', 'FR'),
+        // supportedLocales: const [
+        //   Locale('fr', 'FR')
+        // ],
+        // locale: const Locale('fr', 'FR'),
         title: 'KuuWaa',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

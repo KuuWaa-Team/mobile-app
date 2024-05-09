@@ -3,13 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
-import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/settings/edit_profile_screen.dart';
-import 'package:kuuwaa/screens/my_booking_screen.dart';
-import 'package:kuuwaa/screens/my_events_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
@@ -128,40 +125,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       size: ResponsiveFlutter.of(context).fontSize(1.7),
                     ),
                   ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(15),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EditProfileScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: appColors.btnColor,
-                        borderRadius: BorderRadius.circular(5)
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.edit, size: 15, color: Colors.white,),
-                          SizedBox(width: 5,),
-                          Text(
-                            "Modifier",
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.white
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                  // SizedBox(
+                  //   height: ResponsiveFlutter.of(context).moderateScale(15),
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const EditProfileScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: appColors.btnColor,
+                  //       borderRadius: BorderRadius.circular(5)
+                  //     ),
+                  //     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  //     child: const Row(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Icon(Icons.edit, size: 15, color: Colors.white,),
+                  //         SizedBox(width: 5,),
+                  //         Text(
+                  //           "Modifier",
+                  //           style: TextStyle(
+                  //             fontSize: 13,
+                  //             color: Colors.white
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
