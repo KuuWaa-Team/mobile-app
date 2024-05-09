@@ -2,6 +2,8 @@ import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/routes/routes_name.dart';
+import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -75,6 +77,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
               title: "Activer l'évenement",
               backArrow: true,
               context: context,
+              backClick: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailsScreen(id: widget.event.id!),
+                  ),
+                );
+              }
             ),
             if (loadingPercentage < 100)
               LinearProgressIndicator(
