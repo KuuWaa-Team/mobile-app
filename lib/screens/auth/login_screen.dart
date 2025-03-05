@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -23,12 +24,34 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneController = TextEditingController();
   bool loading = false;
   AuthViewModel authViewModel = AuthViewModel();
-
+  
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  User? _user;
+  
   var maskFormatter = MaskTextInputFormatter(
       mask: '*## ### ###',
       filter: { "#": RegExp(r'\d'), "*": RegExp(r'[7-9]') },
       type: MaskAutoCompletionType.lazy
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseAuth.authStateChanges().listen((event) {
+      setState(() {
+        _user = event;
+      });
+    });
+  }
+
+  void _handleGoogleSignIn () {
+    try {
+      GoogleAuthProvider _googleAuthProvide = GoogleAuthProvider();
+      _firebaseAuth.signInWithProvider(_googleAuthProvide);
+    } catch(error) {
+      print(error);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
