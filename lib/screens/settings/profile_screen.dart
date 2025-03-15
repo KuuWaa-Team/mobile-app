@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       size: ResponsiveFlutter.of(context).fontSize(1.7),
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                   MyTextView(
                     user.address.toString(),
                     textAligntNew: TextAlign.start,

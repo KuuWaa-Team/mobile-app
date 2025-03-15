@@ -89,7 +89,7 @@ class Utils {
   }
 
   /// Show Progress Dialog ------------>>
-  void showProgressDialog({@required BuildContext? context}) {
+  void showProgressDialog({required BuildContext? context}) {
     showDialog(
       context: context!,
       barrierDismissible: false,
@@ -132,7 +132,7 @@ class Utils {
   }
 
   /// Hide Progress Dialog ------------>>
-  void hideProgressDialog({@required BuildContext? buildContext}) {
+  void hideProgressDialog({required BuildContext? buildContext}) {
     Navigator.of(buildContext!, rootNavigator: true).pop();
   }
 
