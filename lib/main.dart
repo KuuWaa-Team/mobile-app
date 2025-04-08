@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
+import 'package:kuuwaa/firebase_options.dart';
 import 'package:kuuwaa/screens/on_boarding/on_boarding_screen.dart';
 import 'package:kuuwaa/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ void main() async {
   if (initScreen != true) {
     await preferences.setBool('initScreen', true);
   }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }

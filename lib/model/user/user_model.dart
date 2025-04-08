@@ -1,43 +1,43 @@
 class UserModel {
   int? id;
-  String? phoneNumber;
-  String? firstname;
-  String? lastname;
-  String? address;
-  bool? otpVerified;
-  bool? completed;
+  String? uid;
+  String? displayName;
+  String? email;
+  String? photoUrl;
+  String? provider;
   String? token;
 
   UserModel({
     this.id,
-    this.phoneNumber,
-    this.firstname,
-    this.lastname,
-    this.address,
+    this.uid,
+    this.displayName,
+    this.email,
+    this.photoUrl,
+    this.provider,
     this.token,
-    this.otpVerified,
-    this.completed
   });
 
-  UserModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    phoneNumber = json['phoneNumber'];
-    firstname = json['firstname'];
-    lastname = json['lastname'];
-    completed = json['completed'];
-    address = json['address'];
-    token = json['token'];
-    otpVerified = json['otpVerified'];
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'],
+      uid: json['uid'],
+      displayName: json['displayName'],
+      email: json['email'],
+      photoUrl: json['photoUrl'],
+      provider: json['provider'],
+      token: json['token'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['phoneNumber'] = phoneNumber;
-    data['firstname'] = firstname;
-    data['completed'] = completed;
-    data['lastname'] = lastname;
-    data['address'] = address;
-    return data;
+    return {
+      'id': id,
+      'uid': uid,
+      'displayName': displayName,
+      'email': email,
+      'photoUrl': photoUrl,
+      'provider': provider,
+      'token': token,
+    };
   }
 }

@@ -12,7 +12,6 @@ import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -203,34 +202,34 @@ class Utils {
   }
 
   /// Is Network Available Check ------------>>
-  Future<bool> isNetworkAvailable({
-    bool? showDialog,
-    BuildContext? context,
-  }) async {
-    ConnectivityResult _result;
-    final Connectivity _connectivity = Connectivity();
-    try {
-      _result = await _connectivity.checkConnectivity();
-      debugPrint(_result.toString());
-      switch (_result) {
-        case ConnectivityResult.wifi:
-          return true;
-        case ConnectivityResult.mobile:
-          return true;
-        default:
-          if (showDialog!) {
-            alertDialog(Strings.networkError, contextDialog: context!);
-          }
-          return false;
-      }
-    } on PlatformException catch (e) {
-      debugPrint(e.toString());
-      if (showDialog!) {
-        alertDialog(Strings.networkError, contextDialog: context!);
-      }
-      return false;
-    }
-  }
+  // Future<bool> isNetworkAvailable({
+  //   bool? showDialog,
+  //   BuildContext? context,
+  // }) async {
+  //   ConnectivityResult _result;
+  //   final Connectivity _connectivity = Connectivity();
+  //   try {
+  //     _result = await _connectivity.checkConnectivity();
+  //     debugPrint(_result.toString());
+  //     switch (_result) {
+  //       case ConnectivityResult.wifi:
+  //         return true;
+  //       case ConnectivityResult.mobile:
+  //         return true;
+  //       default:
+  //         if (showDialog!) {
+  //           alertDialog(Strings.networkError, contextDialog: context!);
+  //         }
+  //         return false;
+  //     }
+  //   } on PlatformException catch (e) {
+  //     debugPrint(e.toString());
+  //     if (showDialog!) {
+  //       alertDialog(Strings.networkError, contextDialog: context!);
+  //     }
+  //     return false;
+  //   }
+  // }
 
   /// Simple Massage Alert Dialog ------------>>
   alertDialog(String title, {@required BuildContext? contextDialog}) async {

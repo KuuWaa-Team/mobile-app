@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ,radius: 50, // sets radius, default 50.0
                     backgroundColor: appColors.btnColor, // sets background color, default Colors.white
                     initialsText: Text(
-                      user.firstname.toString()[0] + "" + user.lastname.toString()[0],
+                      user.displayName.toString()[0] + "" + user.displayName.toString()[1],
                       style: const TextStyle(fontSize: 30, color: Colors.white),
                     ),  // sets initials text, set your own style, default Text('')
                     borderColor: Colors.brown, // sets border color, default Colors.white
@@ -95,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: ResponsiveFlutter.of(context).moderateScale(10),
                   ),
                   MyTextView(
-                    user.firstname.toString() + " " + user.lastname.toString(),
+                    user.displayName.toString(),
                     textAligntNew: TextAlign.start,
                     maxLineWrap: true,
                     styleNew: MyTextStyle(
@@ -105,18 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   MyTextView(
-                    "+243 " + user.phoneNumber.toString(),
-                    textAligntNew: TextAlign.start,
-                    maxLineWrap: true,
-                    styleNew: MyTextStyle(
-                      colorNew: appColors.lightColor.withOpacity(.5),
-                      fontWeightNew: FontWeight.w400,
-                      size: ResponsiveFlutter.of(context).fontSize(1.7),
-                    ),
-                  ),
-                  const Divider(),
-                  MyTextView(
-                    user.address.toString(),
+                    user.email.toString(),
                     textAligntNew: TextAlign.start,
                     maxLineWrap: true,
                     styleNew: MyTextStyle(

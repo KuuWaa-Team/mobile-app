@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 15,),
                   MyTextView(
-                    "Salut,\n" + (user.firstname == null ? "" : user.firstname!) + " " + (user.lastname == null ? "" : user.lastname!),
+                    "Salut,\n" + user.displayName!,
                     textAligntNew: TextAlign.start,
                     maxLineWrap: true,
                     styleNew: MyTextStyle(

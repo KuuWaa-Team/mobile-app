@@ -12,10 +12,10 @@ class Strings {
   static const String networkError = "Your internet is not available, please try again later";
   static const String dioError = "Something went wrong, Please try again...";
 
-  static const String login = "Identifiez-vous";
+  static const String login = "Faites de chaque évenement un moment inoubliable";
   static const String enterCode = "Entrez le code réçu par sms";
   static const String completeProfile = "Completez votre profil";
-  static const String pleaseFillTheDetails = "Entrez votre numéro de téléphone";
+  static const String pleaseFillTheDetails = "Connectez-vous et gérez vos évenements comme un pro du domaine";
   static const String emailAddress = "Email Address";
   static const String password = "Password";
   static const String doNotHaveAnAccount = "Don't have an account?";

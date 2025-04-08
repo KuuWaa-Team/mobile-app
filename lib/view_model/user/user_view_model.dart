@@ -6,70 +6,46 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserViewModel with ChangeNotifier {
   Future<bool> saveUser(UserModel user) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setInt('user__id', user.id!.toInt());
-    sp.setString('token', user.token.toString());
+    sp.setInt('user__id', user.id ?? 0);
+    sp.setString('user__uid', user.uid ?? '');
+    sp.setString('user__display_name', user.displayName ?? '');
+    sp.setString('user__email', user.email ?? '');
+    sp.setString('user__photo_url', user.photoUrl ?? '');
+    sp.setString('user__provider', user.provider ?? '');
+    sp.setString('user__token', user.token ?? '');
     notifyListeners();
     return true;
   }
 
   Future<bool> updateUser(UserModel user) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    if (user.id != null) {
-      sp.setInt('user__id', user.id!.toInt());
-    }
-    if (user.token != null) {
-      sp.setString('user__token', user.token.toString());
-    }
-    if (user.firstname != null) {
-      sp.setString('user__firstname', user.firstname.toString());
-    }
-    if (user.lastname != null) {
-      sp.setString('user__lastname', user.lastname.toString());
-    }
-    if (user.phoneNumber != null) {
-      sp.setString('user__phone_number', user.phoneNumber.toString());
-    }
-    if (user.address != null) {
-      sp.setString('user__address', user.address.toString());
-    }
-
+    if (user.id != null) sp.setInt('user__id', user.id!);
+    if (user.uid != null) sp.setString('user__uid', user.uid!);
+    if (user.displayName != null) sp.setString('user__display_name', user.displayName!);
+    if (user.email != null) sp.setString('user__email', user.email!);
+    if (user.photoUrl != null) sp.setString('user__photo_url', user.photoUrl!);
+    if (user.provider != null) sp.setString('user__provider', user.provider!);
+    if (user.token != null) sp.setString('user__token', user.token!);
     notifyListeners();
     return true;
   }
 
-  Future<bool> otpVerified() async {
+  Future<UserModel> getUser() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setBool('user__otp_verified', true);
-    notifyListeners();
-    return true;
-  }
-
-  Future<UserModel>   getUser() async {
-    final SharedPreferences sp = await SharedPreferences.getInstance();
-    int? id = sp.getInt('user__id');
-    String? token = sp.getString('user__token');
-    String? firstname = sp.getString('user__firstname');
-    String? lastname = sp.getString('user__lastname');
-    String? phoneNumber = sp.getString('user__phone_number');
-    String? address = sp.getString('user__address');
-    bool? otpVerified = sp.getBool('user__otp_verified');
-
-    UserModel account = UserModel(
-      id: id,
-      token: token,
-      phoneNumber: phoneNumber,
-      firstname: firstname,
-      lastname: lastname,
-      address: address,
-      otpVerified: otpVerified
+    return UserModel(
+      id: sp.getInt('user__id'),
+      uid: sp.getString('user__uid'),
+      displayName: sp.getString('user__display_name'),
+      email: sp.getString('user__email'),
+      photoUrl: sp.getString('user__photo_url'),
+      provider: sp.getString('user__provider'),
+      token: sp.getString('user__token'),
     );
-
-    return account;
   }
 
   Future<bool> remove() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.clear();
+    await sp.clear();
     await sp.setBool('initScreen', true);
     return true;
   }
