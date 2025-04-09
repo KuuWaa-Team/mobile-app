@@ -37,7 +37,6 @@ class _MyAppState extends State<MyApp> {
   AppColors appColors = AppColors();
   @override
   void initState() {
-    // TODO: implement initState
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
