@@ -54,10 +54,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => InvitationViewModel()),
       ],
       child: MaterialApp(
-        // supportedLocales: const [
-        //   Locale('fr', 'FR')
-        // ],
-        // locale: const Locale('fr', 'FR'),
         title: 'KuuWaa',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -65,7 +61,6 @@ class _MyAppState extends State<MyApp> {
           fontFamily: Constants.carosSoft,
         ),
         home: initScreen ? const SplashScreen(): const OnBoardingView(),
-        // home: InvitationDetailsScreen(),
       )
     );
   }

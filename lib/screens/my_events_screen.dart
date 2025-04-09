@@ -3,9 +3,7 @@ import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:kuuwaa/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:kuuwaa/screens/events/edit_event_screen.dart';
 
 class MyEventsScreen extends StatefulWidget {
   const MyEventsScreen({Key? key}) : super(key: key);

@@ -51,7 +51,7 @@ class OnBoardingViewState extends State<OnBoardingView> {
 
   @override
   Widget build(BuildContext context) {
-    Color dotsColor = isLast ? Colors.white : appColors.btnColor;
+    Color dotsColor = appColors.btnColor;
     return Scaffold(
         body: Container(
           decoration: BoxDecoration(

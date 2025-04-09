@@ -41,38 +41,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDX37S1g_Eo7eZZZGlzKVN71aMZxLmXpkM',
-    appId: '1:861779122333:web:4baf56e7f2a733ec679c74',
-    messagingSenderId: '861779122333',
-    projectId: 'chapchapapp-fa630',
-    authDomain: 'chapchapapp-fa630.firebaseapp.com',
-    storageBucket: 'chapchapapp-fa630.firebasestorage.app',
-    measurementId: 'G-JZZ12G8V6N',
+    apiKey: 'AIzaSyD4W52ga8r26knz-M7sLA3SGTJVST95bAY',
+    appId: '1:77651918174:web:932677a57eaf7ccfa823cf',
+    messagingSenderId: '77651918174',
+    projectId: 'kuuwaa-adcc4',
+    authDomain: 'kuuwaa-adcc4.firebaseapp.com',
+    storageBucket: 'kuuwaa-adcc4.firebasestorage.app',
+    measurementId: 'G-DCEERTYJM0',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBGhsmVOqAL6NDyx4aZm1QHIRURrwUmvDg',
-    appId: '1:861779122333:android:ee5b7a0257a55081679c74',
-    messagingSenderId: '861779122333',
-    projectId: 'chapchapapp-fa630',
-    storageBucket: 'chapchapapp-fa630.firebasestorage.app',
+    apiKey: 'AIzaSyAWhee9Ghkg9QHach2Ye2c5v1QjTzqTFoE',
+    appId: '1:77651918174:android:14ff0e9b862f2e86a823cf',
+    messagingSenderId: '77651918174',
+    projectId: 'kuuwaa-adcc4',
+    storageBucket: 'kuuwaa-adcc4.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCMwTWEbB6hHnBhY1gJJYfYSr1pu-siOfc',
-    appId: '1:861779122333:ios:22aca7bd85b819e3679c74',
-    messagingSenderId: '861779122333',
-    projectId: 'chapchapapp-fa630',
-    storageBucket: 'chapchapapp-fa630.firebasestorage.app',
+    apiKey: 'AIzaSyDqv2OiMV-IxeoSNTNMQHj_ht6XeCQLkr8',
+    appId: '1:77651918174:ios:7cada4c24bce31a3a823cf',
+    messagingSenderId: '77651918174',
+    projectId: 'kuuwaa-adcc4',
+    storageBucket: 'kuuwaa-adcc4.firebasestorage.app',
+    iosClientId: '77651918174-3ljaij0anninqvnc7uv7t68nvicqbtki.apps.googleusercontent.com',
     iosBundleId: 'com.app.kuuwaa',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCMwTWEbB6hHnBhY1gJJYfYSr1pu-siOfc',
-    appId: '1:861779122333:ios:22aca7bd85b819e3679c74',
-    messagingSenderId: '861779122333',
-    projectId: 'chapchapapp-fa630',
-    storageBucket: 'chapchapapp-fa630.firebasestorage.app',
+    apiKey: 'AIzaSyDqv2OiMV-IxeoSNTNMQHj_ht6XeCQLkr8',
+    appId: '1:77651918174:ios:7cada4c24bce31a3a823cf',
+    messagingSenderId: '77651918174',
+    projectId: 'kuuwaa-adcc4',
+    storageBucket: 'kuuwaa-adcc4.firebasestorage.app',
+    iosClientId: '77651918174-3ljaij0anninqvnc7uv7t68nvicqbtki.apps.googleusercontent.com',
     iosBundleId: 'com.app.kuuwaa',
   );
 
