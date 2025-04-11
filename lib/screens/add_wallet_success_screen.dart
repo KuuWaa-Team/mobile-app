@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -18,6 +19,16 @@ class _AddWalletSuccessScreenState extends State<AddWalletSuccessScreen> {
   AppColors appColors = AppColors();
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: appColors.btnColor,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarColor: appColors.btnColor,
+        systemNavigationBarDividerColor: appColors.btnColor,
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+    );
     return SafeArea(
       top: false,
       bottom: false,
@@ -31,13 +42,13 @@ class _AddWalletSuccessScreenState extends State<AddWalletSuccessScreen> {
             children: [
               Image.asset(
                 ImagePath.successFull,
-                height: ResponsiveFlutter.of(context).moderateScale(350),
+                height: ResponsiveFlutter.of(context).moderateScale(280),
               ),
               SizedBox(
                 height: ResponsiveFlutter.of(context).moderateScale(40),
               ),
               MyTextView(
-                Strings.addedMoneySuccessful,
+                Strings.addedMoneyPending,
                 textAligntNew: TextAlign.center,
                 maxLineWrap: true,
                 styleNew: MyTextStyle(
@@ -49,33 +60,37 @@ class _AddWalletSuccessScreenState extends State<AddWalletSuccessScreen> {
               SizedBox(
                 height: ResponsiveFlutter.of(context).moderateScale(20),
               ),
-              MyTextView(
-                Strings.yourAmountSuccessfullyAdded,
-                textAligntNew: TextAlign.center,
-                maxLineWrap: true,
-                styleNew: MyTextStyle(
-                  colorNew: appColors.white,
-                  fontWeightNew: FontWeight.w500,
-                  size: ResponsiveFlutter.of(context).fontSize(1.8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: MyTextView(
+                  Strings.yourAmountSuccessfullyAdded,
+                  textAligntNew: TextAlign.center,
+                  maxLineWrap: true,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.white,
+                    fontWeightNew: FontWeight.w500,
+                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                  ),
                 ),
               ),
               SizedBox(
                 height: ResponsiveFlutter.of(context).moderateScale(35),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(95)),
+                padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(80)),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const BottomBarScreen(),
                       ),
+                        (route) => false
                     );
                   },
                   child: CommonButton(
                     context: context,
-                    title: Strings.backToHome,
+                    title: Strings.backToHome.toUpperCase(),
                     btnColor: appColors.white,
                     textColor: appColors.btnColor,
                   ),

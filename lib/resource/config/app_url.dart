@@ -1,13 +1,15 @@
 import 'dart:io';
 
 class AppUrl {
-  static var domainName = Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
+  // static var domainName = Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
+  static var domainName = 'https://plain-loops-beam.loca.lt';
   static var baseUrl = "$domainName/api";
 
   // AUTH
   static var loginEndPoint = '$baseUrl/login';
   static var otpVerificationEndPoint = '$baseUrl/otps/verification';
   static var userEndPoint = '$baseUrl/users';
+  static var operationEndPoint = '$baseUrl/operations';
 
   // EVENTS
   static var eventEndPoint = '$baseUrl/events';

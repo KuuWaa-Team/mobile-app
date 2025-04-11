@@ -6,9 +6,9 @@ import 'package:kuuwaa/resource/config/app_url.dart';
 class EventRepository {
   final BaseApiServices _apiServices = NetworkApiService();
 
-  Future<dynamic> listingApi ({required BuildContext context}) async {
+  Future<dynamic> listingApi ({required BuildContext context, required int id}) async {
     try  {
-      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint, context: context, auth: true);
+      dynamic response = await _apiServices.getGetResponse(AppUrl.userEndPoint + "/$id/events", context: context, auth: true);
       return response;
     } catch(e) {
       rethrow;

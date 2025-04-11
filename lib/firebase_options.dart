@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '77651918174',
     projectId: 'kuuwaa-adcc4',
     storageBucket: 'kuuwaa-adcc4.firebasestorage.app',
+    androidClientId: '77651918174-5la9okfi0ic3a1d41dpvpud173i8pf3k.apps.googleusercontent.com',
     iosClientId: '77651918174-3ljaij0anninqvnc7uv7t68nvicqbtki.apps.googleusercontent.com',
     iosBundleId: 'com.app.kuuwaa',
   );
@@ -74,6 +75,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '77651918174',
     projectId: 'kuuwaa-adcc4',
     storageBucket: 'kuuwaa-adcc4.firebasestorage.app',
+    androidClientId: '77651918174-5la9okfi0ic3a1d41dpvpud173i8pf3k.apps.googleusercontent.com',
     iosClientId: '77651918174-3ljaij0anninqvnc7uv7t68nvicqbtki.apps.googleusercontent.com',
     iosBundleId: 'com.app.kuuwaa',
   );

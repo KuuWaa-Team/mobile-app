@@ -45,8 +45,8 @@ class _CommonButtonState extends State<CommonButton> {
         width: 20,
         child:
         CupertinoActivityIndicator(
-          color: appColors.lightColor,
-          radius: 8,
+          color: appColors.white,
+          radius: 10,
         ),
       ) :  MyTextView(
         widget.title!,

@@ -1,11 +1,16 @@
+import 'package:flutter/services.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/common/utils.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/add_wallet_success_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
+import 'package:kuuwaa/view_model/wallet/wallet_view_model.dart';
 
 class AddMoneyScreen extends StatefulWidget {
   const AddMoneyScreen({Key? key}) : super(key: key);
@@ -15,163 +20,241 @@ class AddMoneyScreen extends StatefulWidget {
 
 class _AddMoneyScreenState extends State<AddMoneyScreen> {
   AppColors appColors = AppColors();
-  String dropDownValue = 'SBI';
-  var items = [
-    'SBI',
-    'SBI 1',
-    'SBI 2',
-    'SBI 3',
-    'SBI 4',
-  ];
+  String? selectedPaymentMethod;
+  bool loading = false;
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+
+  WalletViewModel walletViewModel = WalletViewModel();
+
+  UserModel? user;
+
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: Column(
-          children: [
-            commonAppBar(
-              context: context,
-              backArrow: true,
-              title: Strings.addMoney,
-            ),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(
-                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                ),
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        ImagePath.debitCard,
-                        height: ResponsiveFlutter.of(context).moderateScale(20),
-                        color: appColors.lightColor,
-                      ),
-                      SizedBox(
-                        width: ResponsiveFlutter.of(context).moderateScale(12),
-                      ),
-                      MyTextView(
-                        Strings.debitCard,
-                        textAligntNew: TextAlign.center,
-                        styleNew: MyTextStyle(
-                          colorNew: appColors.lightColor,
-                          fontWeightNew: FontWeight.w600,
-                          size: ResponsiveFlutter.of(context).fontSize(2.2),
+  void initState() {
+    UserViewModel().getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+    super.initState();
+  }
+
+  void showPhoneNumberModal() {
+    final _formKey = GlobalKey<FormState>();
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      backgroundColor: appColors.white,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 20,
+                right: 20,
+                top: 20,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        height: 5,
+                        width: 50,
+                        margin: const EdgeInsets.only(bottom: 15),
+                        decoration: BoxDecoration(
+                          color: appColors.appMediumColor,
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(20),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(20)),
-                    decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      border: Border.all(
-                        color: appColors.borderColor,
-                        width: 1.5,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        ResponsiveFlutter.of(context).moderateScale(20),
+                    ),
+                    MyTextView(
+                      "Recharge avec mobile money",
+                      maxLinesNew: 3,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.black,
+                        fontWeightNew: FontWeight.bold,
+                        size: ResponsiveFlutter.of(context).fontSize(2),
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MyTextView(
-                          Strings.addAmount,
-                          textAligntNew: TextAlign.center,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.transactionText,
-                            fontWeightNew: FontWeight.w400,
-                            size: ResponsiveFlutter.of(context).fontSize(1.8),
-                          ),
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(5),
-                        ),
-                        commonTestField(
-                          context: context,
-                          hintText: Strings.addAmountHint,
-                          icon: false,
-                          keyboardType: TextInputType.number,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(10),
-                  ),
-                  Container(
-                    height: ResponsiveFlutter.of(context).verticalScale(50),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                    ),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(
-                        ResponsiveFlutter.of(context).moderateScale(20),
-                      ),
-                      border: Border.all(
-                        color: appColors.borderColor,
-                        width: 1.5,
-                      ),
-                    ),
-                    child: DropdownButton(
-                      value: dropDownValue,
-                      icon: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: appColors.lightPinkColor,
-                      ),
-                      style: MyTextStyle(
-                        colorNew: appColors.lightColor,
-                        fontWeightNew: FontWeight.w400,
+                    const SizedBox(height: 10),
+                    MyTextView(
+                      "Numéro de téléphone",
+                      maxLinesNew: 3,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.transactionText,
                         size: ResponsiveFlutter.of(context).fontSize(1.8),
                       ),
-                      iconSize: ResponsiveFlutter.of(context).moderateScale(30),
-                      isExpanded: true,
-                      dropdownColor: appColors.appLightColor,
-                      borderRadius: BorderRadius.circular(ResponsiveFlutter.of(context).moderateScale(20)),
-                      underline: Container(),
-                      alignment: Alignment.bottomCenter,
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          alignment: Alignment.centerLeft,
-                          child: MyTextView(
-                            items,
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.lightColor,
-                              fontWeightNew: FontWeight.w500,
-                              size: ResponsiveFlutter.of(context).fontSize(2),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          dropDownValue = value.toString();
-                        });
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [Utils.phoneNumberFormatter],
+                      decoration: InputDecoration(
+                        hintText: "Telephone",
+                        filled: true,
+                        fillColor: appColors.appLightColor,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: appColors.btnColor, width: 1.5),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: appColors.borderColor, width: 1),
+                        ),
+                      ),
+                      validator: (value) {
+                        final regex = RegExp(r'^\+243 \d{3} \d{3} \d{3}$');
+                        if (value == null || value.isEmpty) {
+                          return 'Veuillez entrer un numéro';
+                        } else if (!regex.hasMatch(value)) {
+                          return 'Format invalide. Exemple: +243 970 123 456';
+                        }
+                        return null;
                       },
                     ),
+                    const SizedBox(height: 20),
+                    if (user != null)
+                    GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          loading = true;
+                        });
+                        if (_formKey.currentState!.validate()) {
+                          await walletViewModel.recharge(context, {
+                            'amount': amountController.text,
+                            'payment_method': selectedPaymentMethod,
+                            'phone_number': phoneController.text.replaceAll(' ', '').replaceAll('+', '')
+                          }, user!.id!);
+                        }
+                        setState(() {
+                          loading = false;
+                        });
+                      },
+                      child: CommonButton(
+                        context: context,
+                        loading: loading,
+                        title: "Valider",
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            );
+          }
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: Column(
+        children: [
+          commonAppBar(
+            context: context,
+            backArrow: true,
+            title: Strings.addMoney,
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.symmetric(
+                vertical: ResponsiveFlutter.of(context).moderateScale(15),
+                horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+              ),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    MyTextView(
+                      Strings.paymentMethod,
+                      textAligntNew: TextAlign.center,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.lightColor,
+                        fontWeightNew: FontWeight.w600,
+                        size: ResponsiveFlutter.of(context).fontSize(2.2),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                MyTextView(
+                  "Montant (USD)",
+                  maxLinesNew: 3,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.transactionText,
+                    size: ResponsiveFlutter.of(context).fontSize(1.8),
                   ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(10),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: amountController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "Montant",
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: appColors.btnColor, width: 1.5),
+                    ),
+                    fillColor: appColors.appLightColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: appColors.borderColor, width: 1),
+                    ),
                   ),
-                  Container(
+                ),
+                const SizedBox(height: 5),
+                MyTextView(
+                  "1\$ USD = 1.2 Credit",
+                  maxLinesNew: 3,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.black,
+                    size: ResponsiveFlutter.of(context).fontSize(1.5),
+                  ),
+                ),
+                SizedBox(
+                  height: ResponsiveFlutter.of(context).moderateScale(10),
+                ),
+                MyTextView(
+                  "Veuillez choisir un moyen de paiement pour recharger les credits",
+                  textAligntNew: TextAlign.left,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.transactionText,
+                    fontWeightNew: FontWeight.w500,
+                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                  ),
+                  maxLinesNew: 5,
+                ),
+                SizedBox(
+                  height: ResponsiveFlutter.of(context).moderateScale(20),
+                ),
+                GestureDetector(
+                  onTap: loading ? null : () {
+                    setState(() {
+                      selectedPaymentMethod = PaymentMethod.mobile;
+                    });
+                  },
+                  child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(20)),
                     decoration: BoxDecoration(
                       color: appColors.appLightColor,
-                      border: Border.all(
+                      border: PaymentMethod.mobile == selectedPaymentMethod ? Border.all(
+                        color: appColors.btnColor,
+                        width: 2,
+                      ) : Border.all(
                         color: appColors.borderColor,
                         width: 1.5,
                       ),
@@ -183,238 +266,160 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         MyTextView(
-                          Strings.cardHolderName,
+                          Strings.mobileMoney,
                           textAligntNew: TextAlign.center,
                           styleNew: MyTextStyle(
-                            colorNew: appColors.transactionText,
+                            colorNew: appColors.black,
                             fontWeightNew: FontWeight.w400,
-                            size: ResponsiveFlutter.of(context).fontSize(1.8),
-                          ),
-                        ),
-                        SizedBox(
-                          height: ResponsiveFlutter.of(context).moderateScale(5),
-                        ),
-                        commonTestField(
-                          context: context,
-                          hintText: Strings.enterCardHolderName,
-                          icon: false,
-                          keyboardType: TextInputType.number,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(10),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(20)),
-                    decoration: BoxDecoration(
-                      color: appColors.appLightColor,
-                      border: Border.all(
-                        color: appColors.borderColor,
-                        width: 1.5,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        ResponsiveFlutter.of(context).moderateScale(20),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MyTextView(
-                          Strings.cardNumber,
-                          textAligntNew: TextAlign.center,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.transactionText,
-                            fontWeightNew: FontWeight.w400,
-                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                            size: ResponsiveFlutter.of(context).fontSize(2),
                           ),
                         ),
                         SizedBox(
                           height: ResponsiveFlutter.of(context).moderateScale(5),
                         ),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: commonTestField(
-                                context: context,
-                                hintText: Strings.enterCardNumber,
-                                icon: false,
-                                keyboardType: TextInputType.number,
+                            MyTextView(
+                              "M-Pesa",
+                              textAligntNew: TextAlign.center,
+                              styleNew: MyTextStyle(
+                                colorNew: appColors.transactionText,
+                                fontWeightNew: FontWeight.w400,
+                                size: ResponsiveFlutter.of(context).fontSize(1.5),
                               ),
                             ),
+                            const SizedBox(width: 8,),
+                            Container(
+                              width: 8, height: 8,
+                              decoration: BoxDecoration(
+                                  color: appColors.black,
+                                  shape: BoxShape.circle
+                              ),
+                            ),
+                            const SizedBox(width: 8,),
+                            MyTextView(
+                              "Orange money",
+                              textAligntNew: TextAlign.center,
+                              styleNew: MyTextStyle(
+                                colorNew: appColors.transactionText,
+                                fontWeightNew: FontWeight.w400,
+                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                              ),
+                            ),
+                            const SizedBox(width: 8,),
+                            Container(
+                              width: 8, height: 8,
+                              decoration: BoxDecoration(
+                                  color: appColors.black,
+                                  shape: BoxShape.circle
+                              ),
+                            ),
+                            const SizedBox(width: 8,),
+                            MyTextView(
+                              "Airtel money",
+                              textAligntNew: TextAlign.center,
+                              styleNew: MyTextStyle(
+                                colorNew: appColors.transactionText,
+                                fontWeightNew: FontWeight.w400,
+                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: ResponsiveFlutter.of(context).moderateScale(10),
+                ),
+                GestureDetector(
+                  onTap: loading ? null : () {
+                    setState(() {
+                      selectedPaymentMethod = PaymentMethod.card;
+                    });
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(20)),
+                    decoration: BoxDecoration(
+                      color: appColors.appLightColor,
+                      border: PaymentMethod.card == selectedPaymentMethod ? Border.all(
+                        color: appColors.btnColor,
+                        width: 2,
+                      ) : Border.all(
+                        color: appColors.borderColor,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        ResponsiveFlutter.of(context).moderateScale(20),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MyTextView(
+                          Strings.cardPayment,
+                          textAligntNew: TextAlign.center,
+                          styleNew: MyTextStyle(
+                            colorNew: appColors.black,
+                            fontWeightNew: FontWeight.w400,
+                            size: ResponsiveFlutter.of(context).fontSize(2),
+                          ),
+                        ),
+                        SizedBox(
+                          height: ResponsiveFlutter.of(context).moderateScale(5),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
                             Image.asset(
                               ImagePath.masterCard,
                               height: ResponsiveFlutter.of(context).moderateScale(25),
+                            ),
+                            const SizedBox(width: 10,),
+                            Image.asset(
+                              ImagePath.visa,
+                              height: ResponsiveFlutter.of(context).moderateScale(25),
+                              width: 50,
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(10),
+                ),
+                SizedBox(
+                  height: ResponsiveFlutter.of(context).moderateScale(20),
+                ),
+                GestureDetector(
+                  onTap: loading ? null : () {
+                    if (selectedPaymentMethod == PaymentMethod.mobile) {
+                      showPhoneNumberModal();
+                    } else if (selectedPaymentMethod == PaymentMethod.card) {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => const AddWalletSuccessScreen()),
+                      // );
+                      Utils.flushBarErrorMessage("Ce moyen de paiement n'est pas disponible pour le moment.", context);
+                    } else {
+                      Utils.flushBarErrorMessage("Veuillez sélectionner un mode de paiement", context);
+                    }
+                  },
+                  child: CommonButton(
+                    context: context,
+                    title: "Continuer",
+                    loading: loading,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(20)),
-                          decoration: BoxDecoration(
-                            color: appColors.appLightColor,
-                            border: Border.all(
-                              color: appColors.borderColor,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              ResponsiveFlutter.of(context).moderateScale(20),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              MyTextView(
-                                Strings.expiryDate,
-                                textAligntNew: TextAlign.center,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.transactionText,
-                                  fontWeightNew: FontWeight.w400,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                ),
-                              ),
-                              SizedBox(
-                                height: ResponsiveFlutter.of(context).moderateScale(5),
-                              ),
-                              commonTestField(
-                                context: context,
-                                hintText: Strings.enterExpiryDate,
-                                icon: false,
-                                keyboardType: TextInputType.number,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: ResponsiveFlutter.of(context).moderateScale(10),
-                      ),
-                      Expanded(
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(ResponsiveFlutter.of(context).moderateScale(20)),
-                          decoration: BoxDecoration(
-                            color: appColors.appLightColor,
-                            border: Border.all(
-                              color: appColors.borderColor,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              ResponsiveFlutter.of(context).moderateScale(20),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              MyTextView(
-                                Strings.cvv,
-                                textAligntNew: TextAlign.center,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.transactionText,
-                                  fontWeightNew: FontWeight.w400,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                ),
-                              ),
-                              SizedBox(
-                                height: ResponsiveFlutter.of(context).moderateScale(5),
-                              ),
-                              commonTestField(
-                                context: context,
-                                hintText: Strings.enterCvv,
-                                icon: false,
-                                keyboardType: TextInputType.number,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(20),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddWalletSuccessScreen(),
-                        ),
-                      );
-                    },
-                    child: CommonButton(
-                      context: context,
-                      title: Strings.add,
-                    ),
-                  ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(15),
-                  ),
-                  MyTextView(
-                    Strings.or,
-                    textAligntNew: TextAlign.center,
-                    styleNew: MyTextStyle(
-                      colorNew: appColors.transactionText,
-                      fontWeightNew: FontWeight.w400,
-                      size: ResponsiveFlutter.of(context).fontSize(1.8),
-                    ),
-                  ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(15),
-                  ),
-                  Container(
-                    height: ResponsiveFlutter.of(context).scale(45),
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(30)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        ResponsiveFlutter.of(context).moderateScale(30),
-                      ),
-                      border: Border.all(
-                        width: 1,
-                        color: appColors.white,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          ImagePath.paypal,
-                          height: ResponsiveFlutter.of(context).moderateScale(22),
-                        ),
-                        SizedBox(
-                          width: ResponsiveFlutter.of(context).moderateScale(15),
-                        ),
-                        MyTextView(
-                          Strings.payPal,
-                          textAligntNew: TextAlign.center,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
-                            fontWeightNew: FontWeight.w600,
-                            size: ResponsiveFlutter.of(context).fontSize(2.2),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: ResponsiveFlutter.of(context).moderateScale(50),
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: ResponsiveFlutter.of(context).moderateScale(15),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

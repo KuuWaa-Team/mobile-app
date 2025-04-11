@@ -1,8 +1,12 @@
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
+import 'package:kuuwaa/common/image_path.dart';
+import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/model/common_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:kuuwaa/screens/ticket_listing_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:kuuwaa/screens/add_money_screen.dart';
+import 'package:kuuwaa/screens/wallet/my_operations_list_screen.dart';
+import 'package:kuuwaa/screens/withdraw_money_screen.dart';
 import 'package:flutter/material.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -14,10 +18,6 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
   AppColors appColors = AppColors();
-  TabController? tabController;
-  int? tab = 0;
-  bool? like = true;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,103 +27,89 @@ class _WalletScreenState extends State<WalletScreen> {
         backgroundColor: appColors.appMediumColor,
         body: Column(
           children: [
-            commonAppBar(
-              context: context,
-              title: "Tickets",
-              backArrow: false,
-            ),
-            Expanded(
-              child: DefaultTabController(
-                length: 2,
-                child: Scaffold(
-                  backgroundColor: appColors.appMediumColor,
-                  body: Column(
+            Stack(
+              children: [
+                Container(
+                  height: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + ResponsiveFlutter.of(context).moderateScale(75),
+                  width: double.infinity,
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+                    vertical: ResponsiveFlutter.of(context).moderateScale(15),
+                  ),
+                  decoration: BoxDecoration(
+                    color: appColors.btnColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
+                      bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          bottom: 10
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: appColors.appLightColor,
-                            borderRadius: BorderRadius.circular(ResponsiveFlutter.of(context).moderateScale(25),)
-                          ),
-                          child: TabBar(
-                            controller: tabController,
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                ResponsiveFlutter.of(context).moderateScale(25),
-                              ), // Creates border
-                              color: appColors.btnColor,
-                            ),
-                            onTap: (value) {
-                              tab = value;
-                              setState(() {});
-                              debugPrint("value ------>> $value");
-                            },
-                            tabs: [
-                              Container(
-                                height: ResponsiveFlutter.of(context).moderateScale(35),
-                                alignment: Alignment.center,
-                                child: MyTextView(
-                                  "Events Publics",
-                                  textAligntNew: TextAlign.start,
-                                  maxLineWrap: true,
-                                  styleNew: MyTextStyle(
-                                    colorNew: tab == 0 ? appColors.white : appColors.darkGreyText,
-                                    fontWeightNew: FontWeight.w600,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: ResponsiveFlutter.of(context).moderateScale(35),
-                                alignment: Alignment.center,
-                                child: MyTextView(
-                                  "Mes tickets",
-                                  textAligntNew: TextAlign.start,
-                                  maxLineWrap: true,
-                                  styleNew: MyTextStyle(
-                                    colorNew: tab == 1 ? appColors.white : appColors.darkGreyText,
-                                    fontWeightNew: FontWeight.w600,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                  ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset("assets/icon/coins.png", width: 20,),
+                              const SizedBox(width: 5,),
+                              MyTextView(
+                                "0",
+                                textAligntNew: TextAlign.center,
+                                styleNew: MyTextStyle(
+                                  colorNew: appColors.white,
+                                  fontWeightNew: FontWeight.w600,
+                                  size: ResponsiveFlutter.of(context).fontSize(3),
                                 ),
                               ),
                             ],
                           ),
-                        ),
+                          // SizedBox(
+                          //   height: ResponsiveFlutter.of(context).moderateScale(3),
+                          // ),
+                          // MyTextView(
+                          //   Strings.myBalance,
+                          //   textAligntNew: TextAlign.center,
+                          //   styleNew: MyTextStyle(
+                          //     colorNew: appColors.greyTextColor,
+                          //     fontWeightNew: FontWeight.w500,
+                          //     size: ResponsiveFlutter.of(context).fontSize(1.8),
+                          //   ),
+                          // ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left : 20,
-                          right : 20,
-                          top : 10,
-                          bottom : 10,
-                        ),
-                        child: CupertinoSearchTextField(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          style: TextStyle(
-                              color: appColors.lightColor
-                          ),
-                          placeholder: "Rechercher",
-                          onChanged: (String value) {
-                          },
-                          onSubmitted: (String value) {
-                          },
-                        ),
-                      ),
-                      Expanded(
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AddMoneyScreen(),
+                            ),
+                          );
+                        },
                         child: Container(
-                          alignment: Alignment.topCenter,
-                          child: TabBarView(
-                            controller: tabController,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: const [
-                              TicketListingScreen(),
-                              TicketListingScreen(),
+                          height: ResponsiveFlutter.of(context).moderateScale(45),
+                          padding: EdgeInsets.symmetric(vertical: ResponsiveFlutter.of(context).moderateScale(5), horizontal: 15),
+                          decoration: BoxDecoration(
+                            color: appColors.white,
+                            borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(ImagePath.add),
+                              const SizedBox(width: 10,),
+                              MyTextView(
+                                "Recharger",
+                                textAligntNew: TextAlign.center,
+                                styleNew: MyTextStyle(
+                                  colorNew: appColors.black,
+                                  fontWeightNew: FontWeight.w500,
+                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -131,7 +117,33 @@ class _WalletScreenState extends State<WalletScreen> {
                     ],
                   ),
                 ),
+                commonAppBar(
+                  title: Strings.wallet,
+                  context: context,
+                  backArrow: false,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: ResponsiveFlutter.of(context).verticalScale(10),
+            ),
+            MyTextView(
+              Strings.transactions,
+              textAligntNew: TextAlign.start,
+              styleNew: MyTextStyle(
+                colorNew: appColors.lightColor,
+                fontWeightNew: FontWeight.w500,
+                size: ResponsiveFlutter.of(context).fontSize(2.5),
               ),
+            ),
+            SizedBox(
+              height: ResponsiveFlutter.of(context).verticalScale(10),
+            ),
+            const Expanded(
+              child: MyOperationsListScreen(),
+            ),
+            SizedBox(
+              height: ResponsiveFlutter.of(context).verticalScale(70),
             ),
           ],
         ),

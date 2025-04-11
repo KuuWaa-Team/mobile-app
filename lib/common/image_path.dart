@@ -54,6 +54,7 @@ class ImagePath {
   static const String greenUp = base + "ic_green_up.png";
   static const String redDown = base + "ic_red_down.png";
   static const String masterCard = base + "ic_master_Card.png";
+  static const String visa = base + "visa.png";
   static const String debitCard = base + "ic_debit_card.png";
   static const String paypal = base + "ic_paypal.png";
   static const String cancelled = base + "ic_cancelled.png";

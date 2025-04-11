@@ -88,19 +88,6 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^1.0.0
-flutter_icons:
-  ios: true
-  image_path: "assets/icon/icon.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "assets/icon.png"
-    background_color: "#00000"
-    theme_color: "#ffffff"
-  windows:
-    generate: true
-    image_path: "assets/icon.png"
-    icon_size: 48
 
 flutter:
 

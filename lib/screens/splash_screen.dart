@@ -41,29 +41,25 @@ class _SplashScreenState extends State<SplashScreen> {
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Constants.darkTheme ? Brightness.light : Brightness.dark,
         statusBarBrightness: Constants.darkTheme ? Brightness.dark : Brightness.light,
-        systemNavigationBarColor: appColors.lightColor,
-        // systemNavigationBarDividerColor: appColors.appDarkColor,
+        systemNavigationBarColor: appColors.white,
+        systemNavigationBarDividerColor: appColors.white,
         systemNavigationBarIconBrightness: Constants.darkTheme ? Brightness.light : Brightness.dark,
       ),
     );
-    return SafeArea(
-      bottom: false,
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.bottomCenter,
-          decoration: const BoxDecoration(
-            // image: DecorationImage(
-            //   // image: AssetImage(ImagePath.splash),
-            //   alignment: Alignment.center,
-            //   fit: BoxFit.cover,
-            // ),
-          ),
-          child: Center(child: Image.asset(ImagePath.logo, width: 120,)),
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        alignment: Alignment.bottomCenter,
+        decoration: const BoxDecoration(
+          // image: DecorationImage(
+          //   // image: AssetImage(ImagePath.splash),
+          //   alignment: Alignment.center,
+          //   fit: BoxFit.cover,
+          // ),
         ),
+        child: Center(child: Image.asset(ImagePath.logo, width: 120,)),
       ),
     );
   }

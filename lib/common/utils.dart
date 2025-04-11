@@ -20,10 +20,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   AppColors appColors = AppColors();
+
+  static int minRecharge = 5;
 
   static toastMessage(String message) {
     Fluttertoast.showToast(
@@ -371,6 +374,12 @@ class Utils {
     return time;
   }
 
+  static var phoneNumberFormatter = new MaskTextInputFormatter(
+      mask: '+243 ### ### ###',
+      filter: { "#": RegExp(r'[0-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
+
   static Future<bool> checkPaymentResponse(BuildContext context, String orderNumber, EventModel event) async {
     EventViewModel eventViewModel3 = EventViewModel();
     dynamic value;
@@ -477,4 +486,20 @@ class Utils {
 
     return true;
   }
+}
+
+class OperationType {
+  static String recharge = "OPERATION_RECHARGE";
+  static String use = "OPERATION_USE";
+}
+
+class PaymentMethod {
+  static String mobile = "MOBILE_PAYMENT";
+  static String card = "CARD_PAYMENT";
+}
+
+class OperationStatus {
+  static String waiting = "STATUS_WAITING";
+  static String paid = "STATUS_PAID";
+  static String failed = "STATUS_FAILED";
 }

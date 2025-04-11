@@ -55,15 +55,6 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                       SizedBox(
                         width: ResponsiveFlutter.of(context).moderateScale(12),
                       ),
-                      MyTextView(
-                        Strings.debitCard,
-                        textAligntNew: TextAlign.center,
-                        styleNew: MyTextStyle(
-                          colorNew: appColors.lightColor,
-                          fontWeightNew: FontWeight.w600,
-                          size: ResponsiveFlutter.of(context).fontSize(2.2),
-                        ),
-                      ),
                     ],
                   ),
                   SizedBox(
@@ -85,15 +76,6 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        MyTextView(
-                          Strings.addAmount,
-                          textAligntNew: TextAlign.center,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.transactionText,
-                            fontWeightNew: FontWeight.w400,
-                            size: ResponsiveFlutter.of(context).fontSize(1.8),
-                          ),
-                        ),
                         SizedBox(
                           height: ResponsiveFlutter.of(context).moderateScale(5),
                         ),

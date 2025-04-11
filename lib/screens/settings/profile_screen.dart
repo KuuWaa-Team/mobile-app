@@ -74,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CircularProfileAvatar( //sets image path, it should be a URL string. default value is empty string, if path is empty it will display only initials
-                    ''
+                    user.photoUrl.toString()
                     ,radius: 50, // sets radius, default 50.0
                     backgroundColor: appColors.btnColor, // sets background color, default Colors.white
                     initialsText: Text(

@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/common/image_path.dart';
-import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:kuuwaa/screens/invitations/my_invitations_screen.dart';
 import 'package:kuuwaa/screens/home_page_screen.dart';
 import 'package:kuuwaa/screens/settings/profile_screen.dart';
 import 'package:kuuwaa/screens/setting_screen.dart';
@@ -26,8 +24,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   Widget? tabBar;
 
   bool? home = true;
-  bool? favorites = false;
-  bool? create = false;
+  bool? profile = false;
   bool? wallet = false;
   bool? setting = false;
 
@@ -37,16 +34,22 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     if (widget.isFrom == "Setting") {
       tabBar = const SettingScreen();
       home = false;
-      favorites = false;
-      create = false;
+      profile = false;
       wallet = false;
       setting = true;
+      setState(() {});
+    }
+    if (widget.isFrom == "Wallet") {
+      tabBar = const WalletScreen();
+      home = false;
+      profile = false;
+      wallet = true;
+      setting = false;
       setState(() {});
     } else {
       tabBar = const HomeScreen();
       home = true;
-      favorites = false;
-      create = false;
+      profile = false;
       wallet = false;
       setting = false;
       setState(() {});
@@ -57,12 +60,12 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Constants.darkTheme ? Brightness.light : Brightness.dark,
-        statusBarBrightness: Constants.darkTheme ? Brightness.dark : Brightness.light,
-        systemNavigationBarColor: appColors.lightColor,
-        // systemNavigationBarDividerColor: appColors.appDarkColor,
-        systemNavigationBarIconBrightness: Constants.darkTheme ? Brightness.light : Brightness.dark,
+          statusBarColor: appColors.white,
+          systemNavigationBarColor: appColors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          systemNavigationBarDividerColor: appColors.white
       ),
     );
     return SafeArea(
@@ -113,8 +116,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             setState(() {
                               tabBar = const HomeScreen();
                               home = true;
-                              favorites = false;
-                              create = false;
+                              profile = false;
                               wallet = false;
                               setting = false;
                             });
@@ -122,26 +124,19 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                           child: Container(
                             height: ResponsiveFlutter.of(context).verticalScale(40),
                             alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Icon(home! ? CupertinoIcons.square_split_2x2_fill : CupertinoIcons.square_split_2x2, color: home! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
-                                const SizedBox(height: 8,),
-                                Text("Evenements", style: TextStyle(
-                                  color: appColors.lightColor,
-                                  fontSize: 9
-                                ),)
-                              ],
+                            child: Image(
+                              image: AssetImage(home! ? ImagePath.homeSelect : ImagePath.home),
+                              height: 30,
                             ),
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              tabBar = const FavoritesScreen();
+                              tabBar = const WalletScreen();
                               home = false;
-                              favorites = true;
-                              create = false;
-                              wallet = false;
+                              profile = false;
+                              wallet = true;
                               setting = false;
                             });
                           },
@@ -150,12 +145,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             alignment: Alignment.center,
                             child: Column(
                               children: [
-                                Icon(favorites! ? CupertinoIcons.mail_solid : CupertinoIcons.mail, color: favorites! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
-                                const SizedBox(height: 8,),
-                                Text("Invitations", style: TextStyle(
-                                    color: appColors.lightColor,
-                                    fontSize: 9
-                                ),)
+                                Icon(wallet! ? Icons.wallet_rounded : Icons.wallet_rounded, color: wallet! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 40,),
                               ],
                             ),
                           ),
@@ -165,9 +155,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             setState(() {
                                tabBar = const ProfileScreen();
                                home = false;
-                               favorites = false;
-                               create = false;
-                               wallet = true;
+                               profile = true;
+                               wallet = false;
                                setting = false;
                              });
                           },
@@ -176,12 +165,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             alignment: Alignment.center,
                             child: Column(
                               children: [
-                                Icon(wallet! ? CupertinoIcons.person_alt_circle_fill : CupertinoIcons.person_alt_circle, color: wallet! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
-                                const SizedBox(height: 8,),
-                                Text("Mon compte", style: TextStyle(
-                                    color: appColors.lightColor,
-                                    fontSize: 9
-                                ),)
+                                Icon(profile! ? CupertinoIcons.person_alt_circle_fill : CupertinoIcons.person_alt_circle, color: profile! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 40,),
                               ],
                             ),
                           ),
@@ -191,8 +175,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                             setState(() {
                               tabBar = const SettingScreen();
                               home = false;
-                              favorites = false;
-                              create = false;
+                              profile = false;
                               wallet = false;
                               setting = true;
                             });
@@ -200,15 +183,9 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                           child: Container(
                             height: ResponsiveFlutter.of(context).verticalScale(40),
                             alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Icon(setting! ? CupertinoIcons.gear_solid : CupertinoIcons.gear, color: setting! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 25,),
-                                const SizedBox(height: 8,),
-                                Text("Paramètres", style: TextStyle(
-                                    color: appColors.lightColor,
-                                    fontSize: 9
-                                ),)
-                              ],
+                            child: Image(
+                              image: AssetImage(setting! ? imagePath.settingSelect : ImagePath.setting),
+                              height: 30,
                             ),
                           ),
                         ),

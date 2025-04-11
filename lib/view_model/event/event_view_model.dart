@@ -52,10 +52,10 @@ class EventViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<bool> listingApi(BuildContext context) async {
+  Future<bool> listingApi(BuildContext context, int id) async {
     setEventsList(ApiResponse.loading());
     setLoading(true);
-    await _repository.listingApi(context: context).then((value) {
+    await _repository.listingApi(context: context, id: id).then((value) {
       setLoading(false);
       if (value['success'] == true  ) {
         List eventsJson = value['data'];
@@ -69,11 +69,10 @@ class EventViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return true;
   }
 

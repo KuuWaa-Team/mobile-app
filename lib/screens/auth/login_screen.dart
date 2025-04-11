@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -10,6 +12,7 @@ import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/service/notifications_service.dart';
 import 'package:kuuwaa/view_model/auth/auth_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,7 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
   ImagePath imagePath = ImagePath();
   bool loading = false;
   AuthViewModel authViewModel = AuthViewModel();
-  
+  NotificationsService? notificationsService;
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   User? _user;
 
@@ -35,6 +39,15 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _user = event;
       });
+    });
+    setState(() {
+      try {
+        notificationsService = NotificationsService();
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
     });
   }
 
@@ -62,6 +75,18 @@ class _LoginScreenState extends State<LoginScreen> {
           final email = user?.email;
           final name = user?.displayName;
           final avatar = user?.photoURL;
+          String phoneId = "";
+
+          if (notificationsService != null) {
+            try {
+              notificationsService!.isTokenRefresh();
+              await notificationsService!.getDeviceToken().then((value) {
+                phoneId = value ?? "";
+              });
+            } catch (e) {
+              print(e.toString());
+            }
+          }
 
           final userData = {
             "firebase_token": idToken,
@@ -70,9 +95,10 @@ class _LoginScreenState extends State<LoginScreen> {
             "photoUrl": avatar,
             "provider": "google",
             "uid": user?.uid,
+            "phoneId": phoneId
           };
 
-          authViewModel.loginApi(userData, context);
+          await authViewModel.loginApi(userData, context);
         });
       }
     } catch (error) {
@@ -86,6 +112,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: appColors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.light, // For Android (dark icons)
+          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+          systemNavigationBarDividerColor: appColors.white
+      ),
+    );
     return Scaffold(
       backgroundColor: appColors.appMediumColor,
       body: SafeArea(
@@ -274,7 +310,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 40.0, top: 20),
+              padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 20.0, top: 20),
               child: CupertinoButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

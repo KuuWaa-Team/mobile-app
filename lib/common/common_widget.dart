@@ -150,7 +150,7 @@ Widget commonAppBar({
       right: ResponsiveFlutter.of(context).moderateScale(20),
     ),
     decoration: BoxDecoration(
-      color: appBarColor ?? appColors.appMediumColor,
+      color: appBarColor ?? appColors.white,
       borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
         bottomRight: Radius.circular(ResponsiveFlutter.of(context).moderateScale(30)),
@@ -223,7 +223,7 @@ Widget commonAppBar({
           ],
         ),
         MyTextView(
-          title!.toUpperCase(),
+          title!,
           textAligntNew: TextAlign.center,
           styleNew: MyTextStyle(
             colorNew: appColors.lightColor,

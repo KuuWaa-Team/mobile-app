@@ -73,15 +73,16 @@ class Strings {
   static const String hurray = "Hurray!";
   static const String yourEventSuccessfullyCreated = "Your event successfully created.";
 
-  static const String wallet = "Wallet";
-  static const String myBalance = "My Balance";
-  static const String transactions = "Transactions";
-  static const String transactionId = "Transaction ID: ";
+  static const String wallet = "Portefeuille";
+  static const String myBalance = "Mes credits";
+  static const String transactions = "Opérations";
+  static const String transactionId = "ID Transaction: ";
 
-  static const String addMoney = "Add Money";
+  static const String addMoney = "Recharge";
   static const String withdrawMoney = "Withdraw Money";
-  static const String debitCard = "Debit Card";
-  static const String addAmount = "Add Amount (\$)";
+  static const String paymentMethod = "Moyen de paiemnt";
+  static const String mobileMoney = "Mobile money";
+  static const String cardPayment = "Carte de credit";
   static const String addAmountHint = "Add Amount";
   static const String sbi = "SBI";
   static const String cardHolderName = "Card Holder Name";
@@ -99,9 +100,9 @@ class Strings {
   static const String withdraw = "Withdraw";
   static const String payPal = "Paypal";
 
-  static const String addedMoneySuccessful = "Added money\nSuccessful!";
-  static const String yourAmountSuccessfullyAdded = "Your amount successfully added in\nyour wallet";
-  static const String backToHome = "BACK TO HOME";
+  static const String addedMoneyPending = "Votre demande de recharge\nest en cours.";
+  static const String yourAmountSuccessfullyAdded = "Veuillez valider le paiement et le traitement peut prendre jusqu’à 3 minutes. notification dès que la transaction sera confirmée.";
+  static const String backToHome = "Retour à l'acceuil";
 
   static const String withdrawalCancelled = "Withdrawal\nCancelled";
   static const String yourAmountCanAdded = "Your amount Can't added in\nyour wallet";

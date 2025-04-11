@@ -46,8 +46,8 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
         user = value;
       });
 
-      if (!fetched) {
-        eventViewModel.listingApi(context);
+      if (!fetched && user.id != null) {
+        eventViewModel.listingApi(context, user.id!);
         setState(() {
           fetched = true;
         });

@@ -6,12 +6,14 @@ class UserModel {
   String? photoUrl;
   String? provider;
   String? token;
+  int? credits;
 
   UserModel({
     this.id,
     this.uid,
     this.displayName,
     this.email,
+    this.credits,
     this.photoUrl,
     this.provider,
     this.token,
@@ -23,6 +25,7 @@ class UserModel {
       uid: json['uid'],
       displayName: json['displayName'],
       email: json['email'],
+      credits: json['credits'],
       photoUrl: json['photoUrl'],
       provider: json['provider'],
       token: json['token'],
@@ -35,6 +38,7 @@ class UserModel {
       'uid': uid,
       'displayName': displayName,
       'email': email,
+      'credits': credits,
       'photoUrl': photoUrl,
       'provider': provider,
       'token': token,
