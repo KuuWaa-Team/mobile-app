@@ -3,11 +3,13 @@ import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/model/common_model.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/add_money_screen.dart';
 import 'package:kuuwaa/screens/wallet/my_operations_list_screen.dart';
 import 'package:kuuwaa/screens/withdraw_money_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -18,6 +20,18 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
   AppColors appColors = AppColors();
+  UserModel user = UserModel();
+
+  @override
+  void initState() {
+    UserViewModel().getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,7 +70,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               Image.asset("assets/icon/coins.png", width: 20,),
                               const SizedBox(width: 5,),
                               MyTextView(
-                                "0",
+                                user.credits == null ? '0' : user.credits.toString(),
                                 textAligntNew: TextAlign.center,
                                 styleNew: MyTextStyle(
                                   colorNew: appColors.white,

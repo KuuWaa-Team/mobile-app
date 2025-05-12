@@ -36,12 +36,12 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Constants.darkTheme ? Brightness.light : Brightness.dark,
-        statusBarBrightness: Constants.darkTheme ? Brightness.dark : Brightness.light,
-        systemNavigationBarColor: appColors.lightColor,
-        // systemNavigationBarDividerColor: appColors.appDarkColor,
-        systemNavigationBarIconBrightness: Constants.darkTheme ? Brightness.light : Brightness.dark,
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: appColors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          systemNavigationBarDividerColor: appColors.white
       ),
     );
     return SafeArea(
