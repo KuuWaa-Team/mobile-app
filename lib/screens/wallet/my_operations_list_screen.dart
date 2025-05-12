@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
@@ -125,10 +126,12 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
                                           (operation.status == OperationStatus.waiting ? Colors.orange.withOpacity(.5) : Colors.red.withOpacity(.5)),
                                       ),
                                     ),
-                                    child: Image.asset(
+                                    child: operation.status == OperationStatus.paid ?
+                                    Image.asset(
                                       ImagePath.greenUp,
                                       height: ResponsiveFlutter.of(context).moderateScale(8),
-                                    ),
+                                    ) :
+                                    (operation.status == OperationStatus.waiting ? const Icon(Icons.refresh, color: Colors.orange,) : const Icon(CupertinoIcons.xmark, color: Colors.red,)),
                                   )
                                       : Container(
                                     height: ResponsiveFlutter.of(context).moderateScale(50),

@@ -25,7 +25,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     UserViewModel().getUser().then((value) {
-      print(value);
       setState(() {
         user = value;
       });
@@ -73,23 +72,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CircularProfileAvatar( //sets image path, it should be a URL string. default value is empty string, if path is empty it will display only initials
-                    user.photoUrl.toString()
-                    ,radius: 50, // sets radius, default 50.0
-                    backgroundColor: appColors.btnColor, // sets background color, default Colors.white
-                    initialsText: Text(
-                      user.displayName.toString()[0] + "" + user.displayName.toString()[1],
-                      style: const TextStyle(fontSize: 30, color: Colors.white),
-                    ),  // sets initials text, set your own style, default Text('')
-                    borderColor: Colors.brown, // sets border color, default Colors.white
-                    elevation: 5.0, // sets elevation (shadow of the profile picture), default value is 0.0
-                    foregroundColor: Colors.brown, //sets foreground colour, it works if showInitialTextAbovePicture = true , default Colors.transparent
-                    cacheImage: true, // allow widget to cache image against provided url
-                    imageFit: BoxFit.cover,
-                    onTap: () {
-                      print('adil');
-                    }, // sets on tap
-                    showInitialTextAbovePicture: true, // setting it true will show initials text above profile picture, default false
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: appColors.btnColor,
+                    backgroundImage: const NetworkImage("https://lh3.googleusercontent.com/a/ACg8ocJngcaZuC-RECsL45ZhtSXs9re-raDN77-GQgVjVGMzqKp0M0rA=s96-c"),
                   ),
                   SizedBox(
                     height: ResponsiveFlutter.of(context).moderateScale(10),

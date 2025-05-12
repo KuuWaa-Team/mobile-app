@@ -28,15 +28,6 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
   AppColors appColors = AppColors();
   bool fetched = false;
   EventViewModel eventViewModel = EventViewModel();
-  List<CommonModel>? select = [
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-    CommonModel(isSelect: true),
-  ];
   UserModel user = UserModel();
 
   @override

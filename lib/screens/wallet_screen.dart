@@ -3,11 +3,13 @@ import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/model/common_model.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/add_money_screen.dart';
 import 'package:kuuwaa/screens/wallet/my_operations_list_screen.dart';
 import 'package:kuuwaa/screens/withdraw_money_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -18,6 +20,18 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
   AppColors appColors = AppColors();
+  UserModel? user;
+
+  @override
+  void initState() {
+    UserViewModel().getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -49,35 +63,32 @@ class _WalletScreenState extends State<WalletScreen> {
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(
-                            children: [
-                              Image.asset("assets/icon/coins.png", width: 20,),
-                              const SizedBox(width: 5,),
-                              MyTextView(
-                                "0",
-                                textAligntNew: TextAlign.center,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.white,
-                                  fontWeightNew: FontWeight.w600,
-                                  size: ResponsiveFlutter.of(context).fontSize(3),
-                                ),
+                          Container(
+                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: appColors.white.withOpacity(.1)
                               ),
-                            ],
+                              child: Row(
+                                  children: [
+                                    Image.asset("assets/icon/coins.png", width: 25,),
+                                    const SizedBox(width: 5,),
+                                    if (user != null)
+                                    MyTextView(
+                                      user!.credits == null ? '0' : user!.credits.toString(),
+                                      textAligntNew: TextAlign.start,
+                                      maxLineWrap: true,
+                                      styleNew: MyTextStyle(
+                                        colorNew: appColors.white,
+                                        fontWeightNew: FontWeight.w600,
+                                        size: ResponsiveFlutter.of(context).fontSize(2),
+                                      ),
+                                    ),
+                                  ]
+                              )
                           ),
-                          // SizedBox(
-                          //   height: ResponsiveFlutter.of(context).moderateScale(3),
-                          // ),
-                          // MyTextView(
-                          //   Strings.myBalance,
-                          //   textAligntNew: TextAlign.center,
-                          //   styleNew: MyTextStyle(
-                          //     colorNew: appColors.greyTextColor,
-                          //     fontWeightNew: FontWeight.w500,
-                          //     size: ResponsiveFlutter.of(context).fontSize(1.8),
-                          //   ),
-                          // ),
                         ],
                       ),
                       const Spacer(),

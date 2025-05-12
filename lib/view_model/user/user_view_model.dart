@@ -32,6 +32,13 @@ class UserViewModel with ChangeNotifier {
     return true;
   }
 
+  Future<bool> updateCredits(int credits) async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setInt('user__credits', credits);
+    notifyListeners();
+    return true;
+  }
+
   Future<UserModel> getUser() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     return UserModel(

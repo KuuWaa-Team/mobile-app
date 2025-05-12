@@ -69,7 +69,7 @@ class Strings {
   static const String selectDate = "Sélectionner la date";
   static const String time = "Heure";
   static const String location = "Adresse";
-  static const String enterEventDetails = "Entrez un message descriptif";
+  static const String enterEventDetails = "Entrez le message descriptif";
   static const String hurray = "Hurray!";
   static const String yourEventSuccessfullyCreated = "Your event successfully created.";
 

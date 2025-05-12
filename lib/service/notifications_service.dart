@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class NotificationsService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -50,7 +53,17 @@ class NotificationsService {
 
   void firebaseInit () {
     FirebaseMessaging.onMessage.listen((message) {
-      showNotification(message);
+      if (message.notification != null) {
+        showNotification(message);
+      }
+
+      if (message.data.isNotEmpty) {
+        try {
+          int credits = int.parse(message.data['credits']);
+          UserViewModel().updateCredits(credits);
+        } catch (e) {}
+        String? customValue = message.data['type']; // ou tout autre clé envoyée
+      }
     });
   }
 
