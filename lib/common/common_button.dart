@@ -7,6 +7,7 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 class CommonButton extends StatefulWidget {
   BuildContext? context;
   String? title;
+  IconData? icon;
   Color? btnColor;
   Color? textColor;
   bool? loading;
@@ -17,6 +18,7 @@ class CommonButton extends StatefulWidget {
     this.context,
     this.btnColor,
     this.padding,
+    this.icon,
     this.loading,
     this.title,
     this.textColor,
@@ -48,14 +50,23 @@ class _CommonButtonState extends State<CommonButton> {
           color: appColors.white,
           radius: 10,
         ),
-      ) :  MyTextView(
-        widget.title!,
-        textAligntNew: TextAlign.center,
-        styleNew: MyTextStyle(
-          colorNew: widget.textColor ?? appColors.white,
-          fontWeightNew: FontWeight.w600,
-          size: ResponsiveFlutter.of(context).fontSize(2),
-        ),
+      ) :  Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (widget.icon != null)
+            Icon(widget.icon, color: widget.textColor ?? appColors.white, size: 20,),
+          if (widget.icon != null)
+          const SizedBox(width: 8,),
+          MyTextView(
+            widget.title!,
+            textAligntNew: TextAlign.center,
+            styleNew: MyTextStyle(
+              colorNew: widget.textColor ?? appColors.white,
+              fontWeightNew: FontWeight.w600,
+              size: ResponsiveFlutter.of(context).fontSize(2),
+            ),
+          ),
+        ],
       ),
     );
   }

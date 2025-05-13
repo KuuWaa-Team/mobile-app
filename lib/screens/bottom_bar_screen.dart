@@ -60,11 +60,11 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-          statusBarColor: appColors.white,
+          statusBarColor: Colors.transparent,
           systemNavigationBarColor: appColors.white,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
           systemNavigationBarDividerColor: appColors.white
       ),
     );

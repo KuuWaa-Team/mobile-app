@@ -6,6 +6,7 @@ import 'package:kuuwaa/data/response/api_response.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
+import 'package:kuuwaa/model/event/event_template_model.dart';
 import 'package:kuuwaa/model/event/feature_model.dart';
 import 'package:kuuwaa/repository/event/event_repository.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
@@ -20,6 +21,7 @@ class EventViewModel with ChangeNotifier{
   ApiResponse<dynamic> packList = ApiResponse.loading();
   ApiResponse<EventModel> event = ApiResponse.loading();
   List<EventCategoryModel> categories = [];
+  List<EventTemplateModel> templates = [];
   List<FeatureModel> features = [];
 
   setLoading(bool value) {
@@ -49,6 +51,11 @@ class EventViewModel with ChangeNotifier{
 
   setCategories (List<EventCategoryModel> data) {
     categories = data;
+    notifyListeners();
+  }
+
+  setTemplates (List<EventTemplateModel> data) {
+    templates = data;
     notifyListeners();
   }
 
@@ -97,6 +104,25 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> getTemplates(BuildContext context) async {
+    await _repository.getTemplatesApi(context: context).then((value) {
+      if (value['success'] == true  ) {
+        List templatesJson = value['templates'];
+        List<EventTemplateModel> templatesData = [];
+        for (var element in templatesJson) {
+          templatesData.add(EventTemplateModel.fromJson(element));
+        }
+        setTemplates(templatesData);
+      } else {
+        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
   Future<bool> getPacksApi (BuildContext context) async {
     setPacksList(ApiResponse.loading());
     setLoading(true);
@@ -124,13 +150,7 @@ class EventViewModel with ChangeNotifier{
   Future<bool> downloadBookApi (BuildContext context, int id) async {
     setPacksList(ApiResponse.loading());
     setLoading(true);
-    await _repository.downloadBookApi(context: context, id: id).then((value) {
-      print("****************************************");
-      print("****************************************");
-      print("****************************************");
-      print("****************************************");
-      print(value);
-    });
+    await _repository.downloadBookApi(context: context, id: id).then((value) {});
     return true;
   }
 

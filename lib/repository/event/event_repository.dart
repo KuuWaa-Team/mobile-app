@@ -24,6 +24,15 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> getTemplatesApi ({required BuildContext context}) async {
+    try  {
+      dynamic response = await _apiServices.getGetResponse(AppUrl.templatesEndPoint, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> getPacksApi ({required BuildContext context}) async {
     try  {
       dynamic response = await _apiServices.getGetResponse(AppUrl.packEndPoint + "?paid=0", context: context, auth: false);

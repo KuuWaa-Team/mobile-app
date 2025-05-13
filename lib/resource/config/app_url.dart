@@ -14,6 +14,7 @@ class AppUrl {
   // EVENTS
   static var eventEndPoint = '$baseUrl/events';
   static var categoryEndPoint = '$baseUrl/event_categories';
+  static var templatesEndPoint = '$baseUrl/event_templates';
   static var packEndPoint = '$baseUrl/event_packs';
   static var featureEndPoint = '$baseUrl/features';
   static var invitationEndPoint = '$baseUrl/invitations'; 
