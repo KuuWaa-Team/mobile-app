@@ -315,7 +315,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 10,),
-                                    if (invitation.bookSent != true && (invitation.event!.featureslugs != null || invitation.event!.featureslugs!.contains("BOOK")))
+                                    if (invitation.bookSent != true && (invitation.event!.featureSlugs != null || invitation.event!.featureSlugs!.contains("BOOK")))
                                     GestureDetector(
                                       onTap: () {
                                         showDialog(
@@ -458,7 +458,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    if (invitation.event!.featureslugs != null && invitation.event!.featureslugs!.contains("BEVERAGE") && invitation.event!.beveragesCount != null && invitation.event!.beveragesCount! > 0 && invitation.beverage == null)
+                                    if (invitation.event!.featureSlugs != null && invitation.event!.featureSlugs!.contains("BEVERAGE") && invitation.event!.beveragesCount != null && invitation.event!.beveragesCount! > 0 && invitation.beverage == null)
                                     GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(

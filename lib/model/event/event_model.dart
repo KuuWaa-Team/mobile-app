@@ -5,6 +5,7 @@ import 'package:kuuwaa/model/beverage/beverage_model.dart';
 import 'package:kuuwaa/model/book/book_model.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
+import 'package:kuuwaa/model/event/event_specification_model.dart';
 import 'package:kuuwaa/model/event/feature_model.dart';
 
 class EventModel {
@@ -23,11 +24,12 @@ class EventModel {
   String? imagePath;
   String? thumbPath;
   String? paymentStatus;
-  List? featureslugs;
+  List? featureSlugs;
   EventCategoryModel? category;
   EventPackModel? eventPack;
   bool? paidEvent;
   List<FeatureModel>? features;
+  List<EventSpecificationModel>? specifications;
   List<BeverageModel>? beverages;
   List<BookModel>? books;
   AddressModel? address;
@@ -37,8 +39,9 @@ class EventModel {
     this.name,
     this.date,
     this.beverages,
-    this.featureslugs,
+    this.featureSlugs,
     this.books,
+    this.specifications,
     this.address,
     this.details,
     this.shared,
@@ -71,7 +74,10 @@ class EventModel {
     paidEvent = json['paidEvent'];
     shared = json['shared'];
     if (json['featureslugs'] != null) {
-      featureslugs = jsonDecode(json['featureslugs']);
+      featureSlugs = jsonDecode(json['featureslugs']);
+    }
+    if (json['eventSpecifications'] != null) {
+      specifications = jsonDecode(json['eventSpecifications']);
     }
     tablesCount = json['tablesCount'];
     beveragesCount = json['beveragesCount'];
@@ -128,6 +134,7 @@ class EventModel {
     data['adminId'] = adminId;
     data['eventPack'] = eventPack;
     data['features'] = features;
+    data['eventSpecifications'] = specifications;
     data['shared'] = shared;
     data['tablesCount'] = tablesCount;
     data['beveragesCount'] = beveragesCount;

@@ -3,12 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
+import 'package:kuuwaa/model/event/event_specification_model.dart';
+import 'package:kuuwaa/model/event/event_template_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 
 class OtherInformation extends StatefulWidget {
+  final List<EventSpecificationModel> specifications;
+  final void Function(EventSpecificationModel) addSpecification;
+  final void Function(EventSpecificationModel) removeSpecification;
 
-  OtherInformation({
+  const OtherInformation({
     Key? key,
+    required this.specifications,
+    required this.addSpecification,
+    required this.removeSpecification,
   }) : super(key: key);
 
   @override
@@ -18,8 +26,6 @@ class OtherInformation extends StatefulWidget {
 class _OtherInformationState extends State<OtherInformation> {
   AppColors appColors = AppColors();
   final TextEditingController _controller = TextEditingController();
-
-  List<String> specifications = [];
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +79,7 @@ class _OtherInformationState extends State<OtherInformation> {
             String text = _controller.text.trim();
             if (text.isNotEmpty) {
               setState(() {
-                specifications.add(text);
+                widget.addSpecification(EventSpecificationModel(name: text));
                 _controller.clear();
               });
             }
@@ -85,7 +91,7 @@ class _OtherInformationState extends State<OtherInformation> {
           ),
         ),
         SizedBox(height: ResponsiveFlutter.of(context).verticalScale(20)),
-        ...specifications.map((spec) => Container(
+        ...widget.specifications.map((spec) => Container(
           padding: EdgeInsets.symmetric(
             vertical: ResponsiveFlutter.of(context).moderateScale(10),
             horizontal: ResponsiveFlutter.of(context).moderateScale(15),
@@ -101,7 +107,7 @@ class _OtherInformationState extends State<OtherInformation> {
             children: [
               Expanded(
                 child: MyTextView(
-                  spec,
+                  spec.name.toString(),
                   styleNew: MyTextStyle(
                     colorNew: appColors.lightColor,
                     fontWeightNew: FontWeight.w400,
@@ -112,7 +118,7 @@ class _OtherInformationState extends State<OtherInformation> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    specifications.remove(spec);
+                    widget.removeSpecification(spec);
                   });
                 },
                 child: Icon(Icons.close, color: appColors.btnColor, size: 18,),

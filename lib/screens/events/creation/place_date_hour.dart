@@ -12,6 +12,8 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 class PlaceDateHour extends StatefulWidget {
   DateTime? startDate;
   DateTime? endDate;
+  Function(DateTime)? onStartDateConfirm;
+  Function(DateTime)? onEndDateConfirm;
   final TextEditingController addressController;
   final TextEditingController placeNameController;
 
@@ -19,6 +21,8 @@ class PlaceDateHour extends StatefulWidget {
     Key? key,
     required this.startDate,
     required this.endDate,
+    required this.onStartDateConfirm,
+    required this.onEndDateConfirm,
     required this.addressController,
     required this.placeNameController,
   }) : super(key: key);
@@ -45,10 +49,7 @@ class _PlaceDateHourState extends State<PlaceDateHour> {
                 showTitleActions: true,
                 minTime: DateTime.now(),
                 onConfirm: (value) {
-                  setState(() {
-                    widget.startDate = value;
-                    widget.endDate = null;
-                  });
+                  widget.onStartDateConfirm!(value);
                 },
                 currentTime: DateTime.now(),
                 locale: LocaleType.fr
@@ -103,9 +104,7 @@ class _PlaceDateHourState extends State<PlaceDateHour> {
               showTitleActions: true,
               minTime: widget.startDate ?? DateTime.now(),
               onConfirm: (value) {
-                setState(() {
-                  widget.endDate = value;
-                });
+                widget.onEndDateConfirm!(value);
               },
               currentTime: widget.startDate ?? DateTime.now(),
               locale: LocaleType.fr

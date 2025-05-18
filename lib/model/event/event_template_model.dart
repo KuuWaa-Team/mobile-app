@@ -19,7 +19,7 @@ class EventTemplateModel {
     id = json['id'];
     name = json['name'];
     code = json['code'];
-    price = json['price'];
+    price = double.parse(json['price'].toString());
     imagePath = json['imagePath'];
   }
 

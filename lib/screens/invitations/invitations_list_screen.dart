@@ -1038,9 +1038,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                        if (widget.event.featureslugs != null && widget.event.featureslugs!.contains("BEVERAGE"))
+                                                        if (widget.event.featureSlugs != null && widget.event.featureSlugs!.contains("BEVERAGE"))
                                                           const SizedBox(height: 10,),
-                                                        if (widget.event.featureslugs != null && widget.event.featureslugs!.contains("BEVERAGE"))
+                                                        if (widget.event.featureSlugs != null && widget.event.featureSlugs!.contains("BEVERAGE"))
                                                         Container(
                                                           decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(5),

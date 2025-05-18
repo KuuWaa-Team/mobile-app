@@ -1,16 +1,42 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
+import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_template_model.dart';
+import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:kuuwaa/screens/events/template_preview_page.dart';
 
 class TemplateChoice extends StatefulWidget {
   final List<EventTemplateModel> templates;
+  EventTemplateModel? eventTemplateModel;
+  void Function(EventTemplateModel) changeTemplate;
+  final File? imageFile;
+  final EventCategoryModel selectedCategory;
+  final TextEditingController detailsController;
+  final TextEditingController titleController;
+  DateTime? startDate;
+  DateTime? endDate;
+  final TextEditingController addressController;
+  final TextEditingController placeNameController;
 
-  const TemplateChoice({
+  TemplateChoice({
     Key? key,
+    required this.eventTemplateModel,
+    required this.changeTemplate,
     required this.templates,
+    required this.selectedCategory,
+    required this.detailsController,
+    required this.imageFile,
+    required this.titleController,
+    required this.startDate,
+    required this.endDate,
+    required this.addressController,
+    required this.placeNameController,
   }) : super(key: key);
 
   @override
@@ -20,12 +46,6 @@ class TemplateChoice extends StatefulWidget {
 class _TemplateChoiceState extends State<TemplateChoice> {
   AppColors appColors = AppColors();
   String? selectedCategory;
-
-  // List<String> get categories {
-  //   final allCategories = widget.templates.map((t) => t.category).toSet().toList();
-  //   allCategories.sort();
-  //   return ["Tous", ...allCategories];
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,129 +57,159 @@ class _TemplateChoiceState extends State<TemplateChoice> {
       padding: EdgeInsets.symmetric(
         horizontal: ResponsiveFlutter.of(context).moderateScale(20),
       ),
-      child: GridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5,
-        childAspectRatio: 0.67,
-        children: filteredTemplates.map((template) {
-          return Stack(
-            children: [
-              Card(
-                elevation: 3,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Column(
+        children: [
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+              childAspectRatio: 0.67,
+              children: filteredTemplates.map((template) {
+                final isSelected = widget.eventTemplateModel?.id == template.id;
+
+                return Stack(
                   children: [
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: appColors.white,
-                        image: DecorationImage(
-                        image: NetworkImage("http://10.100.17.117:8000/images/templates/${template.imagePath}"),fit: BoxFit.cover
+                    Card(
+                      elevation: 3,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: isSelected ? appColors.btnColor : Colors.transparent,
+                          width: 2,
+                        ),
                       ),
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          MyTextView(
-                            template.name!,
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.black,
-                              fontWeightNew: FontWeight.w600,
-                              size: ResponsiveFlutter.of(context).fontSize(1.6),
+                          Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: appColors.white,
+                              image: DecorationImage(
+                                image: NetworkImage(AppUrl.domainName + "/images/templates/${template.imagePath}"),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                             ),
                           ),
-                          MyTextView(
-                            template.price.toString() + " crédits / invitation",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.btnColor,
-                              fontWeightNew: FontWeight.w400,
-                              size: ResponsiveFlutter.of(context).fontSize(1.3),
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                MyTextView(
+                                  template.name!,
+                                  textAligntNew: TextAlign.center,
+                                  styleNew: MyTextStyle(
+                                    colorNew: appColors.black,
+                                    fontWeightNew: FontWeight.w600,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                  ),
+                                ),
+                                MyTextView(
+                                  "${template.price} crédits / invitation",
+                                  textAligntNew: TextAlign.center,
+                                  styleNew: MyTextStyle(
+                                    colorNew: appColors.btnColor,
+                                    fontWeightNew: FontWeight.w400,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                          )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: appColors.black.withOpacity(.5),
-                      borderRadius: BorderRadius.circular(10)
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const Icon(Icons.remove_red_eye, color: Colors.white, size: 15,),
-                        const SizedBox(width: 5,),
-                        MyTextView(
-                          "Voir",
-                          textAligntNew: TextAlign.center,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.white,
-                            fontWeightNew: FontWeight.w600,
-                            size: ResponsiveFlutter.of(context).fontSize(1.4),
+                        GestureDetector(
+                          onTap: () async {
+                            final selected = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TemplatePreviewPage(template: template, data: {
+                                  "title": widget.titleController.text,
+                                  "address": widget.addressController.text,
+                                  "placeName": widget.placeNameController.text,
+                                  "details": widget.detailsController.text,
+                                  "category_id": widget.selectedCategory.id,
+                                  "start_date": widget.startDate.toString(),
+                                  "end_date": widget.endDate.toString(),
+                                  "image": widget.imageFile, //File
+                                  "image_base64": base64Encode(widget.imageFile!.readAsBytesSync()),
+                                  "image_name": widget.imageFile!.path.split('/').last,
+                                },),
+                              ),
+                            );
+                            if (selected != null && selected is EventTemplateModel) {
+                              widget.changeTemplate(selected);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: appColors.black.withOpacity(.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                            margin: EdgeInsets.symmetric(vertical: 10, horizontal: isSelected ? 5 : 10),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.remove_red_eye, color: Colors.white, size: 15),
+                                const SizedBox(width: 5),
+                                MyTextView(
+                                  "Voir",
+                                  textAligntNew: TextAlign.center,
+                                  styleNew: MyTextStyle(
+                                    colorNew: appColors.white,
+                                    fontWeightNew: FontWeight.w600,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.4),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        if (isSelected)
+                          Container(
+                            decoration: BoxDecoration(
+                                color: appColors.white,
+                                shape: BoxShape.circle
+                            ),
+                            child: Icon(Icons.check_circle, color: appColors.btnColor),
+                          ),
+                        if (isSelected)
+                          const SizedBox(width: 10),
                       ],
-                    ),
-                  ),
-                ],
-              )
-            ],
-          );
-        }).toList(),
+                    )
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 10),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => const CustomTemplateRequestScreen(),
+          //       ),
+          //     );
+          //   },
+          //   child: CommonButton(
+          //     btnColor: appColors.black,
+          //     title: "",
+          //     icon: Icons.design_services,
+          //   ),
+          // ),
+          // const SizedBox(height: 20),
+        ],
       ),
     );
-
-    // return Column(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: [
-    //     // Padding(
-    //     //   padding: EdgeInsets.only(
-    //     //     left: ResponsiveFlutter.of(context).moderateScale(20),
-    //     //     right: ResponsiveFlutter.of(context).moderateScale(20),
-    //     //     top: ResponsiveFlutter.of(context).moderateScale(10),
-    //     //   ),
-    //     //   child: DropdownButton<String>(
-    //     //     isExpanded: true,
-    //     //     dropdownColor: appColors.white,
-    //     //     value: selectedCategory ?? "Tous",
-    //     //     icon: const Icon(Icons.filter_list_outlined),
-    //     //     items: [],
-    //     //     // items: categories.map((cat) {
-    //     //     //   return DropdownMenuItem(
-    //     //     //     value: cat,
-    //     //     //     child: Text(cat),
-    //     //     //   );
-    //     //     // }).toList(),
-    //     //     onChanged: (value) {
-    //     //       setState(() {
-    //     //         selectedCategory = value;
-    //     //       });
-    //     //     },
-    //     //   ),
-    //     // ),
-    //     Expanded(
-    //       child: ,
-    //     ),
-    //   ],
-    // );
   }
 }

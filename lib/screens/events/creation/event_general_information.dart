@@ -18,13 +18,15 @@ class EventGeneralInformation extends StatefulWidget {
   final TextEditingController detailsController;
   final TextEditingController titleController;
   bool showOtherCategory;
-  Object categoriesDropDown;
+  Object selectedCategory;
+  final Function(Object) onCategoryChanged;
 
   EventGeneralInformation({
     Key? key,
     required this.onImagePick,
     required this.imageFile,
-    required this.categoriesDropDown,
+    required this.selectedCategory,
+    required this.onCategoryChanged,
     required this.items,
     required this.showOtherCategory,
     required this.categoryController,
@@ -118,7 +120,7 @@ class _EventGeneralInformationState extends State<EventGeneralInformation> {
             ),
           ),
           child: DropdownButton(
-            value: widget.categoriesDropDown,
+            value: widget.selectedCategory,
             icon: Icon(
               Icons.keyboard_arrow_down,
               color: appColors.lightPinkColor,
@@ -150,15 +152,7 @@ class _EventGeneralInformationState extends State<EventGeneralInformation> {
               );
             }).toList(),
             onChanged: (value) {
-              EventCategoryModel dataModel = value as EventCategoryModel;
-              setState(() {
-                widget.categoriesDropDown = value;
-                if (dataModel.id == null) {
-                  widget.showOtherCategory = true;
-                } else {
-                  widget.showOtherCategory = false;
-                }
-              });
+              widget.onCategoryChanged(value!);
             },
           ),
         ),

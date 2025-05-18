@@ -805,7 +805,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (event.featureslugs != null && event.featureslugs!.contains("BEVERAGE"))
+                                    if (event.featureSlugs != null && event.featureSlugs!.contains("BEVERAGE"))
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -841,7 +841,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    if (event.shared != true && event.featureslugs != null && event.featureslugs!.contains("BOOK"))
+                                    if (event.shared != true && event.featureSlugs != null && event.featureSlugs!.contains("BOOK"))
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
