@@ -27,7 +27,6 @@ class NetworkApiService extends BaseApiServices {
 
     var headerAuth = {
       'Content-Type': "application/json",
-      'Authorization': 'Bearer ${user.token}'
     };
 
     dynamic responseJson;
@@ -58,7 +57,6 @@ class NetworkApiService extends BaseApiServices {
 
     var headerAuth = {
       'Content-Type': contentType,
-      'Authorization': 'Bearer ${user.token}'
     };
 
     try {
@@ -99,7 +97,6 @@ class NetworkApiService extends BaseApiServices {
 
     var headerAuth = {
       'Content-Type': contentType,
-      'Authorization': 'Bearer ${user.token}'
     };
     try {
       http.Response response = await http.delete(
@@ -159,7 +156,6 @@ class NetworkApiService extends BaseApiServices {
         }
       });
 
-      request.headers['Authorization'] = 'Bearer ${user.token}';
       request.headers['Content-Type'] = 'multipart/form-data';
 
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(filename, data[filename].path);

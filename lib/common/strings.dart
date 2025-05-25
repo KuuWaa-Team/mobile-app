@@ -119,9 +119,9 @@ class Strings {
   static const String welcomeParty = "Welcome Party";
   static const String dance = "Dance";
   static const String participate = "Participants";
-  static const String invites = "Invitations enrégistrées";
-  static const String tables = "Tables";
-  static const String beverage = "Boissons";
+  static const String invites = "Invitations";
+  static const String tables = "Gestion des tables";
+  static const String beverage = "Gestion des boissons";
   static const String bookNow = "Je serais là";
 
   static const String checkout = "Checkout";

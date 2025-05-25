@@ -73,7 +73,7 @@ class _SharedEventInvitationScreenState extends State<SharedEventInvitationScree
               ),
               const SizedBox(height: 40,),
               MyTextView(
-                widget.event.name.toString(),
+                widget.event.title.toString(),
                 textAligntNew: TextAlign.start,
                 maxLineWrap: true,
                 styleNew: MyTextStyle(
@@ -115,7 +115,7 @@ class _SharedEventInvitationScreenState extends State<SharedEventInvitationScree
                   ),
                   SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
                   MyTextView(
-                    DateFormat('dd MMM, yyyy').format(widget.event.date!),
+                    DateFormat('dd MMM, yyyy').format(widget.event.startDate!),
                     textAligntNew: TextAlign.start,
                     maxLineWrap: true,
                     styleNew: MyTextStyle(
@@ -132,7 +132,7 @@ class _SharedEventInvitationScreenState extends State<SharedEventInvitationScree
                   ),
                   SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
                   MyTextView(
-                    DateFormat('kk:mm').format(widget.event.date!),
+                    DateFormat('kk:mm').format(widget.event.startDate!),
                     textAligntNew: TextAlign.start,
                     maxLineWrap: true,
                     styleNew: MyTextStyle(

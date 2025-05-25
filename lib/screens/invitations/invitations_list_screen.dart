@@ -1038,9 +1038,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                        if (widget.event.featureSlugs != null && widget.event.featureSlugs!.contains("BEVERAGE"))
                                                           const SizedBox(height: 10,),
-                                                        if (widget.event.featureSlugs != null && widget.event.featureSlugs!.contains("BEVERAGE"))
                                                         Container(
                                                           decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(5),
@@ -1356,7 +1354,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         ),
                                                         if (widget.event.shared != true)
                                                         const SizedBox(height: 10,),
-                                                        if (widget.event.paymentStatus == 'paid' && widget.event.shared != true)
+                                                        if (false && widget.event.shared != true)
                                                         GestureDetector(
                                                           onTap: () {
                                                             String url = "http://kuuwaa.com/invitations/" + invitation.slug.toString();
@@ -1390,7 +1388,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         if (widget.event.shared != true)
                                                         GestureDetector(
                                                           onTap: () {
-                                                            if (widget.event.paymentStatus == 'paid') {
+                                                            if (false) {
                                                               final box = context.findRenderObject() as RenderBox?;
                                                               Share.share(
                                                                 invitation.message.toString(),

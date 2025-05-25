@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/firebase_options.dart';
-import 'package:kuuwaa/screens/on_boarding/on_boarding_screen.dart';
 import 'package:kuuwaa/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +14,7 @@ import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
 import 'package:kuuwaa/view_model/wallet/wallet_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 bool initScreen = false;
 
@@ -31,7 +31,7 @@ void main() async {
     badge: true,
     sound: true,
   );
-
+  await initializeDateFormatting('fr_FR', null);
   runApp(const MyApp());
 }
 
@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: appColors.primarySwatchColors,
           fontFamily: Constants.carosSoft,
         ),
-        home: initScreen ? const SplashScreen(): const OnBoardingView(),
+        home: const SplashScreen(),
       )
     );
   }

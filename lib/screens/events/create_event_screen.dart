@@ -1,18 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
-import 'package:kuuwaa/model/address/address_model.dart';
-import 'package:kuuwaa/model/address/country_model.dart';
-import 'package:kuuwaa/model/address/province_model.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
 import 'package:kuuwaa/model/event/event_specification_model.dart';
 import 'package:kuuwaa/model/event/event_template_model.dart';
 import 'package:kuuwaa/model/event/feature_model.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +22,7 @@ import 'package:kuuwaa/screens/events/creation/place_date_hour.dart';
 import 'package:kuuwaa/screens/events/creation/resume.dart';
 import 'package:kuuwaa/screens/events/creation/template_choice.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreateEventScreen extends StatefulWidget {
@@ -46,11 +46,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   String ref = "";
 
   List<EventSpecificationModel> specifications = [];
-
-  int selected = 1;
-  EventModel event = EventModel(
-    paidEvent: false
-  );
 
   var maskFormatter = MaskTextInputFormatter(
       mask: '*## ### ###',
@@ -111,10 +106,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     });
   }
 
+  UserModel user = UserModel();
+
   @override
   void initState() {
     List<dynamic> fetchedCategories = [selectedCategory];
-    eventViewModel.getCategories(context, event.paidEvent == true).then((value) {
+    UserViewModel().getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+
+    eventViewModel.getCategories(context).then((value) {
       for (var element in eventViewModel.categories) {
         fetchedCategories.add(element);
       }
@@ -132,8 +135,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> featuresWidget = [];
-
     final List<String> _pageNames = [
       "Informations générales",
       "Lieu, date et heure",
@@ -238,7 +239,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Padding(
-          padding: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 10),
           child: Column(
             children: [
               Row(
@@ -323,49 +324,17 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                             loadingNext = true;
                           });
                           FocusManager.instance.primaryFocus?.unfocus();
-                          List<dynamic> fetchedCategories = [selectedCategory];
 
-                          EventCategoryModel categoryValue = selectedCategory as EventCategoryModel;
-
-                          if (_controller.page!.toInt() == _pages.length - 1) {
-                            if (startDate == null) {
-                              Utils.flushBarErrorMessage("Vous devez entrer la date de l'évenement", context);
-                            }  else if (selectedProvince["id"] == null || _addressController.text == "") {
-                              Utils.flushBarErrorMessage("Vous devez compléter les informations de l'adress", context);
-                            } else {
-                              event.date = startDate;
-                              event.name = _titleController.text;
-                              event.category = categoryValue;
-                              event.details = _detailsController.text;
-                              event.address = AddressModel(
-                                  country: CountryModel(
-                                      id: 1,
-                                      name: "République Démocratique du Congo"
-                                  ),
-                                  number: _numberController.text,
-                                  province: ProvinceModel.fromJson(selectedProvince),
-                                  street: _addressController.text,
-                                  ref: _placeNameController.text
-                              );
-
-                              eventViewModel.getPacksApi(context);
-                              eventViewModel.getFeaturesApi(context);
-
-                              _controller.nextPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.linear
-                              );
-                            }
-                          } else {
+                          if (_controller.page!.toInt() < _pages.length - 1)  {
                             bool hasErrors = false;
                             if (_controller.page!.toInt() == 0 /* GENERAL INFORMATION */) {
                               if (imageFile == null) {
                                 hasErrors = true;
                                 Utils.flushBarErrorMessage("Vous devez ajouter une image", context);
-                              } else if (categoryValue.id == 0) {
+                              } else if (selectedCategory.id == 0) {
                                 hasErrors = true;
                                 Utils.flushBarErrorMessage("Vous devez choisir une catégorie", context);
-                              } else if (categoryValue.id == null && _categoryController.text == "") {
+                              } else if (selectedCategory.id == null && _categoryController.text == "") {
                                 hasErrors = true;
                                 Utils.flushBarErrorMessage("Vous devez entrer le nom de la catégorie", context);
                               } else if (_titleController.text == "") {
@@ -390,13 +359,48 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                               }
                             }
 
+                            if (_controller.page!.toInt() == 3 /* template */) {
+                              if (eventTemplateModel == null) {
+                                hasErrors = true;
+                                Utils.flushBarErrorMessage("Vous devez choisir un modèle d'invitation l'évenement", context);
+                              }
+                            }
+
                             if (!hasErrors) {
                               _controller.nextPage(
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.linear
                               );
                             }
+                          } else {
+                            setState(() {
+                              loadingNext = true;
+                            });
+                            List<String?> specs = specifications.map((e) => e.name).toList();
+
+                            Map data = {
+                              "title": _titleController.text,
+                              "category_id": selectedCategory.id,
+                              "image": image,
+                              "details": _detailsController.text,
+                              "category_name": _categoryController.text,
+
+                              "start_date": startDate.toString(),
+                              "end_date": endDate.toString(),
+                              "address": _addressController.text,
+                              "place_name": _placeNameController.text,
+                              "specifications": jsonEncode(specs),
+
+                              "template_id": eventTemplateModel!.id,
+                              "user_uid": user.uid
+                            };
+                            await eventViewModel.createEventApi(context, data).then((value) {
+                              setState(() {
+                                loadingNext = true;
+                              });
+                            });
                           }
+
                           setState(() {
                             loadingNext = false;
                           });

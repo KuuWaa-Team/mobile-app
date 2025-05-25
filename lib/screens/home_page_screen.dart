@@ -128,18 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     const SizedBox(height: 10,),
-                    // CupertinoSearchTextField(
-                    //   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    //   style: TextStyle(
-                    //       color: appColors.lightColor
-                    //   ),
-                    //   placeholder: "Rechercher",
-                    //   onChanged: (String value) {
-                    //   },
-                    //   onSubmitted: (String value) {
-                    //   },
-                    // ),
-                    // const SizedBox(height: 15,),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -184,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: Container(
                   alignment: Alignment.topCenter,
-                  child: MyEventsScreen(),
+                  child: const MyEventsScreen(),
                 ),
               ),
             ],

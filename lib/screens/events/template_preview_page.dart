@@ -158,6 +158,7 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
                             ],
                           ),
                           const SizedBox(height: 15),
+                          if (widget.template.hasAnimations == true)
                           Row(
                             children: [
                               const Icon(Icons.animation, size: 20),
@@ -173,6 +174,7 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
                               ),
                             ],
                           ),
+                          if (widget.template.hasAnimations == true)
                           const SizedBox(height: 15),
                           Row(
                             mainAxisSize: MainAxisSize.min,
@@ -181,7 +183,7 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
                               const SizedBox(width: 15),
                               Expanded(
                                 child: MyTextView(
-                                  "Adapté pour mariage, conférences et anniversaires.",
+                                  "Adapté pour ${widget.template.eventsAdapted}",
                                   maxLinesNew: 5,
                                   textAligntNew: TextAlign.left,
                                   styleNew: MyTextStyle(
@@ -194,26 +196,6 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
                             ],
                           ),
                           const SizedBox(height: 15),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.photo_size_select_large, size: 20),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: MyTextView(
-                                  "Taille d'image optimale : 200px X 400px",
-                                  maxLinesNew: 5,
-                                  textAligntNew: TextAlign.left,
-                                  styleNew: MyTextStyle(
-                                    colorNew: appColors.darkGreyText,
-                                    fontWeightNew: FontWeight.w500,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
                         ],
                       ),
                     );

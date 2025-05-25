@@ -15,8 +15,8 @@ class CircleImageShimmer extends StatelessWidget {
         baseColor: appColors.white.withOpacity(.05),
         highlightColor: appColors.white.withOpacity(.1),
         child: Container(
-          width: 50,
-          height: 50,
+          width: 55,
+          height: 55,
           margin: const EdgeInsets.only(right: 15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),

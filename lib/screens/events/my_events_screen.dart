@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/common_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
@@ -117,21 +119,9 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                               EventModel current = events[index];
                               return GestureDetector(
                                 onTap: () {
-                                  if (current.shared != true || current.adminStatus == 'accepted') {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailsScreen(id: current.id!),
-                                      ),
-                                    );
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SharedEventInvitationScreen(event: current),
-                                      ),
-                                    );
-                                  }
+                                  Navigator.push(context, CupertinoPageRoute(
+                                    builder: (context) => DetailsScreen(id: current.id!),
+                                  ));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -143,15 +133,16 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                     borderRadius: BorderRadius.circular(
                                       ResponsiveFlutter.of(context).moderateScale(15),
                                     ),
+                                    boxShadow: [Utils.customShadow()]
                                   ),
                                   child: Row(
                                     children: [
                                       Stack(
                                         children: [
-                                          CircleImageShimmer(),
+                                          const CircleImageShimmer(),
                                           Container(
-                                            width: 50,
-                                            height: 50,
+                                            width: 55,
+                                            height: 55,
                                             decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(10)
                                             ),
@@ -181,7 +172,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       MyTextView(
-                                                        current.name.toString(),
+                                                        current.title.toString(),
                                                         textAligntNew: TextAlign.start,
                                                         maxLineWrap: true,
                                                         styleNew: MyTextStyle(
@@ -220,7 +211,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                                         width: ResponsiveFlutter.of(context).moderateScale(6),
                                                       ),
                                                       MyTextView(
-                                                        DateFormat('dd MMM, yyyy').format(current.date!),
+                                                        current.formattedDate(),
                                                         textAligntNew: TextAlign.start,
                                                         maxLineWrap: true,
                                                         styleNew: MyTextStyle(
@@ -241,7 +232,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                                         width: ResponsiveFlutter.of(context).moderateScale(6),
                                                       ),
                                                       MyTextView(
-                                                        DateFormat('kk:mm').format(current.date!),
+                                                        DateFormat('kk:mm').format(current.startDate!),
                                                         textAligntNew: TextAlign.start,
                                                         maxLineWrap: true,
                                                         styleNew: MyTextStyle(
@@ -252,26 +243,6 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                                       ),
                                                     ],
                                                   ),
-                                                  if (current.paymentStatus == 'waiting' && current.shared != true)
-                                                    const SizedBox(width: 10,),
-                                                  if (current.paymentStatus == 'waiting' && current.shared != true)
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(20),
-                                                          color: Colors.red
-                                                      ),
-                                                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                                                      child: MyTextView(
-                                                        "À PAYER",
-                                                        textAligntNew: TextAlign.start,
-                                                        maxLineWrap: true,
-                                                        styleNew: MyTextStyle(
-                                                          colorNew: appColors.lightColor,
-                                                          fontWeightNew: FontWeight.w500,
-                                                          size: ResponsiveFlutter.of(context).fontSize(1.1),
-                                                        ),
-                                                      ),
-                                                    ),
                                                   if (current.shared == true)
                                                     const SizedBox(width: 10,),
                                                   if (current.shared == true)
@@ -279,7 +250,6 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                                       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
                                                       decoration: BoxDecoration(
                                                           borderRadius: BorderRadius.circular(20),
-                                                          color: current.adminStatus == 'waiting' ? Colors.orange : Colors.blue
                                                       ),
                                                       child: Row(
                                                         mainAxisAlignment: MainAxisAlignment.center,

@@ -522,6 +522,54 @@ class _ResumeState extends State<Resume> {
                     ),
                   ],
                 ),
+                Divider(color: appColors.lightColor.withOpacity(.1),
+                    height: 20,
+                    thickness: .5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MyTextView(
+                      "Adapté pour",
+                      textAligntNew: TextAlign.center,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.lightColor.withOpacity(.5),
+                        fontWeightNew: FontWeight.w400,
+                        size: ResponsiveFlutter.of(context).fontSize(1.5),
+                      ),
+                    ),
+                    const SizedBox(width: 20,),
+                    Expanded(
+                      child: MyTextView(
+                        widget.eventTemplateModel!.eventsAdapted.toString(),
+                        textAligntNew: TextAlign.right,
+                        maxLinesNew: 100,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(color: appColors.lightColor.withOpacity(.1),
+                    height: 20,
+                    thickness: .5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MyTextView(
+                      "Inclu annimations",
+                      textAligntNew: TextAlign.center,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.lightColor.withOpacity(.5),
+                        fontWeightNew: FontWeight.w400,
+                        size: ResponsiveFlutter.of(context).fontSize(1.5),
+                      ),
+                    ),
+                    const SizedBox(width: 20,),
+                    Icon(widget.eventTemplateModel!.hasAnimations == true ? Icons.check : Icons.close, size: 20,),
+                  ],
+                ),
               ],
             )
         ),

@@ -182,7 +182,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
   void initState() {
     eventViewModel.getEventDetailApi(context, widget.id);
     List<dynamic> fetchedCategories = [dropDownValue];
-    eventViewModel.getCategories(context, paid == true).then((value) {
+    eventViewModel.getCategories(context).then((value) {
       for (var element in eventViewModel.categories) {
         fetchedCategories.add(element);
       }
@@ -277,21 +277,14 @@ class _EditEventScreenState extends State<EditEventScreen> {
                             EventModel event = value.event.data!;
                             if (!loadedStreet) {
                               loadedStreet = true;
-                              street = event.address!.street ?? "";
+                              street = event.address ?? "";
                             }
                             paid = event.paidEvent == true;
                             if (!loaded) {
                               loaded = true;
-                              _titleController.text = event.name!;
-                              date = DateTime.parse(event.date.toString());
+                              _titleController.text = event.title!;
+                              date = DateTime.parse(event.startDate.toString());
                               _detailsController.text = event.details.toString();
-                              _numberController.text = event.address!.number.toString();
-                              _streetController.text = event.address!.street.toString();
-                              if (event.address!.ref != null && event.address!.ref != "null") {
-                                _refController.text = event.address!.ref.toString();
-                              }
-                              selectedProvince["name"] = event.address!.province!.name.toString();
-                              selectedProvince["id"] = event.address!.province!.id.toString();
                               for (var element in items) {
                                 if (element.name == event.category!.name!) {
                                   dropDownValue = element;
@@ -754,7 +747,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                               SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                               Flexible(
                                                 child: MyTextView(
-                                                  selectedProvince["id"] == null || street == "" ? "Adresse" : street + ". " +  selectedProvince["name"] + " (" + event.address!.ref.toString() + ")",
+                                                  selectedProvince["id"] == null || street == "" ? "Adresse" : street + ". " +  selectedProvince["name"] + " (" + (event.placeName ?? "") + ")",
                                                   textAligntNew: TextAlign.start,
                                                   maxLinesNew: 5,
                                                   maxLineWrap: true,
@@ -817,21 +810,11 @@ class _EditEventScreenState extends State<EditEventScreen> {
                                 const SizedBox(height: 20,),
                                 GestureDetector(
                                   onTap: () async {
-                                    event.name = _titleController.text;
+                                    event.title = _titleController.text;
                                     event.category = dropDownValue as EventCategoryModel;
                                     event.details = _detailsController.text;
-                                    event.date = date;
-                                    event.address = AddressModel(
-                                        country: CountryModel(
-                                            id: 1,
-                                            name: "République Démocratique du Congo"
-                                        ),
-                                        number: _numberController.text,
-                                        province: ProvinceModel.fromJson(selectedProvince),
-                                        street: _streetController.text,
-                                        ref: _refController.text
-                                    );
-                                    eventViewModel.editEventApi(context, event, event.id!);
+                                    event.startDate = date;
+                                    eventViewModel.editEventApi(context, {}, event.id!);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),

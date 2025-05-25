@@ -160,7 +160,7 @@ class _InvitationEventScreenState extends State<InvitationEventScreen> {
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
                                                           MyTextView(
-                                                            current.event!.name.toString(),
+                                                            current.event!.title.toString(),
                                                             textAligntNew: TextAlign.start,
                                                             maxLineWrap: true,
                                                             styleNew: MyTextStyle(
@@ -195,7 +195,7 @@ class _InvitationEventScreenState extends State<InvitationEventScreen> {
                                                         width: ResponsiveFlutter.of(context).moderateScale(6),
                                                       ),
                                                       MyTextView(
-                                                        DateFormat('dd MMM, yyyy').format(current.event!.date!),
+                                                        DateFormat('dd MMM, yyyy').format(current.event!.startDate!),
                                                         textAligntNew: TextAlign.start,
                                                         maxLineWrap: true,
                                                         styleNew: MyTextStyle(
@@ -216,7 +216,7 @@ class _InvitationEventScreenState extends State<InvitationEventScreen> {
                                                         width: ResponsiveFlutter.of(context).moderateScale(6),
                                                       ),
                                                       MyTextView(
-                                                        DateFormat('kk:mm').format(current.event!.date!),
+                                                        DateFormat('kk:mm').format(current.event!.startDate!),
                                                         textAligntNew: TextAlign.start,
                                                         maxLineWrap: true,
                                                         styleNew: MyTextStyle(

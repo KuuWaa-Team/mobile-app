@@ -63,7 +63,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (widget.event.paymentStatus != "paid") {
+                    if (true) {
                       showDialog(
                         context: context,
                         builder: (context) {

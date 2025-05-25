@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -63,6 +64,7 @@ class EventViewModel with ChangeNotifier{
     setEventsList(ApiResponse.loading());
     setLoading(true);
     await _repository.listingApi(context: context, id: id).then((value) {
+      print(value);
       setLoading(false);
       if (value['success'] == true  ) {
         List eventsJson = value['data'];
@@ -85,8 +87,10 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
-  Future<bool> getCategories(BuildContext context, bool paid) async {
-    await _repository.getCategoriesApi(context: context, paid: paid).then((value) {
+  Future<bool> getCategories(BuildContext context) async {
+    await _repository.getCategoriesApi(context: context).then((value) {
+      print(value);
+
       if (value['success'] == true  ) {
         List categoriesJson = value['data'];
         List<EventCategoryModel> categoriesData = [];
@@ -99,6 +103,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
       setLoading(false);
     });
     return true;
@@ -106,6 +111,7 @@ class EventViewModel with ChangeNotifier{
 
   Future<bool> getTemplates(BuildContext context) async {
     await _repository.getTemplatesApi(context: context).then((value) {
+      print(value);
       if (value['success'] == true  ) {
         List templatesJson = value['templates'];
         List<EventTemplateModel> templatesData = [];
@@ -118,6 +124,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
       setLoading(false);
     });
     return true;
@@ -175,65 +182,22 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
-  Future<dynamic> createEventApi (BuildContext context, EventModel event, var image) async {
+  Future<dynamic> createEventApi (BuildContext context, Map data) async {
     setLoading(true);
-    Map data = {
-      "name": event.name,
-      "paid": event.paidEvent,
-      "date": event.date.toString(),
-      "province_id": event.address!.province!.id,
-      "street": event.address!.street,
-      "number": event.address!.number,
-      "ref": event.address!.ref,
-      "details": event.details,
-      "image": image
-    };
-
-    if (event.category!.id != null) {
-      data["category_id"] = event.category!.id;
-    } else {
-      data["category_name"] = event.category!.name;
-    }
-
-    if (event.paidEvent == true) {
-
-    } else {
-      data["pack_id"] = event.eventPack!.id;
-    }
-
-    if (event.features!.isNotEmpty) {
-      int i = 1;
-      for (var element in event.features!) {
-        data["feature_${i}_id"] = element.id;
-        i++;
-      }
-    }
-
-    bool success = false;
-    dynamic eventId;
 
     await _repository.createEventApi(context: context, data: data).then((value) {
       if (value['success'] == true) {
         setLoading(false);
-        success = true;
-        eventId = value['eventId'];
-        // Utils.toastMessage("Évenement créé avec succès");
+        Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (route) => BottomBarScreen()), (route) => false);
       } else {
+        print(value);
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
     }).onError((error, stackTrace) {
-      if (kDebugMode) {
-        print(error);
-      }
+      print(error);
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
-
-    if (success) {
-      return eventId;
-    } else {
-      return false;
-    }
   }
 
   Future<bool> editEventImageApi (BuildContext context, var image, int id) async {
@@ -328,23 +292,8 @@ class EventViewModel with ChangeNotifier{
     return response;
   }
 
-  Future<bool> editEventApi (BuildContext context, EventModel event, int id) async {
+  Future<bool> editEventApi (BuildContext context, Map data, int id) async {
     setLoading(true);
-    Map data = {
-      "name": event.name,
-      "date": event.date.toString(),
-      "details": event.details,
-      "province_id": event.address!.province!.id,
-      "street": event.address!.street,
-      "number": event.address!.number,
-      "ref": event.address!.ref,
-    };
-
-    if (event.category!.id != null) {
-      data["category_id"] = event.category!.id;
-    } else {
-      data["category_name"] = event.category!.name;
-    }
 
     await _repository.editEventApi(context: context, data: data, id: id).then((value) {
       if (value['success'] == true  ) {

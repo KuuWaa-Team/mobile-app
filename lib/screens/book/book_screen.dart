@@ -267,7 +267,7 @@ class _BookScreenState extends State<BookScreen> {
             const SizedBox(height: 30,),
             SizedBox(
               width: ResponsiveFlutter.of(context).moderateScale(200),
-              child: Text(widget.event.name!, style: TextStyle(
+              child: Text(widget.event.title!, style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: appColors.btnColor
               ), textAlign: TextAlign.center,),
@@ -398,7 +398,7 @@ class _BookScreenState extends State<BookScreen> {
               padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
               child: GestureDetector(
                 onTap: () {
-                  Utils.openUrl("https://api.whatsapp.com/send?phone=+243820793972&text=Bonjour KuuWaa,\nNous souhaitons avoir en PDF notre livre d'or pour l'évenement *${widget.event.category!.name} ${widget.event.name}*.\nMerci");
+                  Utils.openUrl("https://api.whatsapp.com/send?phone=+243820793972&text=Bonjour KuuWaa,\nNous souhaitons avoir en PDF notre livre d'or pour l'évenement *${widget.event.category!.name} ${widget.event.title}*.\nMerci");
                 },
                 child: CommonButton(
                   loading: loading,

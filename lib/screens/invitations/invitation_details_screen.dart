@@ -151,7 +151,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         MyTextView(
-                                          invitation.event!.name.toString(),
+                                          invitation.event!.title.toString(),
                                           textAligntNew: TextAlign.start,
                                           maxLineWrap: true,
                                           styleNew: MyTextStyle(
@@ -225,7 +225,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                             ),
                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(5)),
                                             MyTextView(
-                                              DateFormat('dd MMM, yyyy').format(invitation.event!.date!),
+                                              DateFormat('dd MMM, yyyy').format(invitation.event!.startDate!),
                                               textAligntNew: TextAlign.start,
                                               maxLineWrap: true,
                                               styleNew: MyTextStyle(
@@ -246,7 +246,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                             ),
                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(5)),
                                             MyTextView(
-                                              DateFormat('kk:mm').format(invitation.event!.date!),
+                                              DateFormat('kk:mm').format(invitation.event!.startDate!),
                                               textAligntNew: TextAlign.start,
                                               maxLineWrap: true,
                                               styleNew: MyTextStyle(
@@ -257,7 +257,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                             ),
                                           ],
                                         ),
-                                        if (invitation.event!.address!.ref != null && invitation.event!.address!.ref != 'null' && invitation.event!.address!.ref != '')
+                                        if (invitation.event!.placeName != null && invitation.event!.placeName != 'null' && invitation.event!.placeName != '')
                                           Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -268,7 +268,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                               ),
                                               SizedBox(width: ResponsiveFlutter.of(context).moderateScale(5)),
                                               MyTextView(
-                                                invitation.event!.address!.ref.toString(),
+                                                invitation.event!.placeName ?? "",
                                                 textAligntNew: TextAlign.start,
                                                 maxLineWrap: true,
                                                 styleNew: MyTextStyle(
@@ -301,7 +301,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                           ),
                                           SizedBox(width: ResponsiveFlutter.of(context).moderateScale(8)),
                                           Flexible(
-                                            child: MyTextView(invitation.event!.address!.province!.name! + ", " + invitation.event!.address!.street.toString(),
+                                            child: MyTextView(invitation.event!.address ?? "",
                                               textAligntNew: TextAlign.start,
                                               maxLinesNew: 5,
                                               styleNew: MyTextStyle(
@@ -315,150 +315,6 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 10,),
-                                    if (invitation.bookSent != true && (invitation.event!.featureSlugs != null || invitation.event!.featureSlugs!.contains("BOOK")))
-                                    GestureDetector(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (context) {
-                                            return StatefulBuilder(
-                                              builder: (context, setState) {
-                                                return Dialog(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                    ),
-                                                    child: Stack(
-                                                      children: [
-                                                        Positioned(
-                                                            right: 0,
-                                                            top: 0,
-                                                            child: IconButton(onPressed: (){
-                                                              Navigator.pop(context);
-                                                            }, icon: const Icon(Icons.close)
-                                                            )
-                                                        ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                                                          child:
-                                                          Column(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              const SizedBox(
-                                                                width: 200,
-                                                                child: Text("Laissez un mot qui restera au livre d'or", style: TextStyle(
-                                                                    fontWeight: FontWeight.bold
-                                                                ), textAlign: TextAlign.center,),
-                                                              ),
-                                                              const SizedBox(height: 20,),
-                                                              Container(
-                                                                width: double.infinity,
-                                                                padding: EdgeInsets.symmetric(
-                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
-                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(15),
-                                                                ),
-                                                                decoration: BoxDecoration(
-                                                                  border: Border.all(color: appColors.borderColor, width: 1),
-                                                                  borderRadius: BorderRadius.circular(
-                                                                    ResponsiveFlutter.of(context).moderateScale(20),
-                                                                  ),
-                                                                ),
-                                                                child: TextField(
-                                                                  style: MyTextStyle(
-                                                                    colorNew: appColors.borderColor,
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                  cursorColor: appColors.borderColor,
-                                                                  keyboardType: TextInputType.multiline,
-                                                                  expands: false,
-                                                                  controller: _messageController,
-                                                                  maxLines: 5,
-                                                                  decoration: InputDecoration(
-                                                                    border: InputBorder.none,
-                                                                    hintText: "Entrez votre message",
-                                                                    hintStyle: MyTextStyle(
-                                                                      colorNew: appColors.borderColor,
-                                                                      fontWeightNew: FontWeight.w400,
-                                                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                    ),
-                                                                    isDense: true,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(height: 20,),
-                                                              Row(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    onTap: () async {
-                                                                      if (_messageController.text == "") {
-                                                                        Utils.flushBarErrorMessage("Vous devez saisir un message", context);
-                                                                      } else {
-                                                                        setState(() {
-                                                                          loadingBook = true;
-                                                                        });
-                                                                        eventViewModel.addBookApi(context, {
-                                                                          "invitationId": invitation.id,
-                                                                          "message": _messageController.text,
-                                                                        }, invitation.event!.id!).then((value) {
-                                                                          setState(() {
-                                                                            loadingBook = false;
-                                                                            invitation.bookSent = true;
-                                                                          });
-                                                                          Navigator.pop(context);
-                                                                        });
-                                                                      }
-                                                                    },
-                                                                    child: CommonButton(
-                                                                      title: "Envoyer",
-                                                                      loading: loadingBook,
-                                                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                );
-                                              },
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: Container(
-                                        height: ResponsiveFlutter.of(context).moderateScale(40),
-                                        margin: EdgeInsets.only(
-                                          bottom: ResponsiveFlutter.of(context).moderateScale(10),
-                                        ),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            ResponsiveFlutter.of(context).moderateScale(25),
-                                          ), // Creates border
-                                          color: appColors.btnColor,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            MyTextView(
-                                              "Laisser un message au livre d'or ",
-                                              textAligntNew: TextAlign.start,
-                                              maxLineWrap: true,
-                                              styleNew: MyTextStyle(
-                                                colorNew: appColors.white,
-                                                fontWeightNew: FontWeight.w600,
-                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    if (invitation.event!.featureSlugs != null && invitation.event!.featureSlugs!.contains("BEVERAGE") && invitation.event!.beveragesCount != null && invitation.event!.beveragesCount! > 0 && invitation.beverage == null)
                                     GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(

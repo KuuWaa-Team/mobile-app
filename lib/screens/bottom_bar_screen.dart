@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kuuwaa/common/app_colors.dart';
+import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
@@ -106,90 +107,135 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                     left: ResponsiveFlutter.of(context).moderateScale(20),
                   ),
                   child: SizedBox(
-                    height: ResponsiveFlutter.of(context).verticalScale(65),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              tabBar = const HomeScreen();
-                              home = true;
-                              profile = false;
-                              wallet = false;
-                              setting = false;
-                            });
-                          },
-                          child: Container(
-                            height: ResponsiveFlutter.of(context).verticalScale(40),
-                            alignment: Alignment.center,
-                            child: Image(
-                              image: AssetImage(home! ? ImagePath.homeSelect : ImagePath.home),
-                              height: 30,
+                    height: ResponsiveFlutter.of(context).verticalScale(60),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                tabBar = const HomeScreen();
+                                home = true;
+                                profile = false;
+                                wallet = false;
+                                setting = false;
+                              });
+                            },
+                            child: Container(
+                              height: ResponsiveFlutter.of(context).verticalScale(40),
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Icon(home! ? Icons.grid_view_rounded : Icons.grid_view, color: home! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 30,),
+                                  MyTextView(
+                                    "Accueil",
+                                    textAligntNew: TextAlign.start,
+                                    maxLinesNew: 3,
+                                    styleNew: MyTextStyle(
+                                      colorNew: home! ? appColors.btnColor : appColors.iconColor.withOpacity(.5),
+                                      size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              tabBar = const WalletScreen();
-                              home = false;
-                              profile = false;
-                              wallet = true;
-                              setting = false;
-                            });
-                          },
-                          child: Container(
-                            height: ResponsiveFlutter.of(context).verticalScale(40),
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Icon(wallet! ? Icons.wallet_rounded : Icons.wallet_rounded, color: wallet! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 40,),
-                              ],
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                tabBar = const WalletScreen();
+                                home = false;
+                                profile = false;
+                                wallet = true;
+                                setting = false;
+                              });
+                            },
+                            child: Container(
+                              height: ResponsiveFlutter.of(context).verticalScale(40),
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Icon(wallet! ? CupertinoIcons.money_dollar_circle_fill : CupertinoIcons.money_dollar_circle, color: wallet! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 30,),
+                                  MyTextView(
+                                    "Recharges",
+                                    textAligntNew: TextAlign.start,
+                                    maxLinesNew: 3,
+                                    styleNew: MyTextStyle(
+                                      colorNew: wallet! ? appColors.btnColor : appColors.iconColor.withOpacity(.5),
+                                      size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                               tabBar = const ProfileScreen();
-                               home = false;
-                               profile = true;
-                               wallet = false;
-                               setting = false;
-                             });
-                          },
-                          child: Container(
-                            height: ResponsiveFlutter.of(context).verticalScale(40),
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Icon(profile! ? CupertinoIcons.person_alt_circle_fill : CupertinoIcons.person_alt_circle, color: profile! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 40,),
-                              ],
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                 tabBar = const ProfileScreen();
+                                 home = false;
+                                 profile = true;
+                                 wallet = false;
+                                 setting = false;
+                               });
+                            },
+                            child: Container(
+                              height: ResponsiveFlutter.of(context).verticalScale(40),
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Icon(profile! ? Icons.manage_accounts_rounded : Icons.manage_accounts_outlined, color: profile! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 30,),
+                                      MyTextView(
+                                        "Mon compte",
+                                        textAligntNew: TextAlign.start,
+                                        maxLinesNew: 3,
+                                        styleNew: MyTextStyle(
+                                          colorNew: profile! ? appColors.btnColor : appColors.iconColor.withOpacity(.5),
+                                          size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              tabBar = const SettingScreen();
-                              home = false;
-                              profile = false;
-                              wallet = false;
-                              setting = true;
-                            });
-                          },
-                          child: Container(
-                            height: ResponsiveFlutter.of(context).verticalScale(40),
-                            alignment: Alignment.center,
-                            child: Image(
-                              image: AssetImage(setting! ? imagePath.settingSelect : ImagePath.setting),
-                              height: 30,
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                tabBar = const SettingScreen();
+                                home = false;
+                                profile = false;
+                                wallet = false;
+                                setting = true;
+                              });
+                            },
+                            child: Container(
+                              height: ResponsiveFlutter.of(context).verticalScale(40),
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Icon(setting! ? CupertinoIcons.gear_solid : CupertinoIcons.gear, color: setting! ? appColors.btnColor : appColors.iconColor.withOpacity(.5), size: 30,),
+                                  MyTextView(
+                                    "Parametres",
+                                    textAligntNew: TextAlign.start,
+                                    maxLinesNew: 3,
+                                    styleNew: MyTextStyle(
+                                      colorNew: setting! ? appColors.btnColor : appColors.iconColor.withOpacity(.5),
+                                      size: ResponsiveFlutter.of(context).fontSize(1.3),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
