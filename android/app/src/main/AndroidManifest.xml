@@ -15,7 +15,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
         android:label="KuuWaa">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAvXtXVRVf5OMYoeRtzGc-6TIKc_TnL8ys" />
 
         <activity android:name="io.flutter.plugins.urllauncher.WebViewActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"

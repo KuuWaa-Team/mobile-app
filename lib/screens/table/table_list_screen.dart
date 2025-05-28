@@ -58,6 +58,7 @@ class _TableListScreenState extends State<TableListScreen> {
               title: "Gestion des tables",
               backArrow: true,
             ),
+            const SizedBox(height: 20,),
             Row(
               mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
@@ -192,7 +193,7 @@ class _TableListScreenState extends State<TableListScreen> {
                           Strings.add,
                           textAligntNew: TextAlign.center,
                           styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
+                            colorNew: appColors.white,
                             fontWeightNew: FontWeight.w600,
                             size: ResponsiveFlutter.of(context).fontSize(1.5),
                           ),
@@ -208,8 +209,8 @@ class _TableListScreenState extends State<TableListScreen> {
                   child: Container(
                     width: 50,
                     decoration: BoxDecoration(
-                        color: appColors.appLightColor,
-                        borderRadius: BorderRadius.circular(30)
+                      color: appColors.black,
+                      shape: BoxShape.circle
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     child: const Row(
@@ -492,9 +493,9 @@ class _TableListScreenState extends State<TableListScreen> {
                                       child: Container(
                                         width: double.infinity,
                                         margin: EdgeInsets.only(
-                                          bottom: ResponsiveFlutter.of(context).moderateScale(15),
+                                          bottom: ResponsiveFlutter.of(context).moderateScale(5),
                                         ),
-                                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                        padding: const EdgeInsets.fromLTRB(5, 8,8, 8),
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(15),
@@ -521,7 +522,7 @@ class _TableListScreenState extends State<TableListScreen> {
                                                                   "Table",
                                                                   textAligntNew: TextAlign.center,
                                                                   styleNew: MyTextStyle(
-                                                                    colorNew: appColors.lightPinkColor.withOpacity(.5),
+                                                                    colorNew: appColors.btnColor.withOpacity(.8),
                                                                     fontWeightNew: FontWeight.w400,
                                                                     size: ResponsiveFlutter.of(context).fontSize(1.5),
                                                                   ),

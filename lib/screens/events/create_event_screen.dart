@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kuuwaa/screens/events/creation/event_general_information.dart';
+import 'package:kuuwaa/screens/events/creation/map_picker_view.dart';
 import 'package:kuuwaa/screens/events/creation/other_information.dart';
 import 'package:kuuwaa/screens/events/creation/place_date_hour.dart';
 import 'package:kuuwaa/screens/events/creation/resume.dart';
@@ -41,6 +43,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   bool loadingCreation = false;
   bool loadingNext = false;
   bool paying = false;
+
+  LatLng? placeCoords;
 
   String street = "";
   String ref = "";
@@ -181,6 +185,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         },
         placeNameController: _placeNameController,
         addressController: _addressController,
+        onCoordinatesPicked: (latLng) {
+          setState(() {
+            placeCoords = latLng;
+          });
+        },
       ),
       OtherInformation(
         specifications: specifications,
@@ -353,9 +362,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                               } else if (endDate == null) {
                                 hasErrors = true;
                                 Utils.flushBarErrorMessage("Vous devez entrer la date et l'heure de la fin de l'évenement", context);
-                              } else if (_addressController.text == "") {
+                              } else if (placeCoords == null) {
                                 hasErrors = true;
-                                Utils.flushBarErrorMessage("Vous devez entrer l'adresse de l'évenement", context);
+                                Utils.flushBarErrorMessage("Vous devez confirmer le lieu sur le map", context);
                               }
                             }
 
@@ -389,6 +398,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                               "end_date": endDate.toString(),
                               "address": _addressController.text,
                               "place_name": _placeNameController.text,
+                              "place_longitude": placeCoords!.longitude.toString(),
+                              "place_latitude": placeCoords!.latitude.toString(),
                               "specifications": jsonEncode(specs),
 
                               "template_id": eventTemplateModel!.id,

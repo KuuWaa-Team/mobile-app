@@ -228,6 +228,7 @@ class InvitationViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
       setLoading(false);
     });
     return true;

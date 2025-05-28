@@ -22,8 +22,11 @@ class EventModel {
   int? adminsCount;
   int? adminId;
   String? details;
+  bool? canSendInvitations;
   String? imagePath;
   String? thumbPath;
+  String? placeLongitude;
+  String? placeLatitude;
   EventCategoryModel? category;
   EventTemplateModel? template;
   bool? paidEvent;
@@ -40,6 +43,7 @@ class EventModel {
     this.id,
     this.title,
     this.startDate,
+    this.canSendInvitations,
     this.endDate,
     this.beverages,
     this.books,
@@ -59,21 +63,27 @@ class EventModel {
     this.template,
     this.placeName,
     this.hasTables,
+    this.placeLatitude,
+    this.placeLongitude,
     this.hasBeverage,
     this.hasBook
   });
 
   EventModel.fromJson(Map<String, dynamic> json) {
+    print(json);
     id = json['id'];
     title = json['title'];
     startDate = DateTime.parse(json['startDate'].toString());
     endDate = DateTime.parse(json['endDate'].toString());
     details = json['details'];
+    canSendInvitations = json['canSendInvitations'];
     placeName = json['placeName'];
     imagePath = json['imagePath'];
     thumbPath = json['thumbPath'];
     paidEvent = json['paidEvent'];
     hasBook = json['hasBook'];
+    placeLongitude = json['placeLongitude'];
+    placeLatitude = json['placeLatitude'];
     hasBeverage = json['hasBeverage'];
     hasTables = json['hasTables'];
     shared = json['shared'];
@@ -123,9 +133,12 @@ class EventModel {
     data['imagePath'] = imagePath;
     data['thumbPath'] = thumbPath;
     data['paidEvent'] = paidEvent;
+    data['placeLongitude'] = placeLongitude;
+    data['placeLongitude'] = placeLongitude;
     data['category'] = category;
     data['adminId'] = adminId;
     data['eventSpecifications'] = specifications;
+    data['canSendInvitations'] = canSendInvitations;
     data['shared'] = shared;
     data['tablesCount'] = tablesCount;
     data['beveragesCount'] = beveragesCount;
@@ -141,17 +154,26 @@ class EventModel {
   String formattedDate({String locale = 'fr_FR'}) {
     if (startDate == null || endDate == null) return "";
 
-    final dateFormat = DateFormat.yMMMMEEEEd(locale);
+    final dayFormat = DateFormat.d(locale);
+    final monthFormat = DateFormat.MMMM(locale);
+    final yearFormat = DateFormat.y(locale);
+    final fullDateFormat = DateFormat.yMMMMEEEEd(locale);
     final shortFormat = DateFormat.yMMMMd(locale);
 
     if (startDate!.year == endDate!.year &&
         startDate!.month == endDate!.month &&
         startDate!.day == endDate!.day) {
-      return dateFormat.format(startDate!);
+      return fullDateFormat.format(startDate!);
+    } else if (startDate!.year == endDate!.year &&
+        startDate!.month == endDate!.month) {
+      return 'Du ${dayFormat.format(startDate!)} au ${dayFormat.format(endDate!)} ${monthFormat.format(startDate!)} ${yearFormat.format(startDate!)}';
+    } else if (startDate!.year == endDate!.year) {
+      return 'Du ${dayFormat.format(startDate!)} ${monthFormat.format(startDate!)} au ${dayFormat.format(endDate!)} ${monthFormat.format(endDate!)} ${yearFormat.format(startDate!)}';
     } else {
       return 'Du ${shortFormat.format(startDate!)} au ${shortFormat.format(endDate!)}';
     }
   }
+
 
   String formattedHour() {
     if (startDate == null || endDate == null) return "";

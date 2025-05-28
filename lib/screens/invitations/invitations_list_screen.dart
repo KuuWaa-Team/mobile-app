@@ -14,6 +14,7 @@ import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
@@ -126,6 +127,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
               title: Strings.myInvites,
               backArrow: true,
             ),
+            const SizedBox(height: 20,),
             Row(
               mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
@@ -267,6 +269,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                             icon: true,
                                           ),
                                         ),
+                                        if (widget.event.hasTables == true)
                                         Container(
                                           height: ResponsiveFlutter.of(context).verticalScale(40),
                                           padding: EdgeInsets.symmetric(
@@ -323,9 +326,10 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                           ),
                                         ),
                                         const SizedBox(height: 5,),
+                                        if (widget.event.hasTables == true)
                                         Text("Pour attacher une table vous devez commencer par enrégistrer des tables dans le ménu Table. (Vous pouvez faire cette opération plutard puis modifier l'invitation pour attacher la table)", style: TextStyle(
                                           fontSize: 9,
-                                          color: Colors.white.withOpacity(.5),
+                                          color: Colors.black.withOpacity(.5),
                                           fontStyle: FontStyle.italic
                                         ),),
                                         const SizedBox(height: 10,),
@@ -390,7 +394,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 20, right: 10),
-                    width: MediaQuery.of(context).size.width - 100,
+                    width: MediaQuery.of(context).size.width - 95,
                     decoration: BoxDecoration(
                         color: appColors.btnColor,
                         borderRadius: BorderRadius.circular(30)
@@ -405,7 +409,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                           Strings.add,
                           textAligntNew: TextAlign.center,
                           styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
+                            colorNew: appColors.white,
                             fontWeightNew: FontWeight.w600,
                             size: ResponsiveFlutter.of(context).fontSize(1.5),
                           ),
@@ -421,8 +425,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                   child: Container(
                     width: 50,
                     decoration: BoxDecoration(
-                        color: appColors.appLightColor,
-                        borderRadius: BorderRadius.circular(30)
+                      color: appColors.black,
+                      shape: BoxShape.circle
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: const Row(
@@ -1008,6 +1012,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                           ),
                                                         ),
                                                         const SizedBox(height: 10,),
+                                                        if (widget.event.hasTables == true)
                                                         Container(
                                                           decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(5),
@@ -1038,8 +1043,10 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ],
                                                           ),
                                                         ),
+                                                        if (widget.event.hasTables == true)
                                                           const SizedBox(height: 10,),
-                                                        Container(
+                                                        if (widget.event.hasBeverage == true)
+                                                          Container(
                                                           decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(5),
                                                               color: appColors.appLightColor
@@ -1069,7 +1076,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                        const SizedBox(height: 10,),
+                                                        if (widget.event.hasBeverage == true)
+                                                          const SizedBox(height: 10,),
                                                         if (widget.event.shared != true)
                                                         GestureDetector(
                                                           onTap: () {
@@ -1112,7 +1120,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                                   textAligntNew: TextAlign.center,
                                                                                   maxLinesNew: 4,
                                                                                   styleNew: MyTextStyle(
-                                                                                    colorNew: appColors.lightColor,
+                                                                                    colorNew: appColors.black,
                                                                                     fontWeightNew: FontWeight.w600,
                                                                                     size: ResponsiveFlutter.of(context).fontSize(2),
                                                                                   ),
@@ -1343,11 +1351,11 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                   textAligntNew: TextAlign.center,
                                                                   styleNew: MyTextStyle(
                                                                     fontWeightNew: FontWeight.w400,
-                                                                    colorNew: Colors.white,
+                                                                    colorNew: Colors.black,
                                                                     size: ResponsiveFlutter.of(context).fontSize(1.8),
                                                                   ),
                                                                 ),
-                                                                Icon(Icons.edit, color: appColors.white, size: 15,)
+                                                                Icon(Icons.edit, color: appColors.black, size: 15,)
                                                               ],
                                                             ),
                                                           ),
@@ -1388,13 +1396,12 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         if (widget.event.shared != true)
                                                         GestureDetector(
                                                           onTap: () {
-                                                            if (false) {
-                                                              final box = context.findRenderObject() as RenderBox?;
-                                                              Share.share(
-                                                                invitation.message.toString(),
-                                                                sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                                                            if (widget.event.canSendInvitations == true) {
+                                                              // Reduce credits
+                                                              SharePlus.instance.share(
+                                                                  ShareParams(text: invitation.message)
                                                               );
-                                                            } else {
+                                                            }  else {
                                                               showDialog(
                                                                   context: context,
                                                                   builder: (
@@ -1435,117 +1442,64 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                                     mainAxisSize: MainAxisSize
                                                                                         .min,
                                                                                     children: [
-                                                                                      const Icon(CupertinoIcons.xmark_circle, color: Colors.red, size: 60,),
+                                                                                      Image.asset("assets/icon/coins.png", width: 50,),
                                                                                       const SizedBox(
                                                                                         height: 10,),
                                                                                       Column(
                                                                                         mainAxisSize: MainAxisSize
                                                                                             .min,
                                                                                         children: [
-                                                                                          const Text(
-                                                                                            "Vous ne pouvez pas partager l'invitation",
-                                                                                            style: TextStyle(
-                                                                                                fontWeight: FontWeight
-                                                                                                    .bold,
-                                                                                                color: Colors
-                                                                                                    .red
+                                                                                          MyTextView(
+                                                                                            "Vous ne pouvez pas partager cette invitation",
+                                                                                            textAligntNew: TextAlign
+                                                                                                .start,
+                                                                                            maxLineWrap: true,
+                                                                                            styleNew: MyTextStyle(
+                                                                                              colorNew: appColors
+                                                                                                  .red,
+                                                                                              fontWeightNew: FontWeight
+                                                                                                  .w600,
+                                                                                              size: ResponsiveFlutter
+                                                                                                  .of(
+                                                                                                  context)
+                                                                                                  .fontSize(
+                                                                                                  2),
                                                                                             ),
-                                                                                            textAlign: TextAlign
-                                                                                                .center,),
+                                                                                          ),
                                                                                           const SizedBox(
                                                                                             height: 10,),
-                                                                                          Text(
-                                                                                            "Cette fonctionnalité est réservée aux évenements activés. Veuillez activer votre évenmenet pour pouvoir partager les invitations aux invités.",
-                                                                                            style: TextStyle(
-                                                                                                fontSize: 12,
-                                                                                                color: Colors
-                                                                                                    .black
-                                                                                                    .withOpacity(
-                                                                                                    .5)
+                                                                                          MyTextView(
+                                                                                            "Vous devez avoir au moins " + (widget.event.template!.price!.toInt()).toString() + " crédits pour envoyer cette invitation.",
+                                                                                            textAligntNew: TextAlign
+                                                                                                .start,
+                                                                                            maxLineWrap: true,
+                                                                                            styleNew: MyTextStyle(
+                                                                                              colorNew: appColors
+                                                                                                  .black,
+                                                                                              fontWeightNew: FontWeight
+                                                                                                  .w500,
+                                                                                              size: ResponsiveFlutter
+                                                                                                  .of(
+                                                                                                  context)
+                                                                                                  .fontSize(
+                                                                                                  1.5),
                                                                                             ),
-                                                                                            textAlign: TextAlign
-                                                                                                .center,),
+                                                                                          ),
                                                                                         ],
                                                                                       ),
                                                                                       const SizedBox(
                                                                                         height: 20,),
                                                                                       GestureDetector(
                                                                                         onTap: () async {
-                                                                                          Navigator
-                                                                                              .push(
+                                                                                          Navigator.push(
                                                                                             context,
                                                                                             MaterialPageRoute(
-                                                                                              builder: (
-                                                                                                  context) =>
-                                                                                                  PaymentScreen(
-                                                                                                      event: widget
-                                                                                                          .event),
+                                                                                              builder: (context) => const BottomBarScreen(isFrom: "Wallet",),
                                                                                             ),
                                                                                           );
                                                                                         },
-                                                                                        child: Container(
-                                                                                          decoration: BoxDecoration(
-                                                                                              border: Border
-                                                                                                  .all(
-                                                                                                  color: appColors
-                                                                                                      .appLightColor
-                                                                                                      .withOpacity(
-                                                                                                      .5),
-                                                                                                  width: 1),
-                                                                                              borderRadius: BorderRadius
-                                                                                                  .circular(
-                                                                                                  10)
-                                                                                          ),
-                                                                                          margin: const EdgeInsets
-                                                                                              .only(
-                                                                                              bottom: 10),
-                                                                                          width: MediaQuery
-                                                                                              .of(
-                                                                                              context)
-                                                                                              .size
-                                                                                              .width,
-                                                                                          padding: const EdgeInsets
-                                                                                              .all(
-                                                                                              10),
-                                                                                          child: Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment
-                                                                                                .spaceBetween,
-                                                                                            children: [
-                                                                                              Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment
-                                                                                                    .center,
-                                                                                                crossAxisAlignment: CrossAxisAlignment
-                                                                                                    .center,
-                                                                                                mainAxisSize: MainAxisSize
-                                                                                                    .max,
-                                                                                                children: [
-                                                                                                  const Icon(
-                                                                                                    CupertinoIcons
-                                                                                                        .check_mark_circled,
-                                                                                                    size: 20,),
-                                                                                                  const SizedBox(
-                                                                                                    width: 7,),
-                                                                                                  MyTextView(
-                                                                                                    "Activer l'évenement",
-                                                                                                    textAligntNew: TextAlign
-                                                                                                        .start,
-                                                                                                    maxLineWrap: true,
-                                                                                                    styleNew: MyTextStyle(
-                                                                                                      colorNew: appColors
-                                                                                                          .black,
-                                                                                                      fontWeightNew: FontWeight
-                                                                                                          .w500,
-                                                                                                      size: ResponsiveFlutter
-                                                                                                          .of(
-                                                                                                          context)
-                                                                                                          .fontSize(
-                                                                                                          1.6),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
+                                                                                        child: CommonButton(
+                                                                                          title: "Recharger", icon: CupertinoIcons.money_dollar_circle, textColor: Colors.white, btnColor: Colors.black,
                                                                                         ),
                                                                                       ),
                                                                                     ],
@@ -1578,7 +1532,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                     size: ResponsiveFlutter.of(context).fontSize(1.8),
                                                                   ),
                                                                 ),
-                                                                Icon(Icons.send, color: appColors.white, size: 15,)
+                                                                Icon(widget.event.canSendInvitations == true ? Icons.send : CupertinoIcons.lock_fill, color: appColors.white, size: 15,)
                                                               ],
                                                             ),
                                                           ),
@@ -1618,11 +1572,15 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         children: [
                                                           Row(
                                                             children: [
+                                                              if (widget.event.canSendInvitations != true)
+                                                              const Icon(CupertinoIcons.lock_fill, size: 15,),
+                                                              if (widget.event.canSendInvitations != true)
+                                                              const SizedBox(width: 5,),
                                                               MyTextView(
                                                                 invitation.civility.toString(),
                                                                 textAligntNew: TextAlign.center,
                                                                 styleNew: MyTextStyle(
-                                                                  colorNew: appColors.lightPinkColor.withOpacity(.5),
+                                                                  colorNew: appColors.btnColor.withOpacity(.8),
                                                                   fontWeightNew: FontWeight.w400,
                                                                   size: ResponsiveFlutter.of(context).fontSize(1.5),
                                                                 ),
@@ -1690,240 +1648,4 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
       ),
     );
   }
-
-  // void showShareDialog (InvitationModel invitation) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return StatefulBuilder(
-  //         builder: (context, setState) {
-  //           return Dialog(
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(10),
-  //               ),
-  //               child: Stack(
-  //                 children: [
-  //                   Positioned(
-  //                       right: 0,
-  //                       top: 0,
-  //                       child: IconButton(onPressed: (){
-  //                         Navigator.pop(context);
-  //                       }, icon: const Icon(Icons.close)
-  //                       )
-  //                   ),
-  //                   Padding(
-  //                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-  //                     child:
-  //                     Column(
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       children: [
-  //                         SizedBox(
-  //                           height: 60,
-  //                           width: 60,
-  //                           child: Center(
-  //                             child: Icon(
-  //                               Icons.question_mark_rounded,
-  //                               color: appColors.btnColor,
-  //                               size: 50,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         const SizedBox(height: 10,),
-  //                         Column(
-  //                           mainAxisSize: MainAxisSize.min,
-  //                           children: [
-  //                             Text("Comment voulez-vous partagere ${ invitation.count == null || invitation.count! > 1 ? 'au' : 'à' } ${invitation.civility! + " " + invitation.name!} son invitaion ?", style: const TextStyle(
-  //                                 fontWeight: FontWeight.bold
-  //                             ), textAlign: TextAlign.center,),
-  //                           ],
-  //                         ),
-  //                         const SizedBox(height: 20,),
-  //                         if (invitation.status != 'sent')
-  //                         GestureDetector(
-  //                           onTap: () async {
-  //                             if (!sendingSMS) {
-  //                               setState(() {
-  //                                 sendingSMS = true;
-  //                               });
-  //                               await invitationViewModel.sendInvitation(context,
-  //                                   {
-  //                                     "method": "sms"
-  //                                   }, invitation.id!, widget.event).then((value) {
-  //                                 setState(() {
-  //                                   sendingSMS = false;
-  //                                 });
-  //                               });
-  //                             }
-  //                           },
-  //                           child: Container(
-  //                             decoration: BoxDecoration(
-  //                                 border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-  //                                 borderRadius: BorderRadius.circular(10)
-  //                             ),
-  //                             margin: const EdgeInsets.only(bottom: 10),
-  //                             width: MediaQuery.of(context).size.width,
-  //                             padding: const EdgeInsets.all(10),
-  //                             child: Row(
-  //                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                               children: [
-  //                                 Row(
-  //                                   mainAxisAlignment: MainAxisAlignment.start,
-  //                                   crossAxisAlignment: CrossAxisAlignment.center,
-  //                                   children: [
-  //                                     const Icon(CupertinoIcons.chat_bubble_2_fill, size: 22,),
-  //                                     const SizedBox(width: 7,),
-  //                                     MyTextView(
-  //                                       "Envoyer par SMS",
-  //                                       textAligntNew: TextAlign.start,
-  //                                       maxLineWrap: true,
-  //                                       styleNew: MyTextStyle(
-  //                                         colorNew: appColors.black,
-  //                                         fontWeightNew: FontWeight.w500,
-  //                                         size: ResponsiveFlutter.of(context).fontSize(1.6),
-  //                                       ),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                                 if (sendingSMS)
-  //                                   CupertinoActivityIndicator(radius: 8, color: appColors.black,)
-  //                               ],
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         if (invitation.status != 'sent')
-  //                         GestureDetector(
-  //                           onTap: () async {
-  //                             if (!sendingWpp) {
-  //                               setState(() {
-  //                                 sendingWpp = true;
-  //                               });
-  //                               await invitationViewModel.sendInvitation(context,
-  //                                   {
-  //                                     "method": "wpp"
-  //                                   }, invitation.id!, widget.event).then((value) {
-  //                                 setState(() {
-  //                                   sendingWpp = false;
-  //                                 });
-  //                               });
-  //                             }
-  //                           },
-  //                           child: Container(
-  //                             decoration: BoxDecoration(
-  //                                 border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-  //                                 borderRadius: BorderRadius.circular(10)
-  //                             ),
-  //                             margin: const EdgeInsets.only(bottom: 10),
-  //                             width: MediaQuery.of(context).size.width,
-  //                             padding: const EdgeInsets.all(10),
-  //                             child: Column(
-  //                               children: [
-  //                                 Row(
-  //                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                                   children: [
-  //                                     Row(
-  //                                       mainAxisAlignment: MainAxisAlignment.start,
-  //                                       crossAxisAlignment: CrossAxisAlignment.center,
-  //                                       children: [
-  //                                         Image.asset(ImagePath.wpp, width: 25,),
-  //                                         const SizedBox(width: 7,),
-  //                                         MyTextView(
-  //                                           "Envoyer par WhatsApp",
-  //                                           textAligntNew: TextAlign.start,
-  //                                           maxLineWrap: true,
-  //                                           styleNew: MyTextStyle(
-  //                                             colorNew: appColors.black,
-  //                                             fontWeightNew: FontWeight.w500,
-  //                                             size: ResponsiveFlutter.of(context).fontSize(1.6),
-  //                                           ),
-  //                                         ),
-  //                                       ],
-  //                                     ),
-  //                                     if (sendingWpp)
-  //                                       CupertinoActivityIndicator(radius: 8, color: appColors.black,)
-  //                                   ],
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         if (widget.event.paymentStatus == 'paid')
-  //                         GestureDetector(
-  //                           onTap: () async {
-  //                             if (!copying) {
-  //                               setState(() {
-  //                                 copying = true;
-  //                               });
-  //                               await Clipboard.setData(ClipboardData(text: invitation.message!)).then((_){
-  //                                 Utils.toastMessage("Invitation copié avec succès");
-  //                                 Navigator.pop(context);
-  //
-  //                                 setState(() {
-  //                                   copying = false;
-  //                                 });
-  //                               });
-  //                             }
-  //                           },
-  //                           child: Container(
-  //                             decoration: BoxDecoration(
-  //                                 border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-  //                                 borderRadius: BorderRadius.circular(10)
-  //                             ),
-  //                             margin: const EdgeInsets.only(bottom: 10),
-  //                             width: MediaQuery.of(context).size.width,
-  //                             padding: const EdgeInsets.all(10),
-  //                             child: Column(
-  //                               children: [
-  //                                 Row(
-  //                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                                   children: [
-  //                                     Row(
-  //                                       mainAxisAlignment: MainAxisAlignment.start,
-  //                                       crossAxisAlignment: CrossAxisAlignment.center,
-  //                                       children: [
-  //                                         const Icon(Icons.file_copy_rounded, size: 22,),
-  //                                         const SizedBox(width: 7,),
-  //                                         MyTextView(
-  //                                           "Copier",
-  //                                           textAligntNew: TextAlign.start,
-  //                                           maxLineWrap: true,
-  //                                           styleNew: MyTextStyle(
-  //                                             colorNew: appColors.black,
-  //                                             fontWeightNew: FontWeight.w500,
-  //                                             size: ResponsiveFlutter.of(context).fontSize(1.6),
-  //                                           ),
-  //                                         ),
-  //                                       ],
-  //                                     ),
-  //                                     if (copying)
-  //                                       CupertinoActivityIndicator(radius: 8, color: appColors.black,)
-  //                                   ],
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         // Row(
-  //                         //   mainAxisAlignment: MainAxisAlignment.center,
-  //                         //   children: [
-  //                         //     GestureDetector(
-  //                         //       onTap: () {
-  //                         //       },
-  //                         //       child: CommonButton(
-  //                         //         title: "Continuer",
-  //                         //         padding: const EdgeInsets.symmetric(horizontal: 20),
-  //                         //       ),
-  //                         //     )
-  //                         //   ],
-  //                         // )
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ],
-  //               )
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 }

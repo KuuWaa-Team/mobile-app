@@ -125,8 +125,8 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: ResponsiveFlutter.of(context).moderateScale(17),
-                                    vertical: ResponsiveFlutter.of(context).moderateScale(15),
+                                    horizontal: ResponsiveFlutter.of(context).moderateScale(12),
+                                    vertical: ResponsiveFlutter.of(context).moderateScale(8),
                                   ),
                                   decoration: BoxDecoration(
                                     color: appColors.appLightColor,
@@ -282,7 +282,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                               );
                             },
                             separatorBuilder: (context, index) => SizedBox(
-                              height: ResponsiveFlutter.of(context).moderateScale(20),
+                              height: ResponsiveFlutter.of(context).moderateScale(5),
                             ),
                           ),
                         ),

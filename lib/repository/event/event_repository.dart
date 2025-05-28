@@ -23,6 +23,33 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> openTablesApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/open-tables", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> openBeverageApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/open-beverage", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> openBookApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/open-book", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> getTemplatesApi ({required BuildContext context}) async {
     try  {
       dynamic response = await _apiServices.getGetResponse(AppUrl.templatesEndPoint, context: context, auth: false);

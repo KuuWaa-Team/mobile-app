@@ -12,6 +12,7 @@ import 'package:kuuwaa/model/event/feature_model.dart';
 import 'package:kuuwaa/repository/event/event_repository.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/details_screen.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class EventViewModel with ChangeNotifier{
   final _repository = EventRepository();
@@ -107,6 +108,57 @@ class EventViewModel with ChangeNotifier{
       setLoading(false);
     });
     return true;
+  }
+
+  Future<bool> openTables(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.openTablesApi(context: context, id: id).then((value) {
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+        UserViewModel().updateCredits(value['credits']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<bool> openBeverage(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.openBeverageApi(context: context, id: id).then((value) {
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+        UserViewModel().updateCredits(value['credits']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<bool> openBook(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.openBookApi(context: context, id: id).then((value) {
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+        UserViewModel().updateCredits(value['credits']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
   }
 
   Future<bool> getTemplates(BuildContext context) async {

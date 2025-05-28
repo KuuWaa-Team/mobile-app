@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -107,8 +105,31 @@ class _DetailsScreenState extends State<DetailsScreen> {
               const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pop(context);
-                  // TODO: Implémenter la logique de paiement ou de consommation de pièces ici
+                  if (key == "TABLE") {
+                    eventViewModel.openTables(context, widget.id).then((value) {
+                      if (value) {
+                        Navigator.push(context, CupertinoPageRoute(
+                          builder: (context) => DetailsScreen(id: widget.id),
+                        ));
+                      }
+                    });
+                  } else if (key == "BEVERAGE") {
+                    eventViewModel.openBeverage(context, widget.id).then((value) {
+                      if (value) {
+                        Navigator.push(context, CupertinoPageRoute(
+                          builder: (context) => DetailsScreen(id: widget.id),
+                        ));
+                      }
+                    });
+                  } else if (key == "BOOK") {
+                    eventViewModel.openBook(context, widget.id).then((value) {
+                      if (value) {
+                        Navigator.push(context, CupertinoPageRoute(
+                          builder: (context) => DetailsScreen(id: widget.id),
+                        ));
+                      }
+                    });
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: appColors.btnColor,
@@ -117,8 +138,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),
-                icon: Icon(CupertinoIcons.lock_open_fill, color: Colors.white),
-                label: Text(
+                icon: const Icon(CupertinoIcons.lock_open_fill, color: Colors.white),
+                label: const Text(
                   "Déverrouiller",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -152,15 +173,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         );
                       case Status.COMPLETED:
                         EventModel event = value.event.data!;
+
                         return Stack(
                           children: [
                             imageFile == null || !loadingImage?
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.32,
                               width: MediaQuery.of(context).size.width,
-                              child: InstaImageViewer(
-                                child: Image.network(AppUrl.domainName + event.imagePath.toString(), fit: BoxFit.cover,),
-                              ),
+                              child: Image.network(AppUrl.domainName + event.imagePath.toString(), fit: BoxFit.cover,)
                             )
                             : Stack(
                               children: [
@@ -680,7 +700,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
-                                        if (event.hasBook == true) {
+                                        if (event.hasTables == true) {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -718,7 +738,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               ],
                                             ),
                                             if (event.hasTables != true)
-                                              Icon(CupertinoIcons.lock_fill, color: appColors.black, size: 20,)
+                                              Icon(event.hasTables == true ? CupertinoIcons.lock_open_fill : CupertinoIcons.lock_fill, color: appColors.black, size: 20,)
                                           ],
                                         ),
                                       ),

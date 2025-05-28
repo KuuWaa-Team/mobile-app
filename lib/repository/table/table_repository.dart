@@ -8,7 +8,7 @@ class TableRepository {
 
   Future<dynamic> getEventTablesApi ({required BuildContext context, required int id}) async {
     try  {
-      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id/tables", context: context, auth: true);
+      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id/tables", context: context, auth: false);
       return response;
     } catch(e) {
       rethrow;
