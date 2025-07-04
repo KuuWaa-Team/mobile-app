@@ -50,7 +50,7 @@ dependencies:
   google_maps_flutter: ^2.5.0
   permission_handler: ^11.3.0
   path_provider: ^2.0.13
-  geolocator: ^11.0.0
+#  geolocator: ^14.0.1
   dio: ^5.0.1
   syncfusion_flutter_signaturepad: ^21.1.35
   standard_dialogs: ^2.1.0

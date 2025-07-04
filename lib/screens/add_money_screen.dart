@@ -132,7 +132,8 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                           await walletViewModel.recharge(context, {
                             'amount': amountController.text,
                             'payment_method': selectedPaymentMethod,
-                            'phone_number': phoneController.text.replaceAll(' ', '').replaceAll('+', '')
+                            'phone_number': phoneController.text.replaceAll(' ', '').replaceAll('+', ''),
+                            'user_id': user!.id
                           }, user!.id!);
                         }
                         setState(() {
@@ -217,7 +218,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                 ),
                 const SizedBox(height: 5),
                 MyTextView(
-                  "1\$ USD = 1.2 Credit",
+                  "5\$ USD = 20 Credit",
                   maxLinesNew: 3,
                   styleNew: MyTextStyle(
                     colorNew: appColors.black,
@@ -394,15 +395,22 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                   height: ResponsiveFlutter.of(context).moderateScale(20),
                 ),
                 GestureDetector(
-                  onTap: loading ? null : () {
+                  onTap: loading ? null : () async {
                     if (selectedPaymentMethod == PaymentMethod.mobile) {
                       showPhoneNumberModal();
                     } else if (selectedPaymentMethod == PaymentMethod.card) {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => const AddWalletSuccessScreen()),
-                      // );
-                      Utils.flushBarErrorMessage("Ce moyen de paiement n'est pas disponible pour le moment.", context);
+                      setState(() {
+                        loading = true;
+                      });
+                      await walletViewModel.recharge(context, {
+                        'amount': amountController.text,
+                        'payment_method': selectedPaymentMethod,
+                        'phone_number': '',
+                        'user_id': user!.id
+                      }, user!.id!);
+                      setState(() {
+                        loading = false;
+                      });
                     } else {
                       Utils.flushBarErrorMessage("Veuillez sélectionner un mode de paiement", context);
                     }

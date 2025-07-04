@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kuuwaa/common/app_colors.dart';
+import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/model/event/event_template_model.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
@@ -60,9 +62,6 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
         systemNavigationBarDividerColor: Colors.transparent,
       ),
     );
@@ -89,20 +88,22 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
             ),
           ),
           Positioned(
-            bottom: 30,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 55,
             right: 20,
-            child: FloatingActionButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-              elevation: 3,
-              onPressed: () {
+            child: InkWell(
+              onTap: () {
                 Navigator.pop(context, widget.template);
               },
-              backgroundColor: appColors.btnColor,
-              child: const Icon(Icons.push_pin, color: Colors.white),
-            ),
+              child: CommonButton(
+                context: context,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                icon: Icons.push_pin,
+                title: "Selectionner",
+              ),
+            )
           ),
           Positioned(
-            bottom: 30,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 50,
             left: 20,
             child: FloatingActionButton(
               heroTag: "infoBtn",
@@ -117,7 +118,7 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
                   ),
                   builder: (context) {
                     return Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 50),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,7 +176,8 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
                             ],
                           ),
                           if (widget.template.hasAnimations == true)
-                          const SizedBox(height: 15),
+                            const SizedBox(height: 15),
+                          if (widget.template.hasAnimations == true)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -188,6 +190,101 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
                                   textAligntNew: TextAlign.left,
                                   styleNew: MyTextStyle(
                                     colorNew: appColors.darkGreyText,
+                                    fontWeightNew: FontWeight.w500,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.animation, size: 20),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: MyTextView(
+                                  "Inclu des animations",
+                                  maxLinesNew: 5,
+                                  textAligntNew: TextAlign.left,
+                                  styleNew: MyTextStyle(
+                                    colorNew: appColors.darkGreyText,
+                                    fontWeightNew: FontWeight.w500,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(widget.template.imageRequired == true ? Icons.image_outlined : Icons.image_not_supported, size: 20),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: MyTextView(
+                                  "Image${widget.template.imageRequired != true ? ' non' : ''} requise",
+                                  maxLinesNew: 5,
+                                  textAligntNew: TextAlign.left,
+                                  styleNew: MyTextStyle(
+                                    colorNew: appColors.darkGreyText,
+                                    fontWeightNew: FontWeight.w500,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Utils.hexToColor(widget.template.primaryColor!),
+                                  border: Border.all(color: Colors.black12),
+                                ),
+                              ),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: MyTextView(
+                                  "Couleur principale : ${widget.template.primaryColor!.toUpperCase()}",
+                                  maxLinesNew: 2,
+                                  textAligntNew: TextAlign.left,
+                                  styleNew: MyTextStyle(
+                                    colorNew: Utils.hexToColor(widget.template.primaryColor!),
+                                    fontWeightNew: FontWeight.w500,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Utils.hexToColor(widget.template.secondaryColor!),
+                                  border: Border.all(color: Colors.black12),
+                                ),
+                              ),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: MyTextView(
+                                  "Couleur secondaire : ${widget.template.secondaryColor!.toUpperCase()}",
+                                  maxLinesNew: 2,
+                                  textAligntNew: TextAlign.left,
+                                  styleNew: MyTextStyle(
+                                    colorNew: Utils.hexToColor(widget.template.secondaryColor!),
                                     fontWeightNew: FontWeight.w500,
                                     size: ResponsiveFlutter.of(context).fontSize(1.8),
                                   ),

@@ -49,6 +49,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   String street = "";
   String ref = "";
 
+  bool useGoogleMaps = true;
+  bool showEndDate = true;
+
   List<EventSpecificationModel> specifications = [];
 
   var maskFormatter = MaskTextInputFormatter(
@@ -107,6 +110,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   _onChanged(int index) {
     setState(() {
       step = index;
+    });
+  }
+
+  onHasMapChanged(bool value) {
+    setState(() {
+      useGoogleMaps = value;
+    });
+  }
+
+  onShowEndDateChanged(bool value) {
+    setState(() {
+      showEndDate = value;
     });
   }
 
@@ -190,6 +205,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             placeCoords = latLng;
           });
         },
+        showEndDate: showEndDate,
+        hasMaps: useGoogleMaps,
+        onHasMapsChanged: onHasMapChanged,
+        onShowEndDateChanged: onShowEndDateChanged,
       ),
       OtherInformation(
         specifications: specifications,
@@ -292,34 +311,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                  color: appColors.appMediumColor,
-                  border: Border(top: BorderSide(color: appColors.greyTextColor, width: 1))
-                ),
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
-                child: Row(
-                  children: [
-                    SizedBox(
-                        width: 13, height: 13,
-                        child: CircularProgressIndicator(color: appColors.btnColor, strokeWidth: 2,)
-                    ),
-                    const SizedBox(width: 10,),
-                    MyTextView(
-                      "Création d'événement en cours...",
-                      textAligntNew: TextAlign.start,
-                      maxLineWrap: true,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.btnColor,
-                        fontWeightNew: FontWeight.w500,
-                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10,),
-              Container(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 50),
                 decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40),)
@@ -358,11 +350,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                             if (_controller.page!.toInt() == 1 /* PLACE - DATE - HOUR */) {
                               if (startDate == null) {
                                 hasErrors = true;
-                                Utils.flushBarErrorMessage("Vous devez entrer la date et l'heure de débu de l'évenement", context);
-                              } else if (endDate == null) {
+                                Utils.flushBarErrorMessage("Vous devez 8entrer la date et l'heure de débu de l'évenement", context);
+                              } else if (endDate == null && showEndDate) {
                                 hasErrors = true;
                                 Utils.flushBarErrorMessage("Vous devez entrer la date et l'heure de la fin de l'évenement", context);
-                              } else if (placeCoords == null) {
+                              } else if (placeCoords == null && useGoogleMaps) {
                                 hasErrors = true;
                                 Utils.flushBarErrorMessage("Vous devez confirmer le lieu sur le map", context);
                               }
@@ -393,7 +385,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                               "image": image,
                               "details": _detailsController.text,
                               "category_name": _categoryController.text,
-
                               "start_date": startDate.toString(),
                               "end_date": endDate.toString(),
                               "address": _addressController.text,
@@ -405,6 +396,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                               "template_id": eventTemplateModel!.id,
                               "user_uid": user.uid
                             };
+
+                            print("***************** DATA **********************");
+                            print(data);
+
                             await eventViewModel.createEventApi(context, data).then((value) {
                               setState(() {
                                 loadingNext = true;

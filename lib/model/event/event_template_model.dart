@@ -7,7 +7,10 @@ class EventTemplateModel {
   String? eventsAdapted;
   double? price;
   bool? hasAnimations;
+  bool? imageRequired;
   String? imagePath;
+  String? primaryColor;
+  String? secondaryColor;
 
   EventTemplateModel({
     this.id,
@@ -16,7 +19,10 @@ class EventTemplateModel {
     this.price,
     this.hasAnimations,
     this.eventsAdapted,
+    this.imageRequired,
     this.imagePath,
+    this.primaryColor,
+    this.secondaryColor
   });
 
   EventTemplateModel.fromJson(Map<String, dynamic> json) {
@@ -27,6 +33,10 @@ class EventTemplateModel {
     code = json['code'];
     price = double.parse(json['price'].toString());
     imagePath = json['imagePath'];
+    imagePath = json['imagePath'];
+    imageRequired = json['imageRequired'];
+    primaryColor = json['primaryColor'];
+    secondaryColor = json['secondaryColor'];
   }
 
   Map<String, dynamic> toJson() {
@@ -38,6 +48,9 @@ class EventTemplateModel {
     data['code'] = code;
     data['price'] = price;
     data['imagePath'] = imagePath;
+    data['imageRequired'] = imageRequired;
+    data['primaryColor'] = primaryColor;
+    data['secondaryColor'] = secondaryColor;
     return data;
   }
 }

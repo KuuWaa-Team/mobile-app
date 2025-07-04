@@ -98,6 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
             "phoneId": phoneId
           };
 
+          print("*************************** User Data *****************************");
+          print(userData);
+
           await authViewModel.loginApi(userData, context);
         });
       }
@@ -310,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 20.0, top: 20),
+              padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 20.0, top: 20),
               child: CupertinoButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
