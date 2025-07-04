@@ -4,24 +4,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
-import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
-import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
-import 'package:kuuwaa/model/event/feature_model.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kuuwaa/screens/admin/admin_list_screen.dart';
-import 'package:kuuwaa/screens/beverage/beverage_list_screen.dart';
 import 'package:kuuwaa/screens/book/book_screen.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/check/check_screen.dart';
-import 'package:kuuwaa/screens/events/edit_event_screen.dart';
 import 'package:kuuwaa/screens/events/informations_screen.dart';
-import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/screens/table/table_list_screen.dart';
 import 'package:kuuwaa/shimmer/event_owner_detail_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
@@ -404,37 +397,37 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                         ),
                                       ),
-                                    if (event.shared == true)
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                        top: MediaQuery.of(context).size.height * 0.25,
-                                        right: ResponsiveFlutter.of(context).moderateScale(25),
-                                      ),
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius: BorderRadius.circular(40),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Center(
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.share_outlined, color: appColors.lightColor, size: 18,),
-                                            const SizedBox(width: 10,),
-                                            MyTextView(
-                                              "Controlleur",
-                                              textAligntNew: TextAlign.start,
-                                              maxLineWrap: true,
-                                              styleNew: MyTextStyle(
-                                                colorNew: appColors.lightColor,
-                                                fontWeightNew: FontWeight.w600,
-                                                size: ResponsiveFlutter.of(context).fontSize(2),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                    // if (event.shared == true)
+                                    // Container(
+                                    //   margin: EdgeInsets.only(
+                                    //     top: MediaQuery.of(context).size.height * 0.25,
+                                    //     right: ResponsiveFlutter.of(context).moderateScale(25),
+                                    //   ),
+                                    //   height: 40,
+                                    //   decoration: BoxDecoration(
+                                    //     color: Colors.blue,
+                                    //     borderRadius: BorderRadius.circular(40),
+                                    //   ),
+                                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    //   child: Center(
+                                    //     child: Row(
+                                    //       children: [
+                                    //         Icon(Icons.share_outlined, color: appColors.lightColor, size: 18,),
+                                    //         const SizedBox(width: 10,),
+                                    //         MyTextView(
+                                    //           "Controlleur",
+                                    //           textAligntNew: TextAlign.start,
+                                    //           maxLineWrap: true,
+                                    //           styleNew: MyTextStyle(
+                                    //             colorNew: appColors.lightColor,
+                                    //             fontWeightNew: FontWeight.w600,
+                                    //             size: ResponsiveFlutter.of(context).fontSize(2),
+                                    //           ),
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ],
@@ -658,44 +651,44 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (event.shared != true)
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => AdminListScreen(event: event),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: appColors.appLightColor,
-                                            borderRadius: BorderRadius.circular(5),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                          child: Row (
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.admin_panel_settings_rounded, size: 15, color: appColors.btnColor,),
-                                              SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                              MyTextView(
-                                                "Controlleurs",
-                                                textAligntNew: TextAlign.start,
-                                                maxLineWrap: true,
-                                                styleNew: MyTextStyle(
-                                                  colorNew: appColors.lightColor,
-                                                  fontWeightNew: FontWeight.w500,
-                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    if (event.shared != true)
-                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),                                    if (event.shared != true)
+                                    // if (event.shared != true)
+                                    //   GestureDetector(
+                                    //     onTap: () {
+                                    //       Navigator.push(
+                                    //         context,
+                                    //         MaterialPageRoute(
+                                    //           builder: (context) => AdminListScreen(event: event),
+                                    //         ),
+                                    //       );
+                                    //     },
+                                    //     child: Container(
+                                    //       decoration: BoxDecoration(
+                                    //         color: appColors.appLightColor,
+                                    //         borderRadius: BorderRadius.circular(5),
+                                    //       ),
+                                    //       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                    //       child: Row (
+                                    //         mainAxisSize: MainAxisSize.max,
+                                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                                    //         children: [
+                                    //           Icon(Icons.admin_panel_settings_rounded, size: 15, color: appColors.btnColor,),
+                                    //           SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    //           MyTextView(
+                                    //             "Controlleurs",
+                                    //             textAligntNew: TextAlign.start,
+                                    //             maxLineWrap: true,
+                                    //             styleNew: MyTextStyle(
+                                    //               colorNew: appColors.lightColor,
+                                    //               fontWeightNew: FontWeight.w500,
+                                    //               size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                    //             ),
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // if (event.shared != true)
+                                    //   SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),                                    if (event.shared != true)
                                     Divider(color: Colors.black.withOpacity(.05),),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
@@ -744,52 +737,52 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (event.hasBook == true) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => BeverageListScreen(event: event),
-                                            ),
-                                          );
-                                        } else {
-                                          showUnlockDialog(2, "BEVERAGE");
-                                        }
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: appColors.appLightColor,
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row (
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(Icons.wine_bar_outlined, size: 15, color: appColors.btnColor,),
-                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                MyTextView(
-                                                  Strings.beverage,
-                                                  textAligntNew: TextAlign.start,
-                                                  maxLineWrap: true,
-                                                  styleNew: MyTextStyle(
-                                                    colorNew: appColors.lightColor,
-                                                    fontWeightNew: FontWeight.w500,
-                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            if (event.hasBeverage != true)
-                                              Icon(CupertinoIcons.lock_fill, color: appColors.black, size: 20,)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     if (event.hasBook == true) {
+                                    //       Navigator.push(
+                                    //         context,
+                                    //         MaterialPageRoute(
+                                    //           builder: (context) => BeverageListScreen(event: event),
+                                    //         ),
+                                    //       );
+                                    //     } else {
+                                    //       showUnlockDialog(2, "BEVERAGE");
+                                    //     }
+                                    //   },
+                                    //   child: Container(
+                                    //     decoration: BoxDecoration(
+                                    //       color: appColors.appLightColor,
+                                    //       borderRadius: BorderRadius.circular(5),
+                                    //     ),
+                                    //     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                    //     child: Row(
+                                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //       children: [
+                                    //         Row (
+                                    //           crossAxisAlignment: CrossAxisAlignment.center,
+                                    //           children: [
+                                    //             Icon(Icons.wine_bar_outlined, size: 15, color: appColors.btnColor,),
+                                    //             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    //             MyTextView(
+                                    //               Strings.beverage,
+                                    //               textAligntNew: TextAlign.start,
+                                    //               maxLineWrap: true,
+                                    //               styleNew: MyTextStyle(
+                                    //                 colorNew: appColors.lightColor,
+                                    //                 fontWeightNew: FontWeight.w500,
+                                    //                 size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                    //               ),
+                                    //             ),
+                                    //           ],
+                                    //         ),
+                                    //         if (event.hasBeverage != true)
+                                    //           Icon(CupertinoIcons.lock_fill, color: appColors.black, size: 20,)
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    // SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     GestureDetector(
                                       onTap: () {
                                         if (event.hasBook == true) {
