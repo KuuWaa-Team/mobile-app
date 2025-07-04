@@ -71,7 +71,7 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
                         child: Text(value.operationsList.message.toString()),
                       );
                     case Status.COMPLETED:
-                      List<OperationModel>? operations = value.operationsList.data;
+                      List<OperationModel>? operations = value.operationsList.data?.reversed.toList();
                       if (operations == null || operations.isEmpty) {
                         return Container(
                           decoration: BoxDecoration(

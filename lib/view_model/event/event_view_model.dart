@@ -165,6 +165,8 @@ class EventViewModel with ChangeNotifier{
     await _repository.getTemplatesApi(context: context).then((value) {
       print(value);
       if (value['success'] == true  ) {
+        print("************** TEMPLATE **************");
+        print(value);
         List templatesJson = value['templates'];
         List<EventTemplateModel> templatesData = [];
         for (var element in templatesJson) {

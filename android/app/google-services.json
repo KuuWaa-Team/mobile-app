@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "77651918174-rrp8e9evg6rnr21bd39b7oqo9udhu9qh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.kuuwaa",
+            "certificate_hash": "d20a7a1f6566c65b4aa1bba00da605ffc56b5fb5"
+          }
+        },
+        {
           "client_id": "77651918174-trvf19uu6sf3335opv1toimslgp9afhf.apps.googleusercontent.com",
           "client_type": 3
         }
