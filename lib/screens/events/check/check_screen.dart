@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class CheckScreen extends StatefulWidget {
   EventModel event;
