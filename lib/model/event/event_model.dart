@@ -74,7 +74,9 @@ class EventModel {
     id = json['id'];
     title = json['title'];
     startDate = DateTime.parse(json['startDate'].toString());
-    endDate = DateTime.parse(json['endDate'].toString());
+    if (json['endDate'] != null && json['endDate'].toString().toUpperCase() != "null") {
+      endDate = DateTime.parse(json['endDate'].toString());
+    }
     details = json['details'];
     canSendInvitations = json['canSendInvitations'];
     placeName = json['placeName'];
@@ -152,7 +154,7 @@ class EventModel {
   }
 
   String formattedDate({String locale = 'fr_FR'}) {
-    if (startDate == null || endDate == null) return "";
+    if (startDate == null && endDate == null) return "";
 
     final dayFormat = DateFormat.d(locale);
     final monthFormat = DateFormat.MMMM(locale);
@@ -160,17 +162,21 @@ class EventModel {
     final fullDateFormat = DateFormat.yMMMMEEEEd(locale);
     final shortFormat = DateFormat.yMMMMd(locale);
 
-    if (startDate!.year == endDate!.year &&
-        startDate!.month == endDate!.month &&
-        startDate!.day == endDate!.day) {
-      return fullDateFormat.format(startDate!);
-    } else if (startDate!.year == endDate!.year &&
-        startDate!.month == endDate!.month) {
-      return 'Du ${dayFormat.format(startDate!)} au ${dayFormat.format(endDate!)} ${monthFormat.format(startDate!)} ${yearFormat.format(startDate!)}';
-    } else if (startDate!.year == endDate!.year) {
-      return 'Du ${dayFormat.format(startDate!)} ${monthFormat.format(startDate!)} au ${dayFormat.format(endDate!)} ${monthFormat.format(endDate!)} ${yearFormat.format(startDate!)}';
+    if (endDate != null) {
+      if (startDate!.year == endDate!.year &&
+          startDate!.month == endDate!.month &&
+          startDate!.day == endDate!.day) {
+        return fullDateFormat.format(startDate!);
+      } else if (startDate!.year == endDate!.year &&
+          startDate!.month == endDate!.month) {
+        return 'Du ${dayFormat.format(startDate!)} au ${dayFormat.format(endDate!)} ${monthFormat.format(startDate!)} ${yearFormat.format(startDate!)}';
+      } else if (startDate!.year == endDate!.year) {
+        return 'Du ${dayFormat.format(startDate!)} ${monthFormat.format(startDate!)} au ${dayFormat.format(endDate!)} ${monthFormat.format(endDate!)} ${yearFormat.format(startDate!)}';
+      } else {
+        return 'Du ${shortFormat.format(startDate!)} au ${shortFormat.format(endDate!)}';
+      }
     } else {
-      return 'Du ${shortFormat.format(startDate!)} au ${shortFormat.format(endDate!)}';
+      return dayFormat.format(startDate!) + " " + monthFormat.format(startDate!) + " " + yearFormat.format(startDate!);
     }
   }
 

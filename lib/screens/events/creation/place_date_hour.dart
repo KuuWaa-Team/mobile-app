@@ -48,10 +48,10 @@
   class _PlaceDateHourState extends State<PlaceDateHour> {
     AppColors appColors = AppColors();
 
-    LatLng? _selectedCoordinates;
+    LatLng? picked;
 
     Future<void> _pickCoordinatesOnMap() async {
-      final LatLng? picked = await Navigator.push(
+      final LatLng? pick = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => MapPickerPage(
@@ -60,10 +60,13 @@
         ),
       );
 
-      if (picked != null) {
+      if (pick != null) {
         if (widget.onCoordinatesPicked != null) {
-          widget.onCoordinatesPicked!(picked);
+          widget.onCoordinatesPicked!(pick);
         }
+        setState(() {
+          picked = pick;
+        });
       }
     }
 
@@ -132,60 +135,57 @@
           ),
           Opacity(
             opacity: widget.showEndDate ? 1.0 : 0.3,
-            child: IgnorePointer(
-              ignoring: widget.showEndDate,
-              child: GestureDetector(
-                onTap: () async {
-                  DatePicker.showDateTimePicker(
-                    context,
-                    showTitleActions: true,
-                    minTime: widget.startDate ?? DateTime.now(),
-                    onConfirm: (value) {
-                      widget.onEndDateConfirm!(value);
-                    },
-                    currentTime: widget.startDate ?? DateTime.now(),
-                    locale: LocaleType.fr,
-                  );
-                },
-                child: Container(
-                  height: ResponsiveFlutter.of(context).verticalScale(50),
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+            child: GestureDetector(
+              onTap: !widget.showEndDate ? null : () async {
+                DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: widget.startDate ?? DateTime.now(),
+                  onConfirm: (value) {
+                    widget.onEndDateConfirm!(value);
+                  },
+                  currentTime: widget.startDate ?? DateTime.now(),
+                  locale: LocaleType.fr,
+                );
+              },
+              child: Container(
+                height: ResponsiveFlutter.of(context).verticalScale(50),
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+                ),
+                decoration: BoxDecoration(
+                  color: appColors.appLightColor,
+                  borderRadius: BorderRadius.circular(
+                    ResponsiveFlutter.of(context).moderateScale(20),
                   ),
-                  decoration: BoxDecoration(
-                    color: appColors.appLightColor,
-                    borderRadius: BorderRadius.circular(
-                      ResponsiveFlutter.of(context).moderateScale(20),
-                    ),
-                    border: Border.all(
-                      color: appColors.borderColor,
-                      width: 1.5,
-                    ),
+                  border: Border.all(
+                    color: appColors.borderColor,
+                    width: 1.5,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: MyTextView(
-                          widget.endDate == null
-                              ? "Date et heure de la fin"
-                              : DateFormat('dd/MM/yyyy à kk:mm')
-                              .format(widget.endDate!),
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
-                            fontWeightNew: FontWeight.w400,
-                            size: ResponsiveFlutter.of(context).fontSize(1.8),
-                          ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: MyTextView(
+                        widget.endDate == null
+                            ? "Date et heure de la fin"
+                            : DateFormat('dd/MM/yyyy à kk:mm')
+                            .format(widget.endDate!),
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor,
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.8),
                         ),
                       ),
-                      Image.asset(
-                        ImagePath.pinkCalendar,
-                        color: appColors.lightPinkColor,
-                        height: ResponsiveFlutter.of(context).moderateScale(23),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Image.asset(
+                      ImagePath.pinkCalendar,
+                      color: appColors.lightPinkColor,
+                      height: ResponsiveFlutter.of(context).moderateScale(23),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -291,10 +291,10 @@
               child: GestureDetector(
                 onTap: _pickCoordinatesOnMap,
                 child: CommonButton(
-                  icon: Icons.map,
+                  icon: picked == null ? Icons.map : Icons.check_circle_outline,
                   title: "Confirmer sur Maps",
-                  btnColor: appColors.white,
-                  textColor: appColors.black,
+                  btnColor: picked == null ? appColors.white : appColors.btnColor,
+                  textColor: picked == null ? appColors.black : appColors.white,
                 ),
               ),
             ),

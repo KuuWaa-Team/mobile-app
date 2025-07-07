@@ -55,7 +55,7 @@ dependencies:
   syncfusion_flutter_signaturepad: ^21.1.35
   standard_dialogs: ^2.1.0
   google_place: ^0.4.7 # pour l’autocomplétion d’adresses
-#  qr_code_scanner: ^1.0.1
+  qr_code_scanner: ^1.0.1
 #  jiffy: ^6.3.0
   open_filex: ^4.3.4
   #flutter_chat_ui: ^1.6.10

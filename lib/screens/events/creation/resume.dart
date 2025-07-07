@@ -58,522 +58,529 @@ class _ResumeState extends State<Resume> {
   AppColors appColors = AppColors();
   final TextEditingController _controller = TextEditingController();
   String dateName = "";
+  bool sameDay = true;
 
   @override
   void initState() {
     super.initState();
 
     DateTime start = widget.startDate!;
-    DateTime end = widget.endDate!;
-
-    bool sameDay = start.year == end.year &&
-        start.month == end.month &&
-        start.day == end.day;
+    DateTime? end = widget.endDate;
+    if (end != null) {
+      setState(() {
+        sameDay = start.year == end.year &&
+            start.month == end.month &&
+            start.day == end.day;
+      });
+    }
 
     if (sameDay) {
       dateName = formatDate(start);
     } else {
-      dateName = "Du ${formatShortDate(start)} au ${formatShortDate(end)}";
+      dateName = "Du ${formatShortDate(start)} au ${formatShortDate(end!)}";
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
         vertical: ResponsiveFlutter.of(context).moderateScale(15),
         horizontal: ResponsiveFlutter.of(context).moderateScale(20),
       ),
-      children: [
-        Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: appColors.appLightColor,
-              borderRadius: BorderRadius.circular(
-                ResponsiveFlutter.of(context).moderateScale(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: appColors.appLightColor,
+                borderRadius: BorderRadius.circular(
+                  ResponsiveFlutter.of(context).moderateScale(20),
+                ),
+                boxShadow: [Utils.customShadow()]
               ),
-              boxShadow: [Utils.customShadow()]
-            ),
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      widget.titles[0].toUpperCase(),
-                      textAligntNew: TextAlign.left,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.btnColor,
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        widget.goToSection(0);
-                      },
-                      child: Icon(Icons.edit, size: 18, color: appColors.btnColor)
-                    )
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                const SizedBox(height: 5,),
-                Container(
-                  width: 100, height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1, color: Colors.black),
-                    image: DecorationImage(
-                      image: FileImage(widget.imageFile!)
-                    )
-                  ),
-                ),
-                const SizedBox(height: 15,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Titre",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    MyTextView(
-                      widget.titleController.text,
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor,
-                        fontWeightNew: FontWeight.w600,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Catégorie",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    MyTextView(
-                      widget.selectedCategory.name.toString(),
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor,
-                        fontWeightNew: FontWeight.w600,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Message",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    Expanded(
-                      child: MyTextView(
-                        widget.detailsController.text,
-                        textAligntNew: TextAlign.right,
-                        maxLinesNew: 100,
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        widget.titles[0].toUpperCase(),
+                        textAligntNew: TextAlign.left,
                         styleNew: MyTextStyle(
-                          colorNew: appColors.lightColor,
+                          colorNew: appColors.btnColor,
+                          fontWeightNew: FontWeight.w400,
                           size: ResponsiveFlutter.of(context).fontSize(1.8),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            )
-        ),
-        Container(
-          margin: const EdgeInsets.only(bottom: 20),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: appColors.appLightColor,
-            borderRadius: BorderRadius.circular(
-              ResponsiveFlutter.of(context).moderateScale(20),
-            ),
-            boxShadow: [Utils.customShadow()]
-          ),
-          padding: const EdgeInsets.all(15),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      widget.titles[1].toUpperCase(),
-                      textAligntNew: TextAlign.left,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.btnColor,
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                      ),
-                    ),
-                    GestureDetector(
+                      GestureDetector(
                         onTap: () {
-                          widget.goToSection(1);
+                          widget.goToSection(0);
                         },
                         child: Icon(Icons.edit, size: 18, color: appColors.btnColor)
-                    )
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Date",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    MyTextView(
-                      dateName,
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor,
-                        fontWeightNew: FontWeight.w600,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Heure",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    MyTextView(
-                      "De ${widget.startDate!.hour.toString().padLeft(2, '0')}H${widget.startDate!.minute.toString().padLeft(2, '0')} à ${widget.endDate!.hour.toString().padLeft(2, '0')}H${widget.endDate!.minute.toString().padLeft(2, '0')}",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor,
-                        fontWeightNew: FontWeight.w600,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Adresse",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    MyTextView(
-                      widget.addressController.text,
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor,
-                        fontWeightNew: FontWeight.w600,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Lieu de l'événement",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    MyTextView(
-                      widget.placeNameController.text,
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor,
-                        fontWeightNew: FontWeight.w600,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            )
-        ),
-        Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: appColors.appLightColor,
-              borderRadius: BorderRadius.circular(
-                ResponsiveFlutter.of(context).moderateScale(20),
-              ),
-              boxShadow: [Utils.customShadow()]
-            ),
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      widget.titles[2].toUpperCase(),
-                      textAligntNew: TextAlign.left,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.btnColor,
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                      ),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          widget.goToSection(2);
-                        },
-                        child: Icon(Icons.edit, size: 18, color: appColors.btnColor)
-                    )
-                  ],
-                ),
-                ...widget.specifications.map((spec) {
-                  return Column(
-                    children: [
-                      Divider(color: appColors.lightColor.withOpacity(.1),
-                          height: 20,
-                          thickness: .5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Icon(CupertinoIcons.pin, size: 12,), const SizedBox(width: 5,),
-                          MyTextView(
-                            spec.name.toString(),
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.lightColor,
-                              fontWeightNew: FontWeight.w600,
-                              size: ResponsiveFlutter.of(context).fontSize(1.5),
-                            ),
-                          ),
-                        ],
-                      ),
+                      )
                     ],
-                  );
-                })
-              ],
-            )
-        ),
-        Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: appColors.appLightColor,
-              borderRadius: BorderRadius.circular(
-                ResponsiveFlutter.of(context).moderateScale(20),
-              ),
-              boxShadow: [Utils.customShadow()]
-            ),
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      widget.titles[3].toUpperCase(),
-                      textAligntNew: TextAlign.left,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.btnColor,
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                      ),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          widget.goToSection(3);
-                        },
-                        child: Icon(Icons.edit, size: 18, color: appColors.btnColor)
-                    )
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Container(
-                  width: 100, height: 100,
-                  decoration: BoxDecoration(
-                    color: appColors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1, color: Colors.black),
-                    image: DecorationImage(
-                      image: NetworkImage(AppUrl.domainName + "/images/templates/${widget.eventTemplateModel!.imagePath}"),
-                      fit: BoxFit.contain,
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  const SizedBox(height: 5,),
+                  Container(
+                    width: 100, height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 1, color: Colors.black),
+                      image: DecorationImage(
+                        image: FileImage(widget.imageFile!)
+                      )
                     ),
                   ),
-                ),
-                const SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Nom",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    Expanded(
-                      child: MyTextView(
-                        widget.eventTemplateModel!.name.toString(),
-                        textAligntNew: TextAlign.right,
-                        maxLinesNew: 100,
+                  const SizedBox(height: 15,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Titre",
+                        textAligntNew: TextAlign.center,
                         styleNew: MyTextStyle(
-                          colorNew: appColors.lightColor,
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
                           size: ResponsiveFlutter.of(context).fontSize(1.5),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Prix",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    Expanded(
-                      child: MyTextView(
-                        "${widget.eventTemplateModel!.price} crédits / invitation",
-                        textAligntNew: TextAlign.right,
-                        maxLinesNew: 100,
+                      MyTextView(
+                        widget.titleController.text,
+                        textAligntNew: TextAlign.center,
                         styleNew: MyTextStyle(
                           colorNew: appColors.lightColor,
+                          fontWeightNew: FontWeight.w600,
                           size: ResponsiveFlutter.of(context).fontSize(1.5),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Adapté pour",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    Expanded(
-                      child: MyTextView(
-                        widget.eventTemplateModel!.eventsAdapted.toString(),
-                        textAligntNew: TextAlign.right,
-                        maxLinesNew: 100,
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Catégorie",
+                        textAligntNew: TextAlign.center,
                         styleNew: MyTextStyle(
-                          colorNew: appColors.lightColor,
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
                           size: ResponsiveFlutter.of(context).fontSize(1.5),
                         ),
                       ),
-                    ),
-                  ],
+                      MyTextView(
+                        widget.selectedCategory.name.toString(),
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor,
+                          fontWeightNew: FontWeight.w600,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Message",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      const SizedBox(width: 20,),
+                      Expanded(
+                        child: MyTextView(
+                          widget.detailsController.text,
+                          textAligntNew: TextAlign.right,
+                          maxLinesNew: 100,
+                          styleNew: MyTextStyle(
+                            colorNew: appColors.lightColor,
+                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: appColors.appLightColor,
+              borderRadius: BorderRadius.circular(
+                ResponsiveFlutter.of(context).moderateScale(20),
+              ),
+              boxShadow: [Utils.customShadow()]
+            ),
+            padding: const EdgeInsets.all(15),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        widget.titles[1].toUpperCase(),
+                        textAligntNew: TextAlign.left,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.btnColor,
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.8),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            widget.goToSection(1);
+                          },
+                          child: Icon(Icons.edit, size: 18, color: appColors.btnColor)
+                      )
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Date",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      MyTextView(
+                        dateName,
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor,
+                          fontWeightNew: FontWeight.w600,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Heure",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      MyTextView(
+                        sameDay ? widget.startDate!.hour.toString().padLeft(2, '0') + 'H' + widget.startDate!.minute.toString().padLeft(2, '0') : "De ${widget.startDate!.hour.toString().padLeft(2, '0')}H${widget.startDate!.minute.toString().padLeft(2, '0')} à ${widget.endDate!.hour.toString().padLeft(2, '0')}H${widget.endDate!.minute.toString().padLeft(2, '0')}",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor,
+                          fontWeightNew: FontWeight.w600,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Adresse",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      MyTextView(
+                        widget.addressController.text,
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor,
+                          fontWeightNew: FontWeight.w600,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Lieu de l'événement",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      MyTextView(
+                        widget.placeNameController.text,
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor,
+                          fontWeightNew: FontWeight.w600,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+          ),
+          Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: appColors.appLightColor,
+                borderRadius: BorderRadius.circular(
+                  ResponsiveFlutter.of(context).moderateScale(20),
                 ),
-                Divider(color: appColors.lightColor.withOpacity(.1),
-                    height: 20,
-                    thickness: .5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyTextView(
-                      "Inclu annimations",
-                      textAligntNew: TextAlign.center,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.5),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.5),
+                boxShadow: [Utils.customShadow()]
+              ),
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        widget.titles[2].toUpperCase(),
+                        textAligntNew: TextAlign.left,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.btnColor,
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.8),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            widget.goToSection(2);
+                          },
+                          child: Icon(Icons.edit, size: 18, color: appColors.btnColor)
+                      )
+                    ],
+                  ),
+                  ...widget.specifications.map((spec) {
+                    return Column(
+                      children: [
+                        Divider(color: appColors.lightColor.withOpacity(.1),
+                            height: 20,
+                            thickness: .5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Icon(CupertinoIcons.pin, size: 12,), const SizedBox(width: 5,),
+                            MyTextView(
+                              spec.name.toString(),
+                              textAligntNew: TextAlign.center,
+                              styleNew: MyTextStyle(
+                                colorNew: appColors.lightColor,
+                                fontWeightNew: FontWeight.w600,
+                                size: ResponsiveFlutter.of(context).fontSize(1.5),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  })
+                ],
+              )
+          ),
+          Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: appColors.appLightColor,
+                borderRadius: BorderRadius.circular(
+                  ResponsiveFlutter.of(context).moderateScale(20),
+                ),
+                boxShadow: [Utils.customShadow()]
+              ),
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        widget.titles[3].toUpperCase(),
+                        textAligntNew: TextAlign.left,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.btnColor,
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.8),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            widget.goToSection(3);
+                          },
+                          child: Icon(Icons.edit, size: 18, color: appColors.btnColor)
+                      )
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Container(
+                    width: 100, height: 100,
+                    decoration: BoxDecoration(
+                      color: appColors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 1, color: Colors.black),
+                      image: DecorationImage(
+                        image: NetworkImage(AppUrl.domainName + "/images/templates/${widget.eventTemplateModel!.imagePath}"),
+                        fit: BoxFit.contain,
                       ),
                     ),
-                    const SizedBox(width: 20,),
-                    Icon(widget.eventTemplateModel!.hasAnimations == true ? Icons.check : Icons.close, size: 20,),
-                  ],
-                ),
-              ],
-            )
-        ),
-      ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Nom",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      const SizedBox(width: 20,),
+                      Expanded(
+                        child: MyTextView(
+                          widget.eventTemplateModel!.name.toString(),
+                          textAligntNew: TextAlign.right,
+                          maxLinesNew: 100,
+                          styleNew: MyTextStyle(
+                            colorNew: appColors.lightColor,
+                            size: ResponsiveFlutter.of(context).fontSize(1.5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Prix",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      const SizedBox(width: 20,),
+                      Expanded(
+                        child: MyTextView(
+                          "${widget.eventTemplateModel!.price} crédits / invitation",
+                          textAligntNew: TextAlign.right,
+                          maxLinesNew: 100,
+                          styleNew: MyTextStyle(
+                            colorNew: appColors.lightColor,
+                            size: ResponsiveFlutter.of(context).fontSize(1.5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(color: appColors.lightColor.withOpacity(.1),
+                      height: 20,
+                      thickness: .5),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     MyTextView(
+                  //       "Adapté pour",
+                  //       textAligntNew: TextAlign.center,
+                  //       styleNew: MyTextStyle(
+                  //         colorNew: appColors.lightColor.withOpacity(.5),
+                  //         fontWeightNew: FontWeight.w400,
+                  //         size: ResponsiveFlutter.of(context).fontSize(1.5),
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 20,),
+                  //     Expanded(
+                  //       child: MyTextView(
+                  //         widget.eventTemplateModel!.eventsAdapted.toString(),
+                  //         textAligntNew: TextAlign.right,
+                  //         maxLinesNew: 100,
+                  //         styleNew: MyTextStyle(
+                  //           colorNew: appColors.lightColor,
+                  //           size: ResponsiveFlutter.of(context).fontSize(1.5),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // Divider(color: appColors.lightColor.withOpacity(.1),
+                  //     height: 20,
+                  //     thickness: .5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Inclu annimations",
+                        textAligntNew: TextAlign.center,
+                        styleNew: MyTextStyle(
+                          colorNew: appColors.lightColor.withOpacity(.5),
+                          fontWeightNew: FontWeight.w400,
+                          size: ResponsiveFlutter.of(context).fontSize(1.5),
+                        ),
+                      ),
+                      const SizedBox(width: 20,),
+                      Icon(widget.eventTemplateModel!.hasAnimations == true ? Icons.check : Icons.close, size: 20,),
+                    ],
+                  ),
+                ],
+              )
+          ),
+        ],
+      ),
     );
   }
 

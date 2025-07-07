@@ -83,15 +83,39 @@ class _TemplateChoiceState extends State<TemplateChoice> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: appColors.white,
-                              image: DecorationImage(
-                                image: NetworkImage(AppUrl.domainName + "/images/templates/${template.imagePath}"),
-                                fit: BoxFit.cover,
+                          GestureDetector(
+                            onTap: () async {
+                              final selected = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TemplatePreviewPage(template: template, data: {
+                                    "title": widget.titleController.text,
+                                    "address": widget.addressController.text,
+                                    "placeName": widget.placeNameController.text,
+                                    "details": widget.detailsController.text,
+                                    "category_id": widget.selectedCategory.id,
+                                    "start_date": widget.startDate.toString(),
+                                    "end_date": widget.endDate.toString(),
+                                    "image": widget.imageFile, //File
+                                    "image_base64": base64Encode(widget.imageFile!.readAsBytesSync()),
+                                    "image_name": widget.imageFile!.path.split('/').last,
+                                  },),
+                                ),
+                              );
+                              if (selected != null && selected is EventTemplateModel) {
+                                widget.changeTemplate(selected);
+                              }
+                            },
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: appColors.white,
+                                image: DecorationImage(
+                                  image: NetworkImage(AppUrl.domainName + "/images/templates/${template.imagePath}"),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                               ),
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                             ),
                           ),
                           Container(
@@ -126,64 +150,38 @@ class _TemplateChoiceState extends State<TemplateChoice> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        GestureDetector(
-                          onTap: () async {
-                            final selected = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TemplatePreviewPage(template: template, data: {
-                                  "title": widget.titleController.text,
-                                  "address": widget.addressController.text,
-                                  "placeName": widget.placeNameController.text,
-                                  "details": widget.detailsController.text,
-                                  "category_id": widget.selectedCategory.id,
-                                  "start_date": widget.startDate.toString(),
-                                  "end_date": widget.endDate.toString(),
-                                  "image": widget.imageFile, //File
-                                  "image_base64": base64Encode(widget.imageFile!.readAsBytesSync()),
-                                  "image_name": widget.imageFile!.path.split('/').last,
-                                },),
-                              ),
-                            );
-                            if (selected != null && selected is EventTemplateModel) {
-                              widget.changeTemplate(selected);
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: appColors.black.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                            margin: EdgeInsets.symmetric(vertical: 10, horizontal: isSelected ? 5 : 10),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.remove_red_eye, color: Colors.white, size: 15),
-                                const SizedBox(width: 5),
-                                MyTextView(
-                                  "Voir",
-                                  textAligntNew: TextAlign.center,
-                                  styleNew: MyTextStyle(
-                                    colorNew: appColors.white,
-                                    fontWeightNew: FontWeight.w600,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // Container(
+                        //   decoration: BoxDecoration(
+                        //     color: appColors.black.withOpacity(.5),
+                        //     borderRadius: BorderRadius.circular(10),
+                        //   ),
+                        //   padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                        //   margin: EdgeInsets.symmetric(vertical: 10, horizontal: isSelected ? 5 : 10),
+                        //   child: Row(
+                        //     mainAxisSize: MainAxisSize.min,
+                        //     children: [
+                        //       const Icon(Icons.remove_red_eye, color: Colors.white, size: 15),
+                        //       const SizedBox(width: 5),
+                        //       MyTextView(
+                        //         "Voir",
+                        //         textAligntNew: TextAlign.center,
+                        //         styleNew: MyTextStyle(
+                        //           colorNew: appColors.white,
+                        //           fontWeightNew: FontWeight.w600,
+                        //           size: ResponsiveFlutter.of(context).fontSize(1.4),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         if (isSelected)
                           Container(
                             decoration: BoxDecoration(
-                                color: appColors.white,
-                                shape: BoxShape.circle
+                              color: appColors.white,
+                              shape: BoxShape.circle
                             ),
                             child: Icon(Icons.check_circle, color: appColors.btnColor),
                           ),
-                        if (isSelected)
-                          const SizedBox(width: 10),
                       ],
                     )
                   ],

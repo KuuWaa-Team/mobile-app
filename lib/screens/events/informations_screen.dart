@@ -145,12 +145,12 @@ class _InformationsScreenState extends State<InformationsScreen> {
                                 size: ResponsiveFlutter.of(context).fontSize(2),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-
-                              },
-                              child: Icon(Icons.edit, color: appColors.btnColor,),
-                            )
+                            // GestureDetector(
+                            //   onTap: () {
+                            //
+                            //   },
+                            //   child: Icon(Icons.edit, color: appColors.btnColor,),
+                            // )
                           ],
                         ),
                         const SizedBox(height: 10,),
@@ -369,16 +369,16 @@ class _InformationsScreenState extends State<InformationsScreen> {
                                 size: ResponsiveFlutter.of(context).fontSize(2),
                               ),
                             ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-
-                                  },
-                                  child: Icon(Icons.edit, color: appColors.btnColor,),
-                                ),
-                              ],
-                            )
+                            // Row(
+                            //   children: [
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //
+                            //       },
+                            //       child: Icon(Icons.edit, color: appColors.btnColor,),
+                            //     ),
+                            //   ],
+                            // )
                           ],
                         ),
                         const SizedBox(height: 8,),
@@ -466,27 +466,6 @@ class _InformationsScreenState extends State<InformationsScreen> {
                             size: ResponsiveFlutter.of(context).fontSize(1.6),
                           ),
                         ),
-                        SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                        MyTextView(
-                          "Adapté pour",
-                          textAligntNew: TextAlign.start,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor.withOpacity(.5),
-                            fontWeightNew: FontWeight.w400,
-                            size: ResponsiveFlutter.of(context).fontSize(1.5),
-                          ),
-                        ),
-                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(1)),
-                        MyTextView(
-                          widget.event.template!.eventsAdapted.toString(),
-                          maxLinesNew: 20,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
-                            fontWeightNew: FontWeight.w500,
-                            size: ResponsiveFlutter.of(context).fontSize(1.6),
-                          ),
-                        ),
-                        SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                         MyTextView(
                           "Inclu des animations ?",
                           textAligntNew: TextAlign.start,
@@ -506,6 +485,7 @@ class _InformationsScreenState extends State<InformationsScreen> {
                             size: ResponsiveFlutter.of(context).fontSize(1.6),
                           ),
                         ),
+                        SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
                       ],
                     ),
                   ),
