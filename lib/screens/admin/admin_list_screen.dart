@@ -8,6 +8,7 @@ import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/eventAdmin/event_admin_controller.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
@@ -31,7 +32,6 @@ class _AdminListScreenState extends State<AdminListScreen> {
   bool sending = false;
 
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
 
   var maskFormatter = MaskTextInputFormatter(
       mask: '*## ### ###',
@@ -56,249 +56,215 @@ class _AdminListScreenState extends State<AdminListScreen> {
           children: [
             commonAppBar(
               context: context,
-              title: "Controlleurs",
+              title: "Gestionnaires",
               backArrow: true,
             ),
+            const SizedBox(height: 20,),
             Row(
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (true) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                      right: 0,
-                                      top: 0,
-                                      child: IconButton(onPressed: (){
-                                        Navigator.pop(context);
-                                      }, icon: const Icon(Icons.close)
-                                      )
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                                    child:
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const SizedBox(
-                                          height: 60,
-                                          width: 60,
-                                          child: Center(
-                                            child: Icon(
-                                              CupertinoIcons.xmark_circle,
-                                              color: Colors.red,
-                                              size: 50,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10,),
-                                        const Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text("Cet évenement n'est pas activé", style: TextStyle(
-                                                fontWeight: FontWeight.bold, color: Colors.red
-                                            ), textAlign: TextAlign.center,),
-                                            SizedBox(height: 10,),
-                                            Text("Vous ne pouvez pas ajouter des controlleurs à un évenement non activé.", style: TextStyle(
-                                                fontSize: 12
-                                            ), textAlign: TextAlign.center,),
-                                            Divider(),
-                                            Text("Pour activer l'évenement, vous devez payer les frais d'abonnement.", style: TextStyle(
-                                                fontSize: 12
-                                            ), textAlign: TextAlign.center,),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 20,),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => PaymentScreen(event: widget.event),
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                                                borderRadius: BorderRadius.circular(10)
-                                            ),
-                                            margin: const EdgeInsets.only(bottom: 10),
-                                            width: MediaQuery.of(context).size.width,
-                                            padding: const EdgeInsets.all(10),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  children: [
-                                                    const Icon(CupertinoIcons.check_mark_circled, size: 20,),
-                                                    const SizedBox(width: 7,),
-                                                    MyTextView(
-                                                      "Activer l'évenement",
-                                                      textAligntNew: TextAlign.start,
-                                                      maxLineWrap: true,
-                                                      styleNew: MyTextStyle(
-                                                        colorNew: appColors.black,
-                                                        fontWeightNew: FontWeight.w500,
-                                                        size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                          );
-                        },
-                      );
-                    } else {
-                      showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: appColors.appMediumColor,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only( // <-- SEE HERE
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0),
-                            ),
-                          ),
-                          builder: (context) {
-                            return StatefulBuilder(
-                                builder: (context, setState) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          MyTextView(
-                                            "Ajouter un Controlleur",
-                                            textAligntNew: TextAlign.center,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.lightColor,
-                                              fontWeightNew: FontWeight.w600,
-                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 20,),
-                                          Container(
-                                            height: ResponsiveFlutter.of(context).verticalScale(40),
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: ResponsiveFlutter.of(context).moderateScale(6),
-                                              horizontal: ResponsiveFlutter.of(context).moderateScale(15),
-                                            ),
-                                            margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
-                                            decoration: BoxDecoration(
-                                              color: appColors.appLightColor,
-                                              borderRadius: BorderRadius.circular(
-                                                ResponsiveFlutter.of(context).moderateScale(25),
-                                              ),
-                                            ),
-                                            child: commonTestField(
-                                              context: context,
-                                              controller: _nameController,
-                                              hintText: "Nom du controlleur",
-                                              keyboardType: TextInputType.text,
-                                              icon: true,
-                                            ),
-                                          ),
-                                          Container(
-                                            height: ResponsiveFlutter.of(context).verticalScale(40),
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: ResponsiveFlutter.of(context).moderateScale(5),
-                                              horizontal: ResponsiveFlutter.of(context).moderateScale(25),
-                                            ),
-                                            margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(25)),
-                                            decoration: BoxDecoration(
-                                              color: appColors.appLightColor,
-                                              borderRadius: BorderRadius.circular(
-                                                ResponsiveFlutter.of(context).moderateScale(25),
-                                              ),
-                                            ),
-                                            child: commonTestField(
-                                              context: context,
-                                              controller: _phoneController,
-                                              initial: "+243 ",
-                                              hintText: Strings.yourPhoneNumber,
-                                              keyboardType: TextInputType.phone,
-                                              inputFormatters: [maskFormatter],
-                                              icon: true,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              if (_nameController.text == "") {
-                                                Utils.flushBarErrorMessage("Vous devez enter le nom du controlleur", context);
-                                              } else if (_phoneController.text == "") {
-                                                Utils.flushBarErrorMessage("Vous devez enter le numéro de téléphone du controlleur", context);
-                                              } else {
-                                                setState(() {
-                                                  loading = true;
-                                                });
-                                                Map data = {
-                                                  "name": _nameController.text,
-                                                  "phoneNumber": _phoneController.text,
-                                                  "eventId": widget.event.id!
-                                                };
+                    List<String> selectedPermissions = [EventAdminRoles.verifyInvitations];
 
-                                                await adminViewModel.addAdmin(context, data).then((value) {
-                                                  setState(() {
-                                                    loading = false;
-                                                    _nameController.text = "";
-                                                    _phoneController.text = "";
-                                                  });
-                                                });
-                                              }
-                                            },
-                                            child: CommonButton(
-                                              title: "Enrégistrer",
-                                              loading: loading,
-                                            ),
-                                          ),
-                                          SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
-                                        ],
+                    final Map<String, String> permissionLabels = {
+                      "Vérifier les invitations": EventAdminRoles.verifyInvitations,
+                      "Envoyer des invitations": EventAdminRoles.sendInvitations,
+                      "Ajouter des gestionnaires": EventAdminRoles.addAdmins,
+                      "Gestion des tables": EventAdminRoles.manageTables,
+                      "Gestion des boissons": EventAdminRoles.manageDrinks,
+                      "Gérer le livre d'or": EventAdminRoles.manageGuestbook,
+                      "Gérer l'album photo": EventAdminRoles.managePhotoAlbum,
+                      "Consulter les demandes musicales": EventAdminRoles.viewMusicRequests,
+                      "Gérer le jeu interactif": EventAdminRoles.manageInteractiveGame,
+                    };
+
+                    final String alwaysCheckedLabel = "Vérifier les invitations";
+
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: appColors.appMediumColor,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                      ),
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            bool isAllChecked() =>
+                                selectedPermissions.length == permissionLabels.length;
+
+                            void toggleAll(bool value) {
+                              setState(() {
+                                selectedPermissions = value
+                                    ? [...permissionLabels.values]
+                                    : [EventAdminRoles.verifyInvitations];
+                              });
+                            }
+
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                top: 20,
+                                left: 20,
+                                right: 20,
+                                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                              ),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    MyTextView(
+                                      "Ajouter un Gestionnaires",
+                                      textAligntNew: TextAlign.center,
+                                      styleNew: MyTextStyle(
+                                        colorNew: appColors.lightColor,
+                                        fontWeightNew: FontWeight.w600,
+                                        size: ResponsiveFlutter.of(context).fontSize(1.5),
                                       ),
                                     ),
-                                  );
-                                }
+                                    const SizedBox(height: 20),
+                                    Container(
+                                      height: ResponsiveFlutter.of(context).verticalScale(40),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                        horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                      ),
+                                      margin: EdgeInsets.only(
+                                        bottom: ResponsiveFlutter.of(context).moderateScale(10),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: appColors.appLightColor,
+                                        borderRadius: BorderRadius.circular(
+                                          ResponsiveFlutter.of(context).moderateScale(25),
+                                        ),
+                                      ),
+                                      child: commonTestField(
+                                        context: context,
+                                        controller: _nameController,
+                                        hintText: "Nom du Gestionnaires",
+                                        keyboardType: TextInputType.text,
+                                        icon: true,
+                                      ),
+                                    ),
+
+                                    // Tout cocher
+                                    CheckboxListTile(
+                                      title: MyTextView(
+                                        "Tout cocher",
+                                        styleNew: MyTextStyle(
+                                          colorNew: appColors.black,
+                                          fontWeightNew: FontWeight.w600,
+                                          size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                        ),
+                                      ),
+                                      activeColor: appColors.btnColor,
+                                      value: isAllChecked(),
+                                      onChanged: (val) => toggleAll(val ?? false),
+                                      visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+                                    ),
+
+                                    // Liste des permissions
+                                    ...permissionLabels.entries.map((entry) {
+                                      final label = entry.key;
+                                      final value = entry.value;
+                                      final isMandatory = label == alwaysCheckedLabel;
+
+                                      return Column(
+                                        children: [
+                                          Divider(
+                                            height: 1,
+                                            color: Colors.black.withOpacity(.05),
+                                            thickness: 1,
+                                          ),
+                                          CheckboxListTile(
+                                            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+                                            title: MyTextView(
+                                              label,
+                                              styleNew: MyTextStyle(
+                                                colorNew: appColors.black,
+                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
+                                              ),
+                                            ),
+                                            activeColor: appColors.btnColor,
+                                            value: selectedPermissions.contains(value),
+                                            onChanged: isMandatory
+                                                ? null
+                                                : (bool? checked) {
+                                              setState(() {
+                                                if (checked == true) {
+                                                  selectedPermissions.add(value);
+                                                } else {
+                                                  selectedPermissions.remove(value);
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }).toList(),
+
+                                    const SizedBox(height: 10),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        if (_nameController.text.trim().isEmpty) {
+                                          Utils.flushBarErrorMessage("Vous devez entrer le nom du Gestionnaires", context);
+                                          return;
+                                        }
+                                        if (selectedPermissions.isEmpty) {
+                                          Utils.flushBarErrorMessage("Veuillez sélectionner au moins une autorisation", context);
+                                          return;
+                                        }
+
+                                        setState(() => loading = true);
+
+                                        Map data = {
+                                          "name": _nameController.text.trim(),
+                                          "eventId": widget.event.id!,
+                                          "permissions": selectedPermissions,
+                                        };
+
+                                        await adminViewModel.addAdmin(context, data).then((value) {
+                                          setState(() {
+                                            loading = false;
+                                            _nameController.text = "";
+                                            selectedPermissions = [EventAdminRoles.verifyInvitations];
+                                          });
+                                        });
+                                      },
+                                      child: CommonButton(
+                                        title: "Enrégistrer",
+                                        loading: loading,
+                                      ),
+                                    ),
+                                    SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                                  ],
+                                ),
+                              ),
                             );
-                          }
-                      );
-                    }
+                          },
+                        );
+                      },
+                    );
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 20, right: 10),
                     width: MediaQuery.of(context).size.width - 100,
                     decoration: BoxDecoration(
-                        color: appColors.btnColor,
-                        borderRadius: BorderRadius.circular(30)
+                      color: appColors.btnColor,
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.add, color: Colors.white, size: 20,),
-                        const SizedBox(width: 5,),
+                        const Icon(Icons.add, color: Colors.white, size: 20),
+                        const SizedBox(width: 5),
                         MyTextView(
                           Strings.add,
                           textAligntNew: TextAlign.center,
                           styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
+                            colorNew: appColors.white,
                             fontWeightNew: FontWeight.w600,
                             size: ResponsiveFlutter.of(context).fontSize(1.5),
                           ),
@@ -314,7 +280,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                   child: Container(
                     width: 50,
                     decoration: BoxDecoration(
-                        color: appColors.appLightColor,
+                        color: appColors.darkGreyText,
                         borderRadius: BorderRadius.circular(30)
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -368,13 +334,13 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                   Icon(Icons.block_outlined, color: appColors.lightColor.withOpacity(.2),),
                                   const SizedBox(width: 10,),
                                   MyTextView(
-                                    "Vous n'avez ajouté aucun controlleur",
+                                    "Vous n'avez ajouté aucun Gestionnaires",
                                     textAligntNew: TextAlign.start,
                                     maxLinesNew: 3,
                                     styleNew: MyTextStyle(
                                       colorNew: appColors.lightColor.withOpacity(.2),
                                       fontWeightNew: FontWeight.w400,
-                                      size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                      size: ResponsiveFlutter.of(context).fontSize(1.6),
                                     ),
                                   ),
                                 ],
@@ -393,145 +359,138 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                   itemBuilder: (context, index) {
                                     EventAdminModel admin = adminViewModel.adminsList.data![index];
 
-                                    return Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(
-                                        bottom: ResponsiveFlutter.of(context).moderateScale(15),
-                                      ),
-                                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                                      decoration: BoxDecoration(
-                                        color: appColors.appLightColor,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              const SizedBox(width: 10,),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              MyTextView(
-                                                                admin.name.toString(),
-                                                                textAligntNew: TextAlign.center,
-                                                                styleNew: MyTextStyle(
-                                                                  colorNew: appColors.lightColor,
-                                                                  fontWeightNew: FontWeight.w600,
-                                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                    return GestureDetector(
+                                      onTap: () => _showAdminDetailsModal(context, admin),
+                                      child: Container(
+                                        width: double.infinity,
+                                        margin: EdgeInsets.only(
+                                          bottom: ResponsiveFlutter.of(context).moderateScale(10),
+                                        ),
+                                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                        decoration: BoxDecoration(
+                                          color: appColors.appLightColor,
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                const SizedBox(width: 10,),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                MyTextView(
+                                                                  admin.name.toString(),
+                                                                  textAligntNew: TextAlign.center,
+                                                                  styleNew: MyTextStyle(
+                                                                    colorNew: appColors.lightColor,
+                                                                    fontWeightNew: FontWeight.w600,
+                                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          const SizedBox(height: 3,),
-                                                          MyTextView(
-                                                            "+243 " + admin.phoneNumber!,
-                                                            textAligntNew: TextAlign.center,
-                                                            styleNew: MyTextStyle(
-                                                              colorNew: appColors.lightColor.withOpacity(.5),
-                                                              fontWeightNew: FontWeight.w400,
-                                                              size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                              ],
                                                             ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                if (admin.status == 'refused')
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        color: appColors.red
+                                                    ),
+                                                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
+                                                    child: Row(
+                                                      children: [
+                                                        MyTextView(
+                                                          "Pas disponible",
+                                                          textAligntNew: TextAlign.center,
+                                                          styleNew: MyTextStyle(
+                                                            colorNew: appColors.lightColor,
+                                                            fontWeightNew: FontWeight.w700,
+                                                            size: ResponsiveFlutter.of(context).fontSize(1.3),
                                                           ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              if (admin.status == 'refused')
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      color: appColors.red
-                                                  ),
-                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
-                                                  child: Row(
-                                                    children: [
-                                                      MyTextView(
-                                                        "Pas disponible",
-                                                        textAligntNew: TextAlign.center,
-                                                        styleNew: MyTextStyle(
-                                                          colorNew: appColors.lightColor,
-                                                          fontWeightNew: FontWeight.w700,
-                                                          size: ResponsiveFlutter.of(context).fontSize(1.3),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              if (admin.status == 'refused')
-                                                Container(
-                                                  margin: const EdgeInsets.only(left: 10),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(20),
-                                                      color: appColors.lightColor.withOpacity(.1)
+                                                if (admin.status == 'refused')
+                                                  Container(
+                                                    margin: const EdgeInsets.only(left: 10),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                        color: appColors.lightColor.withOpacity(.1)
+                                                    ),
+                                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(Icons.close, color: appColors.lightColor, size: 15,)
+                                                      ],
+                                                    ),
                                                   ),
-                                                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(Icons.close, color: appColors.lightColor, size: 15,)
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (admin.status == 'waiting')
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      color: Colors.orange
-                                                  ),
-                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                                  child: Row(
-                                                    children: [
-                                                      MyTextView(
-                                                        'En attente' ,
-                                                        textAligntNew: TextAlign.center,
-                                                        styleNew: MyTextStyle(
-                                                          colorNew: appColors.lightColor,
-                                                          fontWeightNew: FontWeight.w400,
-                                                          size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                if (admin.status == 'waiting')
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        color: Colors.orange
+                                                    ),
+                                                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                                    child: Row(
+                                                      children: [
+                                                        MyTextView(
+                                                          'En attente' ,
+                                                          textAligntNew: TextAlign.center,
+                                                          styleNew: MyTextStyle(
+                                                            colorNew: appColors.lightColor,
+                                                            fontWeightNew: FontWeight.w400,
+                                                            size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              if (admin.status == 'accepted')
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      color: Colors.green
-                                                  ),
-                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                                  child: Row(
-                                                    children: [
-                                                      MyTextView(
-                                                        'Actif' ,
-                                                        textAligntNew: TextAlign.center,
-                                                        styleNew: MyTextStyle(
-                                                          colorNew: appColors.lightColor,
-                                                          fontWeightNew: FontWeight.w400,
-                                                          size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                if (admin.status == 'accepted')
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        color: Colors.green
+                                                    ),
+                                                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                                    child: Row(
+                                                      children: [
+                                                        MyTextView(
+                                                          'Actif' ,
+                                                          textAligntNew: TextAlign.center,
+                                                          styleNew: MyTextStyle(
+                                                            colorNew: appColors.lightColor,
+                                                            fontWeightNew: FontWeight.w400,
+                                                            size: ResponsiveFlutter.of(context).fontSize(1.2),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                            ],
-                                          )
-                                        ],
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },
@@ -547,4 +506,113 @@ class _AdminListScreenState extends State<AdminListScreen> {
       ),
     );
   }
+
+  void _showAdminDetailsModal(BuildContext context, EventAdminModel admin) {
+    final List<String> rolesList = admin.roles.toString().split(',');
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
+      backgroundColor: appColors.appLightColor,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                MyTextView(
+                  admin.name.toString(),
+                  textAligntNew: TextAlign.center,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.black,
+                    fontWeightNew: FontWeight.w700,
+                    size: ResponsiveFlutter.of(context).fontSize(2),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                MyTextView(
+                  admin.invitationCode ?? "—",
+                  textAligntNew: TextAlign.center,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.btnColor,
+                    fontWeightNew: FontWeight.bold,
+                    size: ResponsiveFlutter.of(context).fontSize(3.5),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: MyTextView(
+                    "Autorisations :",
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.black,
+                      fontWeightNew: FontWeight.w600,
+                      size: ResponsiveFlutter.of(context).fontSize(1.6),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ...rolesList.map((role) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_circle_outline, size: 16, color: Colors.green),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: MyTextView(
+                            EventAdminRoles.getLabel(role),
+                            styleNew: MyTextStyle(
+                              colorNew: appColors.black,
+                              size: ResponsiveFlutter.of(context).fontSize(1.4),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                const SizedBox(height: 25),
+                GestureDetector(
+                  onTap: () {
+                    final labelRoles = rolesList.map((r) => "- ${EventAdminRoles.getLabel(r)}").join("\n");
+
+                    final message = '''
+Bonjour ${admin.name},
+                      
+Vous avez été sélectionné comme gestionnaire de l'évènement "${widget.event.title}" (${widget.event.category!.name}).
+                      
+Votre code d’accès : 
+${admin.invitationCode}
+                      
+Rôles assignés :
+$labelRoles
+                      
+Téléchargez KuuWaa pour accéder a l'évenement : https://kuuwaa.com/telecharger
+                      ''';
+
+                    Share.share(message);
+                  },
+                  child: CommonButton(title: "Envoyer l'invitation"),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }

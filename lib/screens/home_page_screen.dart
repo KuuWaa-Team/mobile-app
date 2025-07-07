@@ -1,7 +1,10 @@
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:kuuwaa/common/app_colors.dart';
+import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
@@ -144,18 +147,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
                             ResponsiveFlutter.of(context).moderateScale(25),
-                          ), // Creates border
+                          ),
                           color: appColors.btnColor,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.add, color: Colors.white, size: 20,),
-                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(5),),
+                            const Icon(Icons.add, color: Colors.white, size: 20),
+                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(5)),
                             MyTextView(
                               Strings.createEvent,
-                              textAligntNew: TextAlign.start,
-                              maxLineWrap: true,
                               styleNew: MyTextStyle(
                                 colorNew: appColors.white,
                                 fontWeightNew: FontWeight.w600,
@@ -166,6 +167,37 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
+
+                    GestureDetector(
+                      onTap: () => _showJoinEventModal(context),
+                      child: Container(
+                        height: ResponsiveFlutter.of(context).moderateScale(40),
+                        margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            ResponsiveFlutter.of(context).moderateScale(25),
+                          ),
+                          color: appColors.darkGreyText,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.lock_open_rounded, color: Colors.white, size: 20),
+                            SizedBox(width: ResponsiveFlutter.of(context).moderateScale(5)),
+                            MyTextView(
+                              "Rejoindre un évènement",
+                              styleNew: MyTextStyle(
+                                colorNew: appColors.white,
+                                fontWeightNew: FontWeight.w600,
+                                size: ResponsiveFlutter.of(context).fontSize(1.8),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                   ],
                 ),
               ),
@@ -181,4 +213,124 @@ class _HomeScreenState extends State<HomeScreen> {
       )
     );
   }
+  void _showJoinEventModal(BuildContext context) {
+    String code = "";
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: appColors.appMediumColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: MyTextView(
+                      "Rejoindre un évènement",
+                      textAligntNew: TextAlign.center,
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.btnColor,
+                        fontWeightNew: FontWeight.w700,
+                        size: ResponsiveFlutter.of(context).fontSize(2.4),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  MyTextView(
+                    "Si une personne vous a ajouté comme gestionnaire de son évènement, vous avez sûrement reçu un code à 6 chiffres. Entrez ce code ci-dessous.",
+                    maxLineWrap: true,
+                    textAligntNew: TextAlign.left,
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.black.withOpacity(0.85),
+                      fontWeightNew: FontWeight.w400,
+                      size: ResponsiveFlutter.of(context).fontSize(1.5),
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: PinCodeTextField(
+                  length: 6,
+
+                  obscureText: false,
+                  animationType: AnimationType.fade,
+                  keyboardType: TextInputType.number,
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(10),
+                    fieldHeight: 45,
+                    fieldWidth: 45,
+                    activeColor: appColors.btnColor,
+                    inactiveColor: Colors.grey,
+                    selectedColor: appColors.btnColor.withOpacity(0.7),
+                  ),
+                  animationDuration: const Duration(milliseconds: 300),
+                  backgroundColor: Colors.transparent,
+                  enableActiveFill: false,
+                  onChanged: (value) {
+                    code = value.toUpperCase();
+                  },
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  appContext: context,
+
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: MyTextView(
+                  "Si vous ne l’avez pas reçu, veuillez contacter la personne qui vous invite.",
+                  maxLineWrap: true,
+                  textAligntNew: TextAlign.left,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.black.withOpacity(0.7),
+                    fontWeightNew: FontWeight.w400,
+                    size: ResponsiveFlutter.of(context).fontSize(1.4),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  if (code.length != 6) {
+                    Utils.flushBarErrorMessage("Veuillez entrer un code valide à 6 chiffres", context);
+                    return;
+                  }
+
+                  Navigator.pop(context);
+                  // TODO: Appeler l’API pour rejoindre l’événement avec ce code
+                  Utils.toastMessage("Code reçu : $code");
+                },
+                child: CommonButton(title: "Rejoindre"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
 }

@@ -13,7 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 class CheckScreen extends StatefulWidget {
   EventModel event;
@@ -32,24 +32,23 @@ class _CheckScreenState extends State<CheckScreen> {
 
   InvitationViewModel invitationViewModel = InvitationViewModel();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  // Barcode? result;
-  // QRViewController? controller;
+  late QRViewController controller; // ✅ `late` avec sécurité
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
   final TextEditingController _codeController = TextEditingController();
 
   @override
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      // controller!.pauseCamera();
+      controller.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller.resumeCamera();
     }
-    // controller!.resumeCamera();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -171,7 +170,7 @@ class _CheckScreenState extends State<CheckScreen> {
                 ),
               ),
             ),
-            // Expanded(flex: 4, child: _buildQrView(context)),
+            Expanded(flex: 4, child: _buildQrView(context)),
           ],
         ),
       )
@@ -179,201 +178,32 @@ class _CheckScreenState extends State<CheckScreen> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
+    final scanArea = (MediaQuery.of(context).size.width < 400 ||
         MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
+
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: appColors.btnColor,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
+        borderColor: appColors.btnColor,
+        borderRadius: 10,
+        borderLength: 30,
+        borderWidth: 10,
+        cutOutSize: scanArea,
+      ),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
+    this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       if (scanData.code != null && !checked) {
-        setState(() {
-          checked = true;
-        });
-        bool unknown = true;
-        Map result = {};
-
-        try {
-          result = jsonDecode(scanData.code!);
-          unknown = false;
-        } catch(e) {
-          if (kDebugMode) {
-            print(e);
-          }
-        }
-
-        if (unknown || !result.containsKey("type") || result['type'] != 'KuuWaa' || !result.containsKey("kwEv")) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return  CheckDialog(
-                context: context,
-                color: Colors.red,
-                message: "Ce codeQR n'est pas reconnu par KuuWaa. Veuillez utiliser le code à 6 chiffres si vous avez des doutes",
-                status: "Invitation invalide",
-                icon: CupertinoIcons.xmark_circle_fill,
-                onClose: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    checked = false;
-                  });
-                },
-                onValidate: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    checked = false;
-                  });
-                },
-                btnTitle: "D'accord",
-              );
-            },
-          );
-        } else {
-          int id = int.parse(result['kwEv'].toString().replaceAll('KW000', ''));
-          if (id != widget.event.id!) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return  CheckDialog(
-                  context: context,
-                  color: Colors.red,
-                  message: "Vous essayez de vérifier une invitation d'un évenement auquel vous n'êtes pas controlleur.",
-                  status: "Vérification non autorisée",
-                  icon: CupertinoIcons.nosign,
-                  onClose: () {
-                    Navigator.pop(context);
-                  },
-                  onValidate: () {
-                    Navigator.pop(context);
-                    setState(() {
-                      checked = false;
-                    });
-                  },
-                  btnTitle: "D'accord",
-                );
-              },
-            );
-          } else {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return CheckDialog(
-                  context: context,
-                  color: result["status"] == "verified" ? Colors.red : Colors.green,
-                  message: result["status"] == "verified"
-                      ? "Cette invitation a été déjà vérifié par un controlleur. "
-                      "L'invité doit déjà être dans la salle."
-                      : "L'invitation est valide. L'invité peut accéder à la salle. "
-                      "Vérifiez l'invitation pour qu'elle ne soit plus utilisée."
-                  ,
-                  status: result["status"] == "verified" ? "Invitation déjà vérifiée" : "Invitation valide",
-                  icon: result["status"] == "verified" ? CupertinoIcons.xmark_circle_fill: CupertinoIcons.check_mark_circled_solid,
-                  onClose: () {
-                    Navigator.pop(context);
-                    setState(() {
-                      checked = false;
-                    });
-                  },
-                  onValidate: () {
-                    if (result["status"] != 'verified') {
-                      invitationViewModel.validateInvitation(context, result['id']);
-                    }
-                    Navigator.pop(context);
-                    setState(() {
-                      checked = false;
-                    });
-                  },
-                  btnTitle: result['status'] == 'verified' ? "D'accord" : "Vérifier",
-                  data: result['status'] == 'verified' ? null :
-                  [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(.1),
-                          borderRadius: BorderRadius.circular(5)
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Nom", style: TextStyle(
-                              color: Colors.black.withOpacity(.5)
-                          ),),
-                          Text(result['civility'] + " "+ result['name'], style: const TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(.1),
-                          borderRadius: BorderRadius.circular(5)
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Table", style: TextStyle(
-                              color: Colors.black.withOpacity(.5)
-                          ),),
-                          Text(result['table'] ?? "-", style: const TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),),
-                        ],
-                      ),
-                    ),
-                    if (result["status"] != "verified" && result['count'] > 1)
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(.1),
-                            borderRadius: BorderRadius.circular(5)
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Nombre de personnes", style: TextStyle(
-                                color: Colors.black.withOpacity(.5)
-                            ),),
-                            Text(result['count'].toString(), style: const TextStyle(
-                                fontWeight: FontWeight.bold
-                            ),),
-                          ],
-                        ),
-                      ),
-                  ]
-                );
-              },
-            );
-
-          }
-        }
+        setState(() => checked = true);
+        _handleScannedCode(scanData.code!);
       }
-
     });
   }
 
@@ -381,14 +211,107 @@ class _CheckScreenState extends State<CheckScreen> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
+        const SnackBar(content: Text('Pas de permission caméra')),
       );
     }
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    controller.dispose();
     super.dispose();
+  }
+
+  void _handleScannedCode(String code) {
+    bool unknown = true;
+    Map result = {};
+    try {
+      result = jsonDecode(code);
+      unknown = false;
+    } catch (e) {
+      if (kDebugMode) print(e);
+    }
+
+    if (unknown || !result.containsKey("type") || result['type'] != 'KuuWaa' || !result.containsKey("kwEv")) {
+      _showDialogError("Ce codeQR n'est pas reconnu par KuuWaa...");
+    } else if (int.parse(result['kwEv'].toString().replaceAll('KW000', '')) != widget.event.id!) {
+      _showDialogError("Vous essayez de vérifier une invitation d'un autre événement.");
+    } else {
+      _showDialogValid(result);
+    }
+  }
+
+  void _showDialogError(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => CheckDialog(
+        color: Colors.red,
+        message: message,
+        status: "Erreur",
+        icon: CupertinoIcons.xmark_circle_fill,
+        onClose: () => setState(() => checked = false),
+        onValidate: () => setState(() => checked = false),
+        btnTitle: "D'accord",
+      ),
+    );
+  }
+
+  void _showDialogValid(Map result) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => CheckDialog(
+        color: result["status"] == "verified" ? Colors.red : Colors.green,
+        message: result["status"] == "verified"
+            ? "Cette invitation a déjà été vérifiée."
+            : "L'invitation est valide. Vérifiez pour confirmer.",
+        status: result["status"] == "verified"
+            ? "Déjà vérifiée"
+            : "Valide",
+        icon: result["status"] == "verified"
+            ? CupertinoIcons.xmark_circle_fill
+            : CupertinoIcons.check_mark_circled_solid,
+        onClose: () => setState(() => checked = false),
+        onValidate: () {
+          if (result["status"] != 'verified') {
+            invitationViewModel.validateInvitation(context, result['id']);
+          }
+          setState(() => checked = false);
+          Navigator.pop(context);
+        },
+        btnTitle: result['status'] == 'verified' ? "D'accord" : "Vérifier",
+        data: result['status'] == 'verified'
+            ? null
+            : _buildGuestInfoWidgets(result),
+      ),
+    );
+  }
+
+  List<Widget> _buildGuestInfoWidgets(Map result) {
+    return [
+      _infoItem("Nom", "${result['civility']} ${result['name']}"),
+      _infoItem("Table", result['table'] ?? "-"),
+      if (result["status"] != "verified" && result['count'] > 1)
+        _infoItem("Nombre de personnes", result['count'].toString()),
+    ];
+  }
+
+  Widget _infoItem(String label, String value) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(color: Colors.black.withOpacity(.5))),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
   }
 }
