@@ -39,11 +39,11 @@ class InvitationViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<bool> listingApi(BuildContext context, int id) async {
+  Future<bool> listingApi(BuildContext context, int id,
+      {bool withMusicRequest = false}) async {
     setInvitationsList(ApiResponse.loading());
     setLoading(true);
-    await _repository.getEventInvitationsApi(context: context, id: id).then((value) {
-      print(value);
+    await _repository.getEventInvitationsApi(context: context, id: id, withMusicRequest: true).then((value) {
       setLoading(false);
       if (value['success'] == true  ) {
         List invitationsJson = value['data'];

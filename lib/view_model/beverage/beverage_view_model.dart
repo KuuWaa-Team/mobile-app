@@ -71,4 +71,29 @@ class BeverageViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> removeBeverage(BuildContext context, int id) async {
+    setLoading(true);
+    await _repository.removeBeverageApi(context: context, id: id).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        List beveragesJson = value['beverages'];
+        List<BeverageModel> beveragesData = [];
+        if (beveragesJson.isNotEmpty) {
+          for (var element in beveragesJson) {
+            beveragesData.add(BeverageModel.fromJson(element));
+          }
+        }
+        setBeveragesList(ApiResponse.completed(beveragesData));
+        Navigator.pop(context);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
+
 }

@@ -6,9 +6,13 @@ import 'package:kuuwaa/resource/config/app_url.dart';
 class InvitationRepository {
   final BaseApiServices _apiServices = NetworkApiService();
 
-  Future<dynamic> getEventInvitationsApi ({required BuildContext context, required int id}) async {
+  Future<dynamic> getEventInvitationsApi ({required BuildContext context, required int id, bool withMusicRequest = false}) async {
     try  {
-      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id/invitations", context: context, auth: false);
+      String url = AppUrl.eventEndPoint + "/$id/invitations";
+      if (withMusicRequest) {
+        url += "?wm=1";
+      }
+      dynamic response = await _apiServices.getGetResponse(url, context: context, auth: false);
       return response;
     } catch(e) {
       rethrow;

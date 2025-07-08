@@ -8,6 +8,7 @@ class InvitationModel {
   String? name;
   String? civility;
   String? status;
+  String? musicChoice;
   int? count;
   String? phoneNumber;
   String? slug;
@@ -23,6 +24,7 @@ class InvitationModel {
   InvitationModel({
     this.id,
     this.name,
+    this.musicChoice,
     this.phoneNumber,
     this.slug,
     this.bookSent,
@@ -42,6 +44,7 @@ class InvitationModel {
     name = json['name'];
     slug = json['slug'];
     civility = json['civility'];
+    musicChoice = json['musicChoice'];
     bookSent = json['bookSent'];
     if (json['beverage'] != null) {
       beverage = BeverageModel.fromJson(json['beverage']);
@@ -68,6 +71,7 @@ class InvitationModel {
     data['civility'] = civility;
     data['slug'] = slug;
     data['code'] = code;
+    data['musicChoice'] = musicChoice;
     data['bookSent'] = bookSent;
     data['decryptKey'] = decryptKey;
     data['codePath'] = codePath;
