@@ -517,3 +517,52 @@ class OperationStatus {
   static String paid = "STATUS_PAID";
   static String failed = "STATUS_FAILED";
 }
+
+class EventAdminRoles {
+  static const String verifyInvitations     = "VERIFY_INVITATIONS";
+  static const String sendInvitations       = "SEND_INVITATIONS";
+  static const String addAdmins             = "ADD_ADMINS";
+  static const String manageTables          = "MANAGE_TABLES";
+  static const String manageDrinks          = "MANAGE_DRINKS";
+  static const String manageGuestbook       = "MANAGE_GUESTBOOK";
+  static const String managePhotoAlbum      = "MANAGE_PHOTO_ALBUM";
+  static const String viewMusicRequests     = "VIEW_MUSIC_REQUESTS";
+  static const String manageInteractiveGame = "MANAGE_INTERACTIVE_GAME";
+
+  static String getLabel(String code) {
+    switch (code) {
+      case "VERIFY_INVITATIONS":
+        return "Vérifier les invitations";
+      case "SEND_INVITATIONS":
+        return "Envoyer des invitations";
+      case "ADD_ADMINS":
+        return "Ajouter des controlleurs";
+      case "MANAGE_TABLES":
+        return "Gestion des tables";
+      case "MANAGE_DRINKS":
+        return "Gestion des boissons";
+      case "MANAGE_GUESTBOOK":
+        return "Gérer le livre d'or";
+      case "MANAGE_PHOTO_ALBUM":
+        return "Gérer l'album photo";
+      case "VIEW_MUSIC_REQUESTS":
+        return "Consulter les demandes musicales";
+      case "MANAGE_INTERACTIVE_GAME":
+        return "Gérer le jeu interactif";
+      default:
+        return code;
+    }
+  }
+
+  static List<String> get all => [
+    verifyInvitations,
+    sendInvitations,
+    addAdmins,
+    manageTables,
+    manageDrinks,
+    manageGuestbook,
+    managePhotoAlbum,
+    viewMusicRequests,
+    manageInteractiveGame,
+  ];
+}

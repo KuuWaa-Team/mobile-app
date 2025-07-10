@@ -217,7 +217,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => BottomBarScreen(),
+                                              builder: (context) => const BottomBarScreen(),
                                             ),
                                           );
                                         },
@@ -645,7 +645,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               Icon(Icons.admin_panel_settings_rounded, size: 15, color: appColors.btnColor,),
                                               SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
                                               MyTextView(
-                                                "Controlleurs",
+                                                "Gestionnaires",
                                                 textAligntNew: TextAlign.start,
                                                 maxLineWrap: true,
                                                 styleNew: MyTextStyle(

@@ -17,6 +17,8 @@ class EventAdminRepository {
 
   Future<dynamic> addAdminApi ({required BuildContext context, required Map data}) async {
     try  {
+      print("object");
+      print(data);
       dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventAdminEndPoint, data, context: context, auth: true);
       return response;
     } catch(e) {

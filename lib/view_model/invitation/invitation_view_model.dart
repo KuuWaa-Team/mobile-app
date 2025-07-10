@@ -432,7 +432,6 @@ class InvitationViewModel with ChangeNotifier{
             dataInvitation = InvitationModel.fromJson(value['data']);
             if (dataInvitation.event!.id != event.id) {
               return  CheckDialog(
-                context: context,
                 color: Colors.red,
                 message: "Vous essayez de vérifier une invitation d'un évenement auquel vous n'êtes pas controlleur.",
                 status: "Vérification non autorisée",
@@ -449,7 +448,6 @@ class InvitationViewModel with ChangeNotifier{
           }
 
           return CheckDialog(
-            context: context,
             color: value['success'] ? Colors.green: Colors.red,
             message: value['message'],
             status: value['success'] ? "Invitation valide" : "Invitation invalide",

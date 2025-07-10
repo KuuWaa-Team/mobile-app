@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kuuwaa/common/common_button.dart';
 
 class CheckDialog extends StatelessWidget {
-
-  final BuildContext context;
   final String status;
   final String message;
   final Color color;
@@ -12,88 +10,93 @@ class CheckDialog extends StatelessWidget {
   final void Function()? onClose;
   final void Function()? onValidate;
   final String btnTitle;
-  List<Widget>? data;
+  final List<Widget>? data;
+  final String? secondaryBtnTitle;
+  final void Function()? onSecondaryValidate;
 
-  CheckDialog({
+  const CheckDialog({
     Key? key,
-    required this.context,
     required this.status,
     required this.message,
     required this.color,
     required this.icon,
-    required this.onClose,
-    required this.onValidate,
+    this.onClose,
+    this.onValidate,
     this.btnTitle = "",
-    this.data
+    this.data,
+    this.secondaryBtnTitle,
+    this.onSecondaryValidate,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Stack(
         children: [
-          Positioned(
-            right: 0,
-            top: 0,
-            child: IconButton(
-              onPressed: onClose,
-              icon: const Icon(Icons.close),
-            ),
-          ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Icon(
-                    icon,
-                    color: color,
-                    size: 100,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, color: color, size: 80),
+                  const SizedBox(height: 15),
+                  Text(
+                    status,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  status,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                    fontSize: 25,
+                  const SizedBox(height: 10),
+                  Text(
+                    message,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black.withOpacity(0.6),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  message,
-                  style: TextStyle(
-                    color: Colors.black.withOpacity(.4),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                if (data != null)
-                const SizedBox(height: 10),
-                if (data != null)
-                  ...data!,
-                const SizedBox(height: 20),
-                if (btnTitle != "")
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: onValidate,
+                  if (data != null) ...[
+                    const SizedBox(height: 15),
+                    ...data!,
+                  ],
+                  const SizedBox(height: 25),
+                  if (btnTitle.isNotEmpty)
+                    GestureDetector(
+                      onTap: onValidate,
+                      child: CommonButton(
+                        title: btnTitle,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                      ),
+                    ),
+                  if (secondaryBtnTitle != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: GestureDetector(
+                        onTap: onSecondaryValidate,
                         child: CommonButton(
-                          title: btnTitle,
+                          title: secondaryBtnTitle!,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
+                          btnColor: Colors.grey.shade300,
+                          textColor: Colors.black87,
                         ),
                       ),
-                    ],
-                  ),
-              ],
+                    ),
+                  const SizedBox(height: 10),
+                  if (onClose != null)
+                    TextButton(
+                      onPressed: onClose,
+                      child: const Text(
+                        "Fermer",
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
