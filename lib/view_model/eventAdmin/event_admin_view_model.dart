@@ -74,15 +74,15 @@ class EventAdminViewModel with ChangeNotifier{
     return true;
   }
 
-  Future<bool> acceptInvitationApi (BuildContext context, Map data, int id) async {
+  Future<bool> acceptInvitationApi (BuildContext context, Map data) async {
     setLoading(true);
-    await _repository.acceptInvitationApi(context: context, data: data, id: id).then((value) {
+    await _repository.acceptInvitationApi(context: context, data: data).then((value) {
       setLoading(false);
       if (value['success'] == true  ) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
         Utils.toastMessage(value['message']);

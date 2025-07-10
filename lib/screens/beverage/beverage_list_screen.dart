@@ -28,6 +28,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
 
   bool loading = false;
   bool sending = false;
+  String? selectedType;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _countController = TextEditingController();
@@ -58,6 +59,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
               title: "Gestion des boissons",
               backArrow: true,
             ),
+            const SizedBox(height: 20,),
             Row(
               mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
@@ -113,27 +115,66 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                             icon: true,
                                           ),
                                         ),
-                                        const SizedBox(height: 10,),
+                                        const SizedBox(height: 5),
+                                        DropdownButtonFormField<String>(
+                                          value: selectedType,
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: appColors.appLightColor,
+                                            hintText: 'Type de boisson',
+                                            hintStyle: MyTextStyle(
+                                              colorNew: appColors.lightColor,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.9),
+                                            ),
+                                            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(25),
+                                              borderSide: BorderSide.none,
+                                            ),
+                                          ),
+                                          dropdownColor: appColors.appLightColor,
+                                          iconEnabledColor: appColors.lightColor,
+                                          items: const [
+                                            DropdownMenuItem(value: 'BEER', child: Text('Bière')),
+                                            DropdownMenuItem(value: 'WINE', child: Text('Vin')),
+                                            DropdownMenuItem(value: 'SUGAR', child: Text('Sucré')),
+                                          ],
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedType = value;
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(height: 20),
                                         GestureDetector(
-                                          onTap: () {
-                                            if (_nameController.text == "") {
-                                              Utils.flushBarErrorMessage("Vous devez enter le nom de la boisson", context);
-                                            } else {
-                                              setState(() {
-                                                loading = true;
-                                              });
-                                              Map data = {
-                                                "name": _nameController.text,
-                                                "eventId": widget.event.id
-                                              };
-
-                                              beverageViewModel.addBeverage(context, data).then((value) {
-                                                setState(() {
-                                                  loading = false;
-                                                  _nameController.clear();
-                                                });
-                                              });
+                                          onTap: loading ? null : () {
+                                            if (_nameController.text.trim().isEmpty) {
+                                              Utils.flushBarErrorMessage("Vous devez entrer le nom de la boisson", context);
+                                              return;
                                             }
+                                            if (selectedType == null) {
+                                              Utils.flushBarErrorMessage("Veuillez sélectionner le type de boisson", context);
+                                              return;
+                                            }
+
+                                            setState(() {
+                                              loading = true;
+                                            });
+
+                                            Map data = {
+                                              "name": _nameController.text.trim(),
+                                              "type": selectedType,
+                                              "eventId": widget.event.id
+                                            };
+
+                                            beverageViewModel.addBeverage(context, data).then((value) {
+                                              setState(() {
+                                                loading = false;
+                                                _nameController.clear();
+                                                selectedType = null;
+                                              });
+                                            });
                                           },
                                           child: CommonButton(
                                             title: "Enrégistrer",
@@ -167,7 +208,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                           Strings.add,
                           textAligntNew: TextAlign.center,
                           styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor,
+                            colorNew: appColors.white,
                             fontWeightNew: FontWeight.w600,
                             size: ResponsiveFlutter.of(context).fontSize(1.5),
                           ),
@@ -183,7 +224,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                   child: Container(
                     width: 50,
                     decoration: BoxDecoration(
-                        color: appColors.appLightColor,
+                        color: appColors.darkGreyText,
                         borderRadius: BorderRadius.circular(30)
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -262,30 +303,6 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                   itemBuilder: (context, index) {
                                     BeverageModel beverage = beverageViewModel.beveragesList.data![index];
 
-                                    // List<Widget> tableIvitations = [];
-                                    //
-                                    // if (table.invitations != null) {
-                                    //   for (var element in table.invitations!) {
-                                    //     tableIvitations.add(
-                                    //         Container(
-                                    //           decoration: BoxDecoration(
-                                    //               color: appColors.appLightColor,
-                                    //               borderRadius: BorderRadius.circular(4)
-                                    //           ),
-                                    //           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                                    //           child: MyTextView(
-                                    //             element.civility.toString() + " " + element.name.toString() + (element.count! >= 2 ? " (" +  element.count.toString() + ")" : ""),
-                                    //             styleNew: MyTextStyle(
-                                    //               colorNew: appColors.lightColor,
-                                    //               fontWeightNew: FontWeight.w400,
-                                    //               size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                    //             ),
-                                    //           ),
-                                    //         )
-                                    //     );
-                                    //   }
-                                    // }
-
                                     return GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(
@@ -316,7 +333,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
 
                                                       const SizedBox(height: 10,),
                                                       GestureDetector(
-                                                        onTap: () {
+                                                        onTap: true ? null : () {
                                                           if (beverage.countTaken != null && beverage.countTaken! > 0) {
                                                             showModalBottomSheet(
                                                                 context: context,
@@ -345,14 +362,6 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                                                   ),
                                                                                 ),
                                                                                 SizedBox(height: ResponsiveFlutter.of(context).verticalScale(20)),
-                                                                                // Wrap(
-                                                                                //   spacing: 10,
-                                                                                //   runSpacing: 10,
-                                                                                //   children: [
-                                                                                //     ...tableIvitations
-                                                                                //   ],
-                                                                                // ),
-                                                                                SizedBox(height: ResponsiveFlutter.of(context).verticalScale(20)),
                                                                               ],
                                                                             ),
                                                                           ),
@@ -362,7 +371,6 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                                 }
                                                             );
                                                           }
-
                                                         },
                                                         child: Container(
                                                           decoration: BoxDecoration(
@@ -374,7 +382,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             children: [
                                                               MyTextView(
-                                                                "Invétés ayant commendé",
+                                                                "Commandes",
                                                                 textAligntNew: TextAlign.center,
                                                                 styleNew: MyTextStyle(
                                                                   colorNew: appColors.lightColor,
@@ -396,6 +404,56 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                         ),
                                                       ),
                                                       const SizedBox(height: 20,),
+                                                      const SizedBox(height: 10),
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          final confirm = await showDialog<bool>(
+                                                            context: context,
+                                                            builder: (context) => AlertDialog(
+                                                              title: const Text("Supprimer la boisson"),
+                                                              content: const Text("Êtes-vous sûr de vouloir supprimer cette boisson ?"),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () => Navigator.pop(context, false),
+                                                                  child: const Text("Annuler"),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed: () => Navigator.pop(context, true),
+                                                                  child: const Text("Supprimer", style: TextStyle(color: Colors.red)),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+
+                                                          if (confirm == true) {
+                                                            await beverageViewModel.removeBeverage(context, beverage.id!);
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.red,
+                                                            borderRadius: BorderRadius.circular(30),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              const Icon(Icons.delete, color: Colors.white, size: 20),
+                                                              const SizedBox(width: 5),
+                                                              MyTextView(
+                                                                "Supprimer la boisson",
+                                                                textAligntNew: TextAlign.center,
+                                                                styleNew: MyTextStyle(
+                                                                  colorNew: Colors.white,
+                                                                  fontWeightNew: FontWeight.w600,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
                                                       SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
                                                     ],
                                                   ),
@@ -432,6 +490,8 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                           children: [
                                                             Row(
                                                               children: [
+                                                                Icon(Icons.wine_bar_outlined, color: appColors.btnColor, size: 20,),
+                                                                const SizedBox(width: 5,),
                                                                 MyTextView(
                                                                   beverage.name.toString(),
                                                                   textAligntNew: TextAlign.center,

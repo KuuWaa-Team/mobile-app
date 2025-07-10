@@ -9,6 +9,7 @@ import 'package:kuuwaa/model/event/event_pack_model.dart';
 import 'package:kuuwaa/model/event/event_specification_model.dart';
 import 'package:kuuwaa/model/event/event_template_model.dart';
 import 'package:kuuwaa/model/event/feature_model.dart';
+import 'package:kuuwaa/model/event/game_question_model.dart';
 
 class EventModel {
   int? id;
@@ -33,6 +34,7 @@ class EventModel {
   List<EventSpecificationModel>? specifications;
   List<BeverageModel>? beverages;
   List<BookModel>? books;
+  List<GameQuestionModel>? questions;
   String? address;
   String? placeName;
   bool? hasTables;
@@ -51,6 +53,7 @@ class EventModel {
     this.address,
     this.details,
     this.shared,
+    this.questions,
     this.adminId,
     this.category,
     this.adminsCount,
@@ -93,6 +96,12 @@ class EventModel {
       specifications ??= [];
       for (var spec in json['eventSpecifications']) {
         specifications!.add(EventSpecificationModel.fromJson(spec));
+      }
+    }
+    if (json['questions'] != null) {
+      questions ??= [];
+      for (var question in json['questions']) {
+        questions!.add(GameQuestionModel.fromJson(question));
       }
     }
     tablesCount = json['tablesCount'];
@@ -149,6 +158,7 @@ class EventModel {
     data['hasTables'] = hasTables;
     data['hasBeverage'] = hasBeverage;
     data['hasBook'] = hasBook;
+    data['questions'] = questions;
 
     return data;
   }

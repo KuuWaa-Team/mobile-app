@@ -1,8 +1,8 @@
+import 'package:kuuwaa/view_model/eventAdmin/event_admin_view_model.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
-import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/common/strings.dart';
 import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
@@ -10,11 +10,8 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/create_event_screen.dart';
 import 'package:kuuwaa/screens/events/my_events_screen.dart';
-import 'package:kuuwaa/screens/notification_screen.dart';
-import 'package:kuuwaa/screens/settings/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kuuwaa/screens/wallet_screen.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
@@ -29,10 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
   AppColors appColors = AppColors();
   UserModel user = UserModel();
 
+  bool loadingAccept = false;
+
   TabController? tabController;
   int? tab = 0;
 
   EventViewModel eventViewModel = EventViewModel();
+  EventAdminViewModel adminViewModel = EventAdminViewModel();
 
   @override
   void initState() {
@@ -313,17 +313,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: () {
+                onTap: loadingAccept ? null : () {
+                  setState(() {
+                    loadingAccept = true;
+                  });
                   if (code.length != 6) {
                     Utils.flushBarErrorMessage("Veuillez entrer un code valide à 6 chiffres", context);
                     return;
                   }
 
-                  Navigator.pop(context);
-                  // TODO: Appeler l’API pour rejoindre l’événement avec ce code
-                  Utils.toastMessage("Code reçu : $code");
+                  adminViewModel.acceptInvitationApi(context, {
+                    'userId' : user.id,
+                    'invitationCode' : code
+                  });
                 },
-                child: CommonButton(title: "Rejoindre"),
+                child: CommonButton(title: "Rejoindre", loading: loadingAccept,),
               ),
             ],
           ),

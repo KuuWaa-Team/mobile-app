@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -51,6 +52,7 @@ class _BookScreenState extends State<BookScreen> {
 
   @override
   void initState() {
+    print(event.books);
     setState(() {
       event = widget.event;
     });
@@ -61,157 +63,216 @@ class _BookScreenState extends State<BookScreen> {
     setState(() {
       books = [];
       event.books?.forEach((element) {
-        books.add(Container(
-          height: MediaQuery.of(context).size.height * 0.6,
-          margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20), right: ResponsiveFlutter.of(context).moderateScale(20), bottom: ResponsiveFlutter.of(context).moderateScale(20)),
-          color: appColors.white,
-          padding: EdgeInsets.symmetric(vertical: ResponsiveFlutter.of(context).moderateScale(40), horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                right: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return StatefulBuilder(
-                          builder: (context, setState) {
-                            return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                        right: 0,
-                                        top: 0,
-                                        child: IconButton(onPressed: (){
-                                          Navigator.pop(context);
-                                        }, icon: const Icon(Icons.close)
-                                        )
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                                      child:
-                                      Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SizedBox(
-                                            height: 60,
-                                            width: 60,
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.question_mark_rounded,
-                                                color: appColors.btnColor,
-                                                size: 50,
+        books.add(
+          Container(
+            margin: EdgeInsets.only(
+              left: ResponsiveFlutter.of(context).moderateScale(20),
+              right: ResponsiveFlutter.of(context).moderateScale(20),
+              bottom: ResponsiveFlutter.of(context).moderateScale(20),
+            ),
+            decoration: BoxDecoration(
+              color: appColors.white,
+              boxShadow: [Utils.customShadow()],
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: ResponsiveFlutter.of(context).moderateScale(20),
+              horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+            ),
+            child: Stack(
+              children: [
+                // Bouton Supprimer
+                Positioned(
+                  bottom: 0,
+                  right: 20,
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                          right: 0,
+                                          top: 0,
+                                          child: IconButton(onPressed: (){
+                                            Navigator.pop(context);
+                                          }, icon: const Icon(Icons.close)
+                                          )
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                        child:
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SizedBox(
+                                              height: 60,
+                                              width: 60,
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.question_mark_rounded,
+                                                  color: appColors.btnColor,
+                                                  size: 50,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 10,),
-                                          const Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text("Êtes-vous sûr de vouloir supprimer ce message du livre d'or ?", style: TextStyle(
-                                                  fontWeight: FontWeight.bold
-                                              ), textAlign: TextAlign.center,),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 20,),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: CommonButton(
-                                                  loading: loading,
-                                                  btnColor: appColors.appLightColor,
-                                                  title: "Annuler",
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10,),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  bookViewModel.deleteBook(context, element.id!, event).then((value) {
+                                            const SizedBox(height: 10,),
+                                            const Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text("Êtes-vous sûr de vouloir supprimer ce message du livre d'or ?", style: TextStyle(
+                                                    fontWeight: FontWeight.bold
+                                                ), textAlign: TextAlign.center,),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 20,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
                                                     Navigator.pop(context);
-                                                    setState(() {
-                                                      event.books!.remove(element);
-                                                      _controller.previousPage(
-                                                          duration: const Duration(milliseconds: 500),
-                                                          curve: Curves.easeInOutQuint
-                                                      );
-                                                      loadBooks();
-                                                    });
-                                                  });
-                                                },
-                                                child: CommonButton(
-                                                  loading: loadingDelete,
-                                                  title: "Confirmer",
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                  },
+                                                  child: CommonButton(
+                                                    loading: loading,
+                                                    btnColor: appColors.appLightColor,
+                                                    title: "Annuler",
+                                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
+                                                const SizedBox(width: 10,),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    bookViewModel.deleteBook(context, element.id!, event).then((value) {
+                                                      Navigator.pop(context);
+                                                      setState(() {
+                                                        event.books!.remove(element);
+                                                        _controller.previousPage(
+                                                            duration: const Duration(milliseconds: 500),
+                                                            curve: Curves.easeInOutQuint
+                                                        );
+                                                        loadBooks();
+                                                      });
+                                                    });
+                                                  },
+                                                  child: CommonButton(
+                                                    loading: loadingDelete,
+                                                    title: "Confirmer",
+                                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
+                                    ],
+                                  )
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: appColors.black.withOpacity(.03)
-                    ),
-                    padding: const EdgeInsets.only(top: 3, left: 5, right: 7, bottom: 4),
-                    child: Row(
-                      children: [
-                        Icon(Icons.close, size: 12, color: appColors.black.withOpacity(.5),),
-                        const SizedBox(width: 2,),
-                        Text("Supprimer", style: TextStyle(
-                            fontSize: 10,
-                            color: appColors.black.withOpacity(.4),
-                            fontWeight: FontWeight.w600
-                        ),)
-                      ],
+                        color: appColors.black.withOpacity(.03),
+                      ),
+                      padding: const EdgeInsets.only(top: 3, left: 5, right: 7, bottom: 4),
+                      child: Row(
+                        children: [
+                          Icon(Icons.close, size: 12, color: appColors.black.withOpacity(.5)),
+                          const SizedBox(width: 2),
+                          Text(
+                            "Supprimer",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: appColors.black.withOpacity(.4),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset("assets/images/quote.png", width: 30,),
-                  Container(
-                    width: 250,
-                    margin: const EdgeInsets.only(left: 20, top: 10),
-                    child: Text(element.message!, style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: appColors.black
-                    )),
-                  ),
-                  const SizedBox(height: 30,),
-                  Text("${element.invitation!.civility!} ${element.invitation!.name}", style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 10,
-                      fontStyle: FontStyle.italic
-                  ),)
-                ],
-              ),
-            ],
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: element.public == true ? Colors.green : Colors.orange,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(element.public == true ? Icons.lock_open_outlined :Icons.lock_outline_rounded, color: Colors.white, size: 10,),
+                            const SizedBox(width: 5,),
+                            Text(
+                              element.public == true ? 'Public' : 'Privé',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Image.asset("assets/images/quote.png", width: 30),
+                    Container(
+                      width: 250,
+                      margin: const EdgeInsets.only(left: 20, top: 10),
+                      constraints: const BoxConstraints(
+                        maxHeight: 300,
+                      ),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          element.message ?? "",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: appColors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    if (element.audioPath != null)
+                      AudioPlayerCard(audioPath: element.audioPath!),
+
+                    const SizedBox(height: 10),
+                    Text(
+                      "${element.invitation!.civility!} ${element.invitation!.name}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 10,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
-        ));
+        );
+
       });
     });
   }
@@ -226,11 +287,13 @@ class _BookScreenState extends State<BookScreen> {
     }
     _pages = [
       Container(
-        height: MediaQuery.of(context).size.height * 0.6,
         margin: EdgeInsets.only(left: ResponsiveFlutter.of(context).moderateScale(20), right: ResponsiveFlutter.of(context).moderateScale(20), bottom: ResponsiveFlutter.of(context).moderateScale(20)),
-        color: appColors.white,
+        decoration: BoxDecoration(
+          color: appColors.white,
+          boxShadow: [Utils.customShadow()]
+        ),
         padding: EdgeInsets.only(
-          top: ResponsiveFlutter.of(context).moderateScale(40),
+          top: ResponsiveFlutter.of(context).moderateScale(20),
           bottom: ResponsiveFlutter.of(context).moderateScale(20),
           left: ResponsiveFlutter.of(context).moderateScale(20),
           right: ResponsiveFlutter.of(context).moderateScale(20)
@@ -241,14 +304,13 @@ class _BookScreenState extends State<BookScreen> {
           children: [
             const Text("LIVRE D'OR", style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 30,
+              fontSize: 25,
             ),),
-            SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10),),
             SizedBox(
-              width: ResponsiveFlutter.of(context).moderateScale(200),
+              width: ResponsiveFlutter.of(context).moderateScale(250),
               child: Text("Vous leur avez invité à votre évenement, ils vous ont laissé un mot en guise de leur reconnaissance et amour", style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: 10,
+                  fontSize: 12,
                   color: appColors.black.withOpacity(.4)
               ), textAlign: TextAlign.center,),
             ),
@@ -316,6 +378,7 @@ class _BookScreenState extends State<BookScreen> {
               title: "Livre d'or",
               backArrow: true,
             ),
+            const SizedBox(height: 20,),
             Expanded(
               child: Column(
                 children: [
@@ -334,12 +397,13 @@ class _BookScreenState extends State<BookScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text((step + 1).toString(), style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 25
+                      Text((step + 1).toString(), style: TextStyle(
+                        color: appColors.btnColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
                       ),),
                       Text("/${_pages.length}", style: TextStyle(
-                          color: Colors.white.withOpacity(.5)
+                          color: Colors.black.withOpacity(.5)
                       ),),
                     ],
                   ),
@@ -361,10 +425,10 @@ class _BookScreenState extends State<BookScreen> {
                           width: 35,
                           height: 35,
                           decoration: BoxDecoration(
-                              color: (step > 0 ) ? appColors.btnColor: appColors.appLightColor,
+                              color: (step > 0 ) ? appColors.btnColor: appColors.darkGreyText.withOpacity(.8),
                               borderRadius: BorderRadius.circular(40)
                           ),
-                          child: Icon(CupertinoIcons.chevron_left, color: step > 0 ? Colors.white : Colors.white.withOpacity(.3), size: 15,),
+                          child: Icon(CupertinoIcons.chevron_left, color: step > 0 ? Colors.white : Colors.white.withOpacity(.5), size: 15,),
                         ),
                       ),
                       const SizedBox(width: 10,),
@@ -381,10 +445,10 @@ class _BookScreenState extends State<BookScreen> {
                           width: 35,
                           height: 35,
                           decoration: BoxDecoration(
-                              color: (step + 1 < _pages.length) ? appColors.btnColor: appColors.appLightColor,
+                              color: (step + 1 < _pages.length) ? appColors.btnColor: appColors.darkGreyText.withOpacity(.8),
                               borderRadius: BorderRadius.circular(40)
                           ),
-                          child: Icon(CupertinoIcons.chevron_right, color: (step + 1 < _pages.length) ? Colors.white : Colors.white.withOpacity(.3), size: 15,),
+                          child: Icon(CupertinoIcons.chevron_right, color: (step + 1 < _pages.length) ? Colors.white : Colors.white.withOpacity(.5), size: 15,),
                         ),
                       ),
                     ],
@@ -392,54 +456,134 @@ class _BookScreenState extends State<BookScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 30,),
-            if (widget.event.books!.isNotEmpty)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: ResponsiveFlutter.of(context).moderateScale(20)),
-              child: GestureDetector(
-                onTap: () {
-                  Utils.openUrl("https://api.whatsapp.com/send?phone=+243820793972&text=Bonjour KuuWaa,\nNous souhaitons avoir en PDF notre livre d'or pour l'évenement *${widget.event.category!.name} ${widget.event.title}*.\nMerci");
-                },
-                child: CommonButton(
-                  loading: loading,
-                  title: "Télécharger",
-                ),
-              ),
-            ),
-            if (widget.event.books!.isEmpty)
-              Container(
-                height: ResponsiveFlutter.of(context).scale(40),
-                decoration: BoxDecoration(
-                    color: appColors.appLightColor,
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                margin: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20
-                ),
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.block_outlined, color: appColors.lightColor.withOpacity(.2),),
-                    const SizedBox(width: 10,),
-                    MyTextView(
-                      "Livre d'or actuellement vide",
-                      textAligntNew: TextAlign.start,
-                      maxLinesNew: 3,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.lightColor.withOpacity(.2),
-                        fontWeightNew: FontWeight.w400,
-                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            SizedBox(height: ResponsiveFlutter.of(context).moderateScale(30),),
+            SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20),),
           ],
         ),
       ),
     );
   }
 }
+
+class AudioPlayerCard extends StatefulWidget {
+  final String audioPath;
+
+  const AudioPlayerCard({super.key, required this.audioPath});
+
+  @override
+  State<AudioPlayerCard> createState() => _AudioPlayerCardState();
+}
+
+class _AudioPlayerCardState extends State<AudioPlayerCard> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+
+  AppColors appColors = AppColors();
+
+  String get audioUrl => "https://invitation.kuuwaa.com${widget.audioPath}";
+
+  @override
+  void initState() {
+    super.initState();
+
+    _audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
+      setState(() => isPlaying = state == PlayerState.playing);
+    });
+
+    _audioPlayer.onDurationChanged.listen((d) {
+      setState(() => duration = d);
+    });
+
+    _audioPlayer.onPositionChanged.listen((p) {
+      setState(() => position = p);
+    });
+
+    _audioPlayer.onPlayerComplete.listen((event) {
+      setState(() => position = Duration.zero);
+    });
+
+    _audioPlayer.setSource(UrlSource(audioUrl));
+  }
+
+  String formatTime(Duration d) {
+    return [d.inMinutes, d.inSeconds % 60]
+        .map((seg) => seg.toString().padLeft(2, '0'))
+        .join(':');
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: appColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: appColors.btnColor.withOpacity(0.2)),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+              color: appColors.btnColor,
+              size: 28,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () async {
+              if (isPlaying) {
+                await _audioPlayer.pause();
+              } else {
+                await _audioPlayer.play(UrlSource(audioUrl));
+              }
+            },
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    trackHeight: 2,
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
+                    activeTrackColor: appColors.btnColor,
+                    inactiveTrackColor: appColors.btnColor.withOpacity(0.3),
+                    thumbColor: appColors.btnColor,
+                  ),
+                  child: Slider(
+                    min: 0,
+                    max: duration.inSeconds.toDouble(),
+                    value: position.inSeconds.clamp(0, duration.inSeconds).toDouble(),
+                    onChanged: (value) async {
+                      final newPosition = Duration(seconds: value.toInt());
+                      await _audioPlayer.seek(newPosition);
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(formatTime(position), style: const TextStyle(fontSize: 10)),
+                    Text(formatTime(duration), style: const TextStyle(fontSize: 10)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+

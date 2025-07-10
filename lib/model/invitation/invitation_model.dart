@@ -8,11 +8,13 @@ class InvitationModel {
   String? name;
   String? civility;
   String? status;
+  String? musicChoice;
   int? count;
   String? phoneNumber;
   String? slug;
   String? message;
   bool? bookSent;
+  bool? musicPlayed;
   String? codePath;
   String? code;
   String? decryptKey;
@@ -23,12 +25,14 @@ class InvitationModel {
   InvitationModel({
     this.id,
     this.name,
+    this.musicChoice,
     this.phoneNumber,
     this.slug,
     this.bookSent,
     this.beverage,
     this.message,
     this.decryptKey,
+    this.musicPlayed,
     this.count,
     this.civility,
     this.table,
@@ -41,7 +45,9 @@ class InvitationModel {
     id = json['id'];
     name = json['name'];
     slug = json['slug'];
+    musicPlayed = json['slug'];
     civility = json['civility'];
+    musicChoice = json['musicChoice'];
     bookSent = json['bookSent'];
     if (json['beverage'] != null) {
       beverage = BeverageModel.fromJson(json['beverage']);
@@ -68,6 +74,8 @@ class InvitationModel {
     data['civility'] = civility;
     data['slug'] = slug;
     data['code'] = code;
+    data['musicPlayed'] = musicPlayed;
+    data['musicChoice'] = musicChoice;
     data['bookSent'] = bookSent;
     data['decryptKey'] = decryptKey;
     data['codePath'] = codePath;

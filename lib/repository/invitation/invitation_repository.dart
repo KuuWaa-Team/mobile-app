@@ -6,9 +6,13 @@ import 'package:kuuwaa/resource/config/app_url.dart';
 class InvitationRepository {
   final BaseApiServices _apiServices = NetworkApiService();
 
-  Future<dynamic> getEventInvitationsApi ({required BuildContext context, required int id}) async {
+  Future<dynamic> getEventInvitationsApi ({required BuildContext context, required int id, bool withMusicRequest = false}) async {
     try  {
-      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id/invitations", context: context, auth: false);
+      String url = AppUrl.eventEndPoint + "/$id/invitations";
+      if (withMusicRequest) {
+        url += "?wm=1";
+      }
+      dynamic response = await _apiServices.getGetResponse(url, context: context, auth: false);
       return response;
     } catch(e) {
       rethrow;
@@ -54,6 +58,15 @@ class InvitationRepository {
   Future<dynamic> sendInvitationsApi ({required BuildContext context, required Map data, required int id}) async {
     try  {
       dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$id/send", data, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> playMusicApi ({required BuildContext context, required String slug, required bool unPlay}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$slug/${unPlay ? 'un' : ''}play-music", {}, context: context, auth: true);
       return response;
     } catch(e) {
       rethrow;

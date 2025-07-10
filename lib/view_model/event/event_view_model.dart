@@ -80,8 +80,6 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      print("------------------------");
-      print(error);
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });

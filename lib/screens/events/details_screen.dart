@@ -17,6 +17,7 @@ import 'package:kuuwaa/screens/book/book_screen.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/check/check_screen.dart';
 import 'package:kuuwaa/screens/events/informations_screen.dart';
+import 'package:kuuwaa/screens/music/music_list_screen.dart';
 import 'package:kuuwaa/screens/table/table_list_screen.dart';
 import 'package:kuuwaa/shimmer/event_owner_detail_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
@@ -807,54 +808,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => BookScreen(event: event),
-                                            ),
-                                          );
-                                        } else {
-                                          showUnlockDialog(2, "PHOTO");
-                                        }
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.only(bottom: 10),
-                                        decoration: BoxDecoration(
-                                          color: appColors.appLightColor,
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(CupertinoIcons.photo_on_rectangle, size: 15, color: appColors.btnColor),
-                                                SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
-                                                MyTextView(
-                                                  "Album Photo",
-                                                  textAligntNew: TextAlign.start,
-                                                  maxLineWrap: true,
-                                                  styleNew: MyTextStyle(
-                                                    colorNew: appColors.lightColor,
-                                                    fontWeightNew: FontWeight.w500,
-                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 10),
-                                              ],
-                                            ),
-                                            if (event.hasBook != true)
-                                              Icon(CupertinoIcons.lock_fill, color: appColors.black, size: 20),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (event.hasBook == true) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => BookScreen(event: event),
+                                              builder: (context) => MusicListScreen(event: event),
                                             ),
                                           );
                                         } else {

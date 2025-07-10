@@ -163,7 +163,7 @@ class _SharedEventInvitationScreenState extends State<SharedEventInvitationScree
                     setState(() {
                       loadingAccept = true;
                     });
-                    eventAdminViewModel.acceptInvitationApi(context, {}, widget.event.adminId!);
+                    eventAdminViewModel.acceptInvitationApi(context, {});
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),

@@ -23,4 +23,13 @@ class BeverageRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> removeBeverageApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.beverageEndPoint + "/$id/remove", {}, context: context);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
 }
