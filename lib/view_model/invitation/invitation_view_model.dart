@@ -57,11 +57,10 @@ class InvitationViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
     });
-    // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
-    //   setLoading(false);
-    // });
     return true;
   }
 
@@ -537,6 +536,11 @@ class InvitationViewModel with ChangeNotifier{
   Future<void> validateInvitation(BuildContext context, int id) async {
     setLoading(true);
     await _repository.validateInvitationApi(context: context, id: id);
+  }
+
+  Future<void> playMusic(BuildContext context, String slug, {bool unPlay = false}) async {
+    setLoading(true);
+    await _repository.playMusicApi(context: context, slug: slug, unPlay: unPlay);
   }
 
   Future<bool> sendAllInvitations(BuildContext context, Map data, EventModel event) async {

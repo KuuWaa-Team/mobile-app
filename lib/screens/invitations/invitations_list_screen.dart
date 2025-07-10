@@ -46,6 +46,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
   bool sendingWpp = false;
   bool copying = false;
 
+  TextEditingController _searchController = TextEditingController();
+  String searchQuery = '';
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _countController = TextEditingController();
@@ -438,361 +440,30 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                   ),
                 ),
                 const SizedBox(width: 10,),
-                // if (widget.event.shared != true)
-                // GestureDetector(
-                //   onTap: () {
-                //     if (widget.event.paymentStatus == 'paid') {
-                //       showDialog(
-                //         context: context,
-                //         builder: (context) {
-                //           return StatefulBuilder(
-                //             builder: (context, setState) {
-                //               return Dialog(
-                //                   shape: RoundedRectangleBorder(
-                //                     borderRadius: BorderRadius.circular(10),
-                //                   ),
-                //                   child: Stack(
-                //                     children: [
-                //                       Positioned(
-                //                           right: 0,
-                //                           top: 0,
-                //                           child: IconButton(onPressed: (){
-                //                             Navigator.pop(context);
-                //                           }, icon: const Icon(Icons.close)
-                //                           )
-                //                       ),
-                //                       Padding(
-                //                         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                //                         child:
-                //                         Column(
-                //                           mainAxisSize: MainAxisSize.min,
-                //                           children: [
-                //                             SizedBox(
-                //                               height: 60,
-                //                               width: 60,
-                //                               child: Center(
-                //                                   child: Image.asset("assets/images/excel.png", width: 50,)
-                //                               ),
-                //                             ),
-                //                             const SizedBox(height: 10,),
-                //                             const Column(
-                //                               mainAxisSize: MainAxisSize.min,
-                //                               children: [
-                //                                 Text("Importer la liste des invité à partir d'Excel", style: TextStyle(
-                //                                     fontWeight: FontWeight.bold
-                //                                 ), textAlign: TextAlign.center,),
-                //                                 SizedBox(height: 10,),
-                //                                 Text("Vous devez télécharger le ficher Excel de model, le remplir puis l'importer", style: TextStyle(
-                //                                     fontSize: 12
-                //                                 ), textAlign: TextAlign.center,),
-                //                               ],
-                //                             ),
-                //                             const SizedBox(height: 20,),
-                //                             GestureDetector(
-                //                               onTap: () {
-                //
-                //                               },
-                //                               child: Container(
-                //                                 decoration: BoxDecoration(
-                //                                     border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                //                                     borderRadius: BorderRadius.circular(10)
-                //                                 ),
-                //                                 margin: const EdgeInsets.only(bottom: 10),
-                //                                 width: MediaQuery.of(context).size.width,
-                //                                 padding: const EdgeInsets.all(10),
-                //                                 child: Row(
-                //                                   mainAxisAlignment: MainAxisAlignment.start,
-                //                                   crossAxisAlignment: CrossAxisAlignment.center,
-                //                                   children: [
-                //                                     const Icon(CupertinoIcons.cloud_download_fill, size: 22, color: Colors.green,),
-                //                                     const SizedBox(width: 7,),
-                //                                     MyTextView(
-                //                                       "Télécharger le fichier model",
-                //                                       textAligntNew: TextAlign.start,
-                //                                       maxLinesNew: 4,
-                //                                       styleNew: MyTextStyle(
-                //                                         colorNew: appColors.black,
-                //                                         fontWeightNew: FontWeight.w500,
-                //                                         size: ResponsiveFlutter.of(context).fontSize(1.6),
-                //                                       ),
-                //                                     ),
-                //                                   ],
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                             GestureDetector(
-                //                               onTap: () {
-                //                               },
-                //                               child: Container(
-                //                                 decoration: BoxDecoration(
-                //                                     border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                //                                     borderRadius: BorderRadius.circular(10)
-                //                                 ),
-                //                                 margin: const EdgeInsets.only(bottom: 10),
-                //                                 width: MediaQuery.of(context).size.width,
-                //                                 padding: const EdgeInsets.all(10),
-                //                                 child: Column(
-                //                                   children: [
-                //                                     Row(
-                //                                       mainAxisAlignment: MainAxisAlignment.start,
-                //                                       crossAxisAlignment: CrossAxisAlignment.center,
-                //                                       children: [
-                //                                         const Icon(CupertinoIcons.cloud_upload_fill, color: Colors.green,),
-                //                                         const SizedBox(width: 7,),
-                //                                         MyTextView(
-                //                                           "Importer le fichier",
-                //                                           textAligntNew: TextAlign.start,
-                //                                           maxLineWrap: true,
-                //                                           styleNew: MyTextStyle(
-                //                                             colorNew: appColors.black,
-                //                                             fontWeightNew: FontWeight.w500,
-                //                                             size: ResponsiveFlutter.of(context).fontSize(1.6),
-                //                                           ),
-                //                                         ),
-                //                                       ],
-                //                                     ),
-                //                                   ],
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                             // const SizedBox(height: 20,),
-                //                             // Row(
-                //                             //   mainAxisAlignment: MainAxisAlignment.center,
-                //                             //   children: [
-                //                             //     GestureDetector(
-                //                             //       onTap: () {
-                //                             //       },
-                //                             //       child: CommonButton(
-                //                             //         title: "Continuer",
-                //                             //         padding: const EdgeInsets.symmetric(horizontal: 20),
-                //                             //       ),
-                //                             //     )
-                //                             //   ],
-                //                             // )
-                //                           ],
-                //                         ),
-                //                       ),
-                //                     ],
-                //                   )
-                //               );
-                //             },
-                //           );
-                //         },
-                //       );
-                //     } else {
-                //
-                //         },
-                //       );
-                //     }
-                //   },
-                //   child: Container(
-                //     width: 50,
-                //     decoration: BoxDecoration(
-                //         color: appColors.appLightColor,
-                //         borderRadius: BorderRadius.circular(30)
-                //     ),
-                //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         // Icon(Icons.upload_file_outlined, color: Colors.white, size: 20,),
-                //         Image.asset("assets/images/excel.png", width: 20,)
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                // if (widget.event.shared != true)
-                // const SizedBox(width: 10,),
-                // if (widget.event.shared != true)
-                // GestureDetector(
-                //   onTap: () {
-                //     showDialog(
-                //       context: context,
-                //       builder: (context) {
-                //         return StatefulBuilder(
-                //           builder: (context, setState) {
-                //             return Dialog(
-                //                 shape: RoundedRectangleBorder(
-                //                   borderRadius: BorderRadius.circular(10),
-                //                 ),
-                //                 child: Stack(
-                //                   children: [
-                //                     Positioned(
-                //                         right: 0,
-                //                         top: 0,
-                //                         child: IconButton(onPressed: (){
-                //                           Navigator.pop(context);
-                //                         }, icon: const Icon(Icons.close)
-                //                         )
-                //                     ),
-                //                     Padding(
-                //                       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                //                       child:
-                //                       Column(
-                //                         mainAxisSize: MainAxisSize.min,
-                //                         children: [
-                //                           SizedBox(
-                //                             height: 60,
-                //                             width: 60,
-                //                             child: Center(
-                //                               child: Icon(
-                //                                 Icons.question_mark_rounded,
-                //                                 color: appColors.btnColor,
-                //                                 size: 50,
-                //                               ),
-                //                             ),
-                //                           ),
-                //                           const SizedBox(height: 10,),
-                //                           const Column(
-                //                             mainAxisSize: MainAxisSize.min,
-                //                             children: [
-                //                               Text("Envoyer toutes les invitations", style: TextStyle(
-                //                                   fontWeight: FontWeight.bold
-                //                               ), textAlign: TextAlign.center,),
-                //                               SizedBox(height: 10,),
-                //                               Text("Comment voulez-vous envoyer à tous les invités leurs invitations ?", style: TextStyle(
-                //                                   fontSize: 12
-                //                               ), textAlign: TextAlign.center,),
-                //                             ],
-                //                           ),
-                //                           const SizedBox(height: 20,),
-                //                           GestureDetector(
-                //                             onTap: () async {
-                //                               if (!sendingAllSMS) {
-                //                                 setState(() {
-                //                                   sendingAllSMS = true;
-                //                                 });
-                //                                 await invitationViewModel.sendAllInvitations(context,
-                //                                   {
-                //                                     "method": "sms",
-                //                                     "eventId": widget.event.id,
-                //                                   }, widget.event,
-                //                                 ).then((value) {
-                //                                   setState(() {
-                //                                     sendingAllSMS = false;
-                //                                   });
-                //                                 });
-                //                               }
-                //                             },
-                //                             child: Container(
-                //                               decoration: BoxDecoration(
-                //                                   border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                //                                   borderRadius: BorderRadius.circular(10)
-                //                               ),
-                //                               margin: const EdgeInsets.only(bottom: 10),
-                //                               width: MediaQuery.of(context).size.width,
-                //                               padding: const EdgeInsets.all(10),
-                //                               child: Row(
-                //                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //                                 children: [
-                //                                   Row(
-                //                                     mainAxisAlignment: MainAxisAlignment.start,
-                //                                     crossAxisAlignment: CrossAxisAlignment.center,
-                //                                     children: [
-                //                                       const Icon(CupertinoIcons.chat_bubble_2_fill, size: 22,),
-                //                                       const SizedBox(width: 7,),
-                //                                       MyTextView(
-                //                                         "Envoyer par SMS",
-                //                                         textAligntNew: TextAlign.start,
-                //                                         maxLineWrap: true,
-                //                                         styleNew: MyTextStyle(
-                //                                           colorNew: appColors.black,
-                //                                           fontWeightNew: FontWeight.w500,
-                //                                           size: ResponsiveFlutter.of(context).fontSize(1.6),
-                //                                         ),
-                //                                       ),
-                //                                     ],
-                //                                   ),
-                //                                   if (sendingAllSMS)
-                //                                   CupertinoActivityIndicator(radius: 8, color: appColors.black,)
-                //                                 ],
-                //                               ),
-                //                             ),
-                //                           ),
-                //                           GestureDetector(
-                //                             onTap: () async {
-                //                               if (!sendingAllWpp) {
-                //                                 setState(() {
-                //                                   sendingAllWpp = true;
-                //                                 });
-                //                                 await invitationViewModel.sendAllInvitations(context,
-                //                                   {
-                //                                     "method": "wpp",
-                //                                     "eventId": widget.event.id
-                //                                   }, widget.event,
-                //                                 ).then((value) {
-                //                                   setState(() {
-                //                                     sendingAllWpp = false;
-                //                                   });
-                //                                 });
-                //                               }
-                //                             },
-                //                             child: Container(
-                //                               decoration: BoxDecoration(
-                //                                   border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                //                                   borderRadius: BorderRadius.circular(10)
-                //                               ),
-                //                               margin: const EdgeInsets.only(bottom: 10),
-                //                               width: MediaQuery.of(context).size.width,
-                //                               padding: const EdgeInsets.all(10),
-                //                               child: Column(
-                //                                 children: [
-                //                                   Row(
-                //                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //                                     children: [
-                //                                       Row(
-                //                                         mainAxisAlignment: MainAxisAlignment.start,
-                //                                         crossAxisAlignment: CrossAxisAlignment.center,
-                //                                         children: [
-                //                                           Image.asset(ImagePath.wpp, width: 25,),
-                //                                           const SizedBox(width: 7,),
-                //                                           MyTextView(
-                //                                             "Envoyer par WhatsApp",
-                //                                             textAligntNew: TextAlign.start,
-                //                                             maxLineWrap: true,
-                //                                             styleNew: MyTextStyle(
-                //                                               colorNew: appColors.black,
-                //                                               fontWeightNew: FontWeight.w500,
-                //                                               size: ResponsiveFlutter.of(context).fontSize(1.6),
-                //                                             ),
-                //                                           ),
-                //                                         ],
-                //                                       ),
-                //                                       if (sendingAllWpp)
-                //                                         CupertinoActivityIndicator(radius: 8, color: appColors.black,)
-                //                                     ],
-                //                                   ),
-                //                                 ],
-                //                               ),
-                //                             ),
-                //                           ),
-                //                         ],
-                //                       ),
-                //                     ),
-                //                   ],
-                //                 )
-                //             );
-                //           },
-                //         );
-                //       },
-                //     );
-                //   },
-                //   child: Container(
-                //     width: 50,
-                //     decoration: BoxDecoration(
-                //         color: appColors.appLightColor,
-                //         borderRadius: BorderRadius.circular(30)
-                //     ),
-                //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                //     child: const Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Icon(Icons.share_outlined, color: Colors.white, size: 20,),
-                //       ],
-                //     ),
-                //   ),
-                // )
               ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value.toLowerCase().trim();
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: "Rechercher...",
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: appColors.appLightColor,
+                  border: OutlineInputBorder(
+                    gapPadding: 0,
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(width: .5, color: appColors.darkGreyText.withOpacity(.2)),
+                  ),
+                ),
+              ),
             ),
 
             ChangeNotifierProvider<InvitationViewModel>(
@@ -816,8 +487,18 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                             child: Text(value.invitationsList.message.toString()),
                           );
                         case Status.COMPLETED:
-                          List<InvitationModel> events = value.invitationsList.data;
-                          if (events.isEmpty) {
+                          List<InvitationModel> invitations = value.invitationsList.data;
+                          List<InvitationModel> filteredInvitations = invitations.where((invite) {
+                            final name = invite.name?.toLowerCase() ?? '';
+                            final table = invite.table?.name?.toLowerCase() ?? '';
+                            final beverage = invite.beverage?.name?.toLowerCase() ?? '';
+
+                            return name.contains(searchQuery) ||
+                                table.contains(searchQuery) ||
+                                beverage.contains(searchQuery);
+                          }).toList();
+
+                          if (filteredInvitations.isEmpty) {
                             return Container(
                               decoration: BoxDecoration(
                                   color: appColors.appLightColor,
@@ -834,7 +515,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                   Icon(Icons.block_outlined, color: appColors.lightColor.withOpacity(.2),),
                                   const SizedBox(width: 10,),
                                   MyTextView(
-                                    "Vous n'avez ajouté aucune invitation",
+                                    "Aucune invitation trouvée",
                                     textAligntNew: TextAlign.start,
                                     maxLinesNew: 3,
                                     styleNew: MyTextStyle(
@@ -855,9 +536,10 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                 right: ResponsiveFlutter.of(context).scale(20),
                               ),
                               child: ListView.builder(
-                                itemCount: invitationViewModel.invitationsList.data!.length,
+                                padding: EdgeInsets.zero,
+                                itemCount: filteredInvitations.length,
                                 itemBuilder: (context, index) {
-                                  InvitationModel invitation = invitationViewModel.invitationsList.data![index];
+                                  InvitationModel invitation = filteredInvitations[index];
                                   return GestureDetector(
                                     onTap: () {
                                       showModalBottomSheet(
@@ -896,88 +578,6 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                           ],
                                                         ),
                                                         const SizedBox(height: 10,),
-                                                        // Wrap(
-                                                        //   spacing: 10,
-                                                        //   runSpacing: 10,
-                                                        //   children: [
-                                                        //     // if (invitation.status == 'sent')
-                                                        //       // Container(
-                                                        //       //   decoration: BoxDecoration(
-                                                        //       //       borderRadius: BorderRadius.circular(20),
-                                                        //       //       color: Colors.orange
-                                                        //       //   ),
-                                                        //       //   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                                        //       //   child: MyTextView(
-                                                        //       //     "Invitation envoyée",
-                                                        //       //     textAligntNew: TextAlign.center,
-                                                        //       //     styleNew: MyTextStyle(
-                                                        //       //       colorNew: appColors.lightColor,
-                                                        //       //       fontWeightNew: FontWeight.w600,
-                                                        //       //       size: ResponsiveFlutter.of(context).fontSize(1.3),
-                                                        //       //     ),
-                                                        //       //   ),
-                                                        //       // ),
-                                                        //     // if (invitation.status == 'sent')
-                                                        //     // if (widget.event.shared != true)
-                                                        //     // GestureDetector(
-                                                        //     //   onTap: () {
-                                                        //     //     showShareDialog(invitation);
-                                                        //     //   },
-                                                        //     //   child: Container(
-                                                        //     //     decoration: BoxDecoration(
-                                                        //     //         borderRadius: BorderRadius.circular(10),
-                                                        //     //         color: appColors.btnColor
-                                                        //     //     ),
-                                                        //     //     padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
-                                                        //     //     child: Row(
-                                                        //     //       mainAxisSize: MainAxisSize.min,
-                                                        //     //       children: [
-                                                        //     //         MyTextView(
-                                                        //     //           "Envoyer",
-                                                        //     //           textAligntNew: TextAlign.center,
-                                                        //     //           styleNew: MyTextStyle(
-                                                        //     //             colorNew: appColors.lightColor,
-                                                        //     //             fontWeightNew: FontWeight.w700,
-                                                        //     //             size: ResponsiveFlutter.of(context).fontSize(1.3),
-                                                        //     //           ),
-                                                        //     //         ),
-                                                        //     //         const SizedBox(width: 5,),
-                                                        //     //         Icon(Icons.share_outlined, color: appColors.lightColor, size: 12,)
-                                                        //     //       ],
-                                                        //     //     ),
-                                                        //     //   ),
-                                                        //     // ),
-                                                        //     // if (widget.event.paymentStatus == 'paid' && widget.event.shared != true)
-                                                        //     // GestureDetector(
-                                                        //     //   onTap: () {
-                                                        //     //
-                                                        //     //   },
-                                                        //     //   child: Container(
-                                                        //     //     decoration: BoxDecoration(
-                                                        //     //         borderRadius: BorderRadius.circular(10),
-                                                        //     //         color: appColors.appLightColor
-                                                        //     //     ),
-                                                        //     //     padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
-                                                        //     //     child: Row(
-                                                        //     //       mainAxisSize: MainAxisSize.min,
-                                                        //     //       children: [
-                                                        //     //         MyTextView(
-                                                        //     //           "Voir",
-                                                        //     //           textAligntNew: TextAlign.center,
-                                                        //     //           styleNew: MyTextStyle(
-                                                        //     //             colorNew: appColors.lightColor,
-                                                        //     //             fontWeightNew: FontWeight.w700,
-                                                        //     //             size: ResponsiveFlutter.of(context).fontSize(1.3),
-                                                        //     //           ),
-                                                        //     //         ),
-                                                        //     //         const SizedBox(width: 5,),
-                                                        //     //         Icon(Icons.open_in_new, color: appColors.lightColor, size: 12,)
-                                                        //     //       ],
-                                                        //     //     ),
-                                                        //     //   ),
-                                                        //     // ),
-                                                        //   ],
-                                                        // ),
                                                         if (invitation.count! > 1)
                                                         const SizedBox(height: 10,),
                                                         if (invitation.count! > 1)
@@ -1597,16 +1197,6 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                               ),
                                                             ],
                                                           ),
-                                                          // const SizedBox(height: 3,),
-                                                          // MyTextView(
-                                                          //   "+243 " + invitation.phoneNumber.toString(),
-                                                          //   textAligntNew: TextAlign.center,
-                                                          //   styleNew: MyTextStyle(
-                                                          //     colorNew: appColors.lightColor.withOpacity(.5),
-                                                          //     fontWeightNew: FontWeight.w400,
-                                                          //     size: ResponsiveFlutter.of(context).fontSize(1.2),
-                                                          //   ),
-                                                          // ),
                                                         ],
                                                       ),
                                                     ],

@@ -92,6 +92,13 @@ class _MusicListScreenState extends State<MusicListScreen> {
                           List<InvitationModel> allInvites = value.invitationsList.data!
                               .where((i) => i.musicChoice != null && i.musicChoice!.trim().isNotEmpty)
                               .toList();
+
+                          for (InvitationModel invite in allInvites) {
+                            if (invite.musicPlayed == true) {
+                              playedMusicIds.add(invite.id!);
+                            }
+                          }
+
                           List<InvitationModel> notPlayed = allInvites.where((i) => !playedMusicIds.contains(i.id)).toList();
                           List<InvitationModel> played = allInvites.where((i) => playedMusicIds.contains(i.id)).toList();
 
@@ -102,7 +109,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
                                   borderRadius: BorderRadius.circular(10)
                               ),
                               margin: const EdgeInsets.only(
-                                left: 20, right: 20, top: 20
+                                  left: 20, right: 20, top: 20
                               ),
                               width: MediaQuery.of(context).size.width,
                               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -136,7 +143,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
                                     ListView.builder(
                                       itemCount: notPlayed.length,
                                       shrinkWrap: true,
-                                      padding: EdgeInsets.only(bottom: 10),
+                                      padding: const EdgeInsets.only(bottom: 10),
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         final invitation = notPlayed[index];
@@ -199,8 +206,10 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 onChanged: (_) {
                   setState(() {
                     if (isPlayed) {
+                      invitationViewModel.playMusic(context, invitation.slug.toString(), unPlay: true);
                       playedMusicIds.remove(invitation.id);
                     } else {
+                      invitationViewModel.playMusic(context, invitation.slug.toString());
                       playedMusicIds.add(invitation.id!);
                     }
                   });

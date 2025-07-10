@@ -14,6 +14,7 @@ class InvitationModel {
   String? slug;
   String? message;
   bool? bookSent;
+  bool? musicPlayed;
   String? codePath;
   String? code;
   String? decryptKey;
@@ -31,6 +32,7 @@ class InvitationModel {
     this.beverage,
     this.message,
     this.decryptKey,
+    this.musicPlayed,
     this.count,
     this.civility,
     this.table,
@@ -43,6 +45,7 @@ class InvitationModel {
     id = json['id'];
     name = json['name'];
     slug = json['slug'];
+    musicPlayed = json['slug'];
     civility = json['civility'];
     musicChoice = json['musicChoice'];
     bookSent = json['bookSent'];
@@ -71,6 +74,7 @@ class InvitationModel {
     data['civility'] = civility;
     data['slug'] = slug;
     data['code'] = code;
+    data['musicPlayed'] = musicPlayed;
     data['musicChoice'] = musicChoice;
     data['bookSent'] = bookSent;
     data['decryptKey'] = decryptKey;

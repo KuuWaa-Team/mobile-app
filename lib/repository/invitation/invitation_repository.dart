@@ -64,6 +64,15 @@ class InvitationRepository {
     }
   }
 
+  Future<dynamic> playMusicApi ({required BuildContext context, required String slug, required bool unPlay}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$slug/${unPlay ? 'un' : ''}play-music", {}, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> editInvitationsApi ({required BuildContext context, required Map data, required int id}) async {
     try  {
       dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$id/edit", data, context: context, auth: true);
