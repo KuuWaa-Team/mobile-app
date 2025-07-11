@@ -5,8 +5,10 @@ import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/strings.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,10 +19,12 @@ import 'package:kuuwaa/screens/book/book_screen.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/check/check_screen.dart';
 import 'package:kuuwaa/screens/events/informations_screen.dart';
+import 'package:kuuwaa/screens/game/game_screen.dart';
 import 'package:kuuwaa/screens/music/music_list_screen.dart';
 import 'package:kuuwaa/screens/table/table_list_screen.dart';
 import 'package:kuuwaa/shimmer/event_owner_detail_shimmer.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../invitations/invitations_list_screen.dart';
@@ -43,10 +47,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
   File? imageFile;
   bool loadingImage = false;
   bool loadingDelete = false;
+  UserModel? user;
 
   @override
   void initState() {
-    eventViewModel.getEventDetailApi(context, widget.id);
+    UserViewModel().getUser().then((value) {
+      if (value != null) {
+        setState(() {
+          user = value;
+        });
+        eventViewModel.getEventDetailApi(context, widget.id, user!.id!);
+      }
+    });
     super.initState();
   }
 
@@ -170,6 +182,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       case Status.COMPLETED:
                         EventModel event = value.event.data!;
 
+                        List roles = [];
+                        if (event.shared == true && event.adminRoles != null) {
+                          roles = event.adminRoles!.split(',');
+                        }
                         return Stack(
                           children: [
                             imageFile == null || !loadingImage?
@@ -241,9 +257,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        setState(() {
-                                          eventViewModel.getEventDetailApi(context, widget.id);
-                                        });
+                                        if (user != null) {
+                                          setState(() {
+                                            eventViewModel.getEventDetailApi(context, widget.id, user!.id!);
+                                          });
+                                        }
                                       },
                                       child: Container(
                                         width: 40,
@@ -417,32 +435,65 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width,
-                                      child: Column(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          MyTextView(
-                                            event.title.toString(),
-                                            textAligntNew: TextAlign.start,
-                                            maxLinesNew: 3,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.lightColor,
-                                              fontWeightNew: FontWeight.w600,
-                                              size: ResponsiveFlutter.of(context).fontSize(2.1),
-                                            ),
+                                          Column(
+                                            children: [
+                                              MyTextView(
+                                                event.title.toString(),
+                                                textAligntNew: TextAlign.start,
+                                                maxLinesNew: 3,
+                                                styleNew: MyTextStyle(
+                                                  colorNew: appColors.lightColor,
+                                                  fontWeightNew: FontWeight.w600,
+                                                  size: ResponsiveFlutter.of(context).fontSize(2.1),
+                                                ),
+                                              ),
+                                              MyTextView(
+                                                event.category!.name.toString(),
+                                                textAligntNew: TextAlign.center,
+                                                maxLineWrap: true,
+                                                styleNew: MyTextStyle(
+                                                  colorNew: appColors.btnColor,
+                                                  fontWeightNew: FontWeight.w500,
+                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10,),
+                                            ],
                                           ),
-                                          MyTextView(
-                                            event.category!.name.toString(),
-                                            textAligntNew: TextAlign.center,
-                                            maxLineWrap: true,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.btnColor,
-                                              fontWeightNew: FontWeight.w500,
-                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                            ),
-                                          ),
+                                          if (event.shared == true)
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                              decoration: BoxDecoration(
+                                                color: appColors.btnColor.withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(30),
+                                                border: Border.all(color: appColors.btnColor.withOpacity(0.3), width: 3),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(Icons.link, size: 12, color: appColors.btnColor),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    "Invité",
+                                                    style: TextStyle(
+                                                      color: appColors.btnColor,
+                                                      fontSize: 11,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )
                                         ],
                                       ),
                                     ),
+                                    if (event.shared != true || roles.contains(EventAdminRoles.verifyInvitations))
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
+                                    if (event.shared != true || roles.contains(EventAdminRoles.verifyInvitations))
                                     GestureDetector(
                                       onTap: () {
                                         if (event.invitationsCount == null || event.invitationsCount! < 1) {
@@ -582,8 +633,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
+                                    if (event.shared != true || roles.contains(EventAdminRoles.sendInvitations))
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    GestureDetector(
+                                    if (event.shared != true || roles.contains(EventAdminRoles.sendInvitations))
+                                      GestureDetector(
                                       onTap: () {
                                           Navigator.push(
                                             context,
@@ -596,7 +649,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
-                                          border: Border.all(color: appColors.lightPinkColor, width: 1)
+                                          border: Border.all(color: appColors.darkGreyText, width: 1)
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row (
@@ -622,9 +675,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    if (event.shared != true)
-                                      GestureDetector(
+                                    if (event.shared != true || roles.contains(EventAdminRoles.addAdmins))
+                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true || roles.contains(EventAdminRoles.addAdmins))
+                                        GestureDetector(
                                         onTap: () {
                                           Navigator.push(
                                             context,
@@ -662,8 +716,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     if (event.shared != true)
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     Divider(color: Colors.black.withOpacity(.05),),
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    GestureDetector(
+                                    if (event.shared != true || roles.contains(EventAdminRoles.manageTables))
+                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true || roles.contains(EventAdminRoles.manageTables))
+                                      GestureDetector(
                                       onTap: () {
                                         if (event.hasTables == true) {
                                           Navigator.push(
@@ -708,8 +764,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    GestureDetector(
+                                    if (event.shared != true || roles.contains(EventAdminRoles.manageDrinks))
+                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true || roles.contains(EventAdminRoles.manageDrinks))
+                                      GestureDetector(
                                       onTap: () {
                                         if (event.hasBeverage == true) {
                                           Navigator.push(
@@ -754,8 +812,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    GestureDetector(
+                                    if (event.shared != true || roles.contains(EventAdminRoles.manageGuestbook))
+                                      SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
+                                    if (event.shared != true || roles.contains(EventAdminRoles.manageGuestbook))
+                                      GestureDetector(
                                       onTap: () {
                                         if (event.hasBook == true) {
                                           Navigator.push(
@@ -802,7 +862,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    GestureDetector(
+                                    if (event.shared != true || roles.contains(EventAdminRoles.viewMusicRequests))
+                                      GestureDetector(
                                       onTap: () {
                                         if (event.hasBook == true) {
                                           Navigator.push(
@@ -849,13 +910,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                    GestureDetector(
+                                    if (event.shared != true || roles.contains(EventAdminRoles.manageInteractiveGame))
+                                      GestureDetector(
                                       onTap: () {
                                         if (event.hasBook == true) {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => BookScreen(event: event),
+                                              builder: (context) => GameScreen(event: event),
                                             ),
                                           );
                                         } else {

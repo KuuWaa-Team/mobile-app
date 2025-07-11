@@ -1,28 +1,15 @@
 import 'package:flutter/services.dart';
 import 'package:kuuwaa/common/app_colors.dart';
-import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
-import 'package:kuuwaa/common/image_path.dart';
-import 'package:kuuwaa/common/strings.dart';
-import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
-import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
-import 'package:kuuwaa/model/table/table_model.dart';
-import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kuuwaa/screens/bottom_bar_screen.dart';
-import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
-import 'package:kuuwaa/view_model/table/table_view_model.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MusicListScreen extends StatefulWidget {
   EventModel event;
@@ -206,8 +193,10 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 onChanged: (_) {
                   setState(() {
                     if (isPlayed) {
-                      invitationViewModel.playMusic(context, invitation.slug.toString(), unPlay: true);
                       playedMusicIds.remove(invitation.id);
+                      setState(() {
+                        invitationViewModel.playMusic(context, invitation.slug.toString(), unPlay: true);
+                      });
                     } else {
                       invitationViewModel.playMusic(context, invitation.slug.toString());
                       playedMusicIds.add(invitation.id!);

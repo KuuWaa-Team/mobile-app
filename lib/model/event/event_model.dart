@@ -26,6 +26,7 @@ class EventModel {
   bool? canSendInvitations;
   String? imagePath;
   String? thumbPath;
+  String? adminRoles;
   String? placeLongitude;
   String? placeLatitude;
   EventCategoryModel? category;
@@ -52,6 +53,7 @@ class EventModel {
     this.specifications,
     this.address,
     this.details,
+    this.adminRoles,
     this.shared,
     this.questions,
     this.adminId,
@@ -86,6 +88,7 @@ class EventModel {
     imagePath = json['imagePath'];
     thumbPath = json['thumbPath'];
     paidEvent = json['paidEvent'];
+    adminRoles = json['adminRoles'];
     hasBook = json['hasBook'];
     placeLongitude = json['placeLongitude'];
     placeLatitude = json['placeLatitude'];
@@ -158,6 +161,7 @@ class EventModel {
     data['hasTables'] = hasTables;
     data['hasBeverage'] = hasBeverage;
     data['hasBook'] = hasBook;
+    data['adminRoles'] = adminRoles;
     data['questions'] = questions;
 
     return data;

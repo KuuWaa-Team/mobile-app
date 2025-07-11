@@ -1,3 +1,4 @@
+import 'package:confetti/confetti.dart';
 import 'package:kuuwaa/view_model/eventAdmin/event_admin_view_model.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:kuuwaa/common/app_colors.dart';
@@ -16,7 +17,8 @@ import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  bool invitationAccepted = false;
+  HomeScreen({Key? key, this.invitationAccepted = false}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -41,25 +43,30 @@ class _HomeScreenState extends State<HomeScreen> {
         user = value;
       });
     });
+    if (widget.invitationAccepted) {
+      Future.delayed(Duration.zero, () {
+        _showInvitationAcceptedDialog();
+      });
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: RefreshIndicator(
-        color: appColors.btnColor,
-        onRefresh: () async {
-          Navigator.pushAndRemoveUntil(
+    return RefreshIndicator(
+      color: appColors.btnColor,
+      onRefresh: () async {
+        Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => const BottomBarScreen(),
             ),
-              (route) => false
-          );
-        },
+                (route) => false
+        );
+      },
+      child: SafeArea(
+        top: false,
+        bottom: false,
         child: Scaffold(
           backgroundColor: appColors.appMediumColor,
           body: Column(
@@ -209,10 +216,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-        ),
-      )
+        )
+      ),
     );
   }
+
   void _showJoinEventModal(BuildContext context) {
     String code = "";
 
@@ -313,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: loadingAccept ? null : () {
+                onTap: loadingAccept ? null : () async {
                   setState(() {
                     loadingAccept = true;
                   });
@@ -322,9 +330,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     return;
                   }
 
-                  adminViewModel.acceptInvitationApi(context, {
+                  await adminViewModel.acceptInvitationApi(context, {
                     'userId' : user.id,
                     'invitationCode' : code
+                  });
+                  setState(() {
+                    loadingAccept = false;
                   });
                 },
                 child: CommonButton(title: "Rejoindre", loading: loadingAccept,),
@@ -336,5 +347,91 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showInvitationAcceptedDialog() {
+    final ConfettiController _confettiController =
+    ConfettiController(duration: const Duration(seconds: 5));
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        _confettiController.play();
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              backgroundColor: appColors.appLightColor,
+              title: Column(
+                children: [
+                  const Icon(Icons.celebration, color: Colors.orange, size: 50),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Invitation acceptée !',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: appColors.btnColor,
+                    ),
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    "Vous êtes désormais gestionnaire de l'évènement.\nIl apparaîtra dans votre liste.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: appColors.darkGreyText,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      _confettiController.stop();
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: appColors.btnColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                      child: Text("Fermer", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 0,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirectionality: BlastDirectionality.explosive,
+                shouldLoop: false,
+                colors: const [
+                  Colors.blue,
+                  Colors.red,
+                  Colors.yellow,
+                  Colors.green,
+                  Colors.purple,
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    ).then((_) {
+      _confettiController.dispose();
+    });
+  }
 
 }

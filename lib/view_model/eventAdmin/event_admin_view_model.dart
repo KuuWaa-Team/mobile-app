@@ -82,7 +82,7 @@ class EventAdminViewModel with ChangeNotifier{
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => HomeScreen(invitationAccepted: true,),
           ),
         );
         Utils.toastMessage(value['message']);

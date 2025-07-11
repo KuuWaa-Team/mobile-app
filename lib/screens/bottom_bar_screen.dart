@@ -48,7 +48,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
       setting = false;
       setState(() {});
     } else {
-      tabBar = const HomeScreen();
+      tabBar = HomeScreen();
       home = true;
       profile = false;
       wallet = false;
@@ -117,7 +117,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                tabBar = const HomeScreen();
+                                tabBar = HomeScreen();
                                 home = true;
                                 profile = false;
                                 wallet = false;

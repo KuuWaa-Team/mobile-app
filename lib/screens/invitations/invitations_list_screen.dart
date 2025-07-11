@@ -10,6 +10,7 @@ import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/invitation/invitation_model.dart';
 import 'package:kuuwaa/model/table/table_model.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
 import 'package:kuuwaa/view_model/table/table_view_model.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -45,6 +47,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
   bool sendingSMS = false;
   bool sendingWpp = false;
   bool copying = false;
+
+  UserModel? user;
 
   TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
@@ -101,6 +105,11 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
 
   @override
   void initState() {
+    UserViewModel().getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
     civilities.insert(0, dropDownValue as Map);
     invitationViewModel.listingApi(context, widget.event.id!);
     List<TableModel> fetchedTables = [tableDropDownValue as TableModel];
@@ -131,9 +140,8 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
             ),
             const SizedBox(height: 20,),
             Row(
-              mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (widget.event.shared != true)
                 GestureDetector(
                   onTap: () {
                     _nameController.text = "";
@@ -678,7 +686,6 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         ),
                                                         if (widget.event.hasBeverage == true)
                                                           const SizedBox(height: 10,),
-                                                        if (widget.event.shared != true)
                                                         GestureDetector(
                                                           onTap: () {
                                                             setState(() {
@@ -960,47 +967,20 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ),
                                                           ),
                                                         ),
-                                                        if (widget.event.shared != true)
                                                         const SizedBox(height: 10,),
-                                                        if (false && widget.event.shared != true)
+                                                        if (user != null)
                                                         GestureDetector(
                                                           onTap: () {
-                                                            String url = "http://kuuwaa.com/invitations/" + invitation.slug.toString();
-                                                            Utils.openUrl(url);
-                                                          },
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(5),
-                                                                color: appColors.appLightColor
-                                                            ),
-                                                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [
-                                                                MyTextView(
-                                                                  "Voir",
-                                                                  textAligntNew: TextAlign.center,
-                                                                  styleNew: MyTextStyle(
-                                                                    fontWeightNew: FontWeight.w400,
-                                                                    colorNew: Colors.white,
-                                                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                                                  ),
-                                                                ),
-                                                                Icon(Icons.file_open_outlined, color: appColors.white, size: 15,)
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        if (widget.event.shared != true)
-                                                        const SizedBox(height: 10,),
-                                                        if (widget.event.shared != true)
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            if (widget.event.canSendInvitations == true) {
-                                                              // Reduce credits
-                                                              SharePlus.instance.share(
-                                                                  ShareParams(text: invitation.message)
-                                                              );
+                                                            if ((widget.event.template!.price ?? 0) <= (user!.credits ?? 0)) {
+                                                              invitationViewModel.sendInvitation(context, {
+                                                                'userId': user!.id
+                                                              }, invitation.id!, widget.event).then((value) {
+                                                                if (value) {
+                                                                  SharePlus.instance.share(
+                                                                      ShareParams(text: invitation.message)
+                                                                  );
+                                                                }
+                                                              });
                                                             }  else {
                                                               showDialog(
                                                                   context: context,
@@ -1207,7 +1187,6 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                           ),
                                           Row(
                                             children: [
-                                              if (widget.event.shared != true)
                                                 Container(
                                                   decoration: BoxDecoration(
                                                       borderRadius: BorderRadius.circular(10),

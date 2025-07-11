@@ -1,8 +1,8 @@
 import 'dart:io';
 
 class AppUrl {
-  // static var domainName = Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
-  static var domainName = 'https://invitation.kuuwaa.com';
+  static var domainName = Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
+  // static var domainName = 'https://invitation.kuuwaa.com';
   static var baseUrl = "$domainName/api";
 
   // AUTH
@@ -13,6 +13,8 @@ class AppUrl {
 
   // EVENTS
   static var eventEndPoint = '$baseUrl/events';
+  static var gameAssertionEndPoint = '$baseUrl/game-assertions';
+  static var gameQuestionEndPoint = '$baseUrl/game-questions';
   static var categoryEndPoint = '$baseUrl/event_categories';
   static var templatesEndPoint = '$baseUrl/event_templates';
   static var packEndPoint = '$baseUrl/event_packs';

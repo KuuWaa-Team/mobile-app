@@ -45,7 +45,7 @@ class InvitationModel {
     id = json['id'];
     name = json['name'];
     slug = json['slug'];
-    musicPlayed = json['slug'];
+    musicPlayed = json['musicPlayed'];
     civility = json['civility'];
     musicChoice = json['musicChoice'];
     bookSent = json['bookSent'];

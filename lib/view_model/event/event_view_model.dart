@@ -9,6 +9,9 @@ import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/event/event_pack_model.dart';
 import 'package:kuuwaa/model/event/event_template_model.dart';
 import 'package:kuuwaa/model/event/feature_model.dart';
+import 'package:kuuwaa/model/event/game_assertion_model.dart';
+import 'package:kuuwaa/model/event/game_question_model.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/repository/event/event_repository.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/details_screen.dart';
@@ -21,6 +24,7 @@ class EventViewModel with ChangeNotifier{
   bool get loading => _loading;
   ApiResponse<dynamic> eventsList = ApiResponse.loading();
   ApiResponse<dynamic> packList = ApiResponse.loading();
+  ApiResponse<List<GameQuestionModel>> questionsList = ApiResponse.loading();
   ApiResponse<EventModel> event = ApiResponse.loading();
   List<EventCategoryModel> categories = [];
   List<EventTemplateModel> templates = [];
@@ -46,6 +50,11 @@ class EventViewModel with ChangeNotifier{
     notifyListeners();
   }
 
+  setGameQuestionsList (ApiResponse<List<GameQuestionModel>> response) {
+    questionsList = response;
+    notifyListeners();
+  }
+
   setFeatures (List<FeatureModel> data) {
     features = data;
     notifyListeners();
@@ -65,7 +74,6 @@ class EventViewModel with ChangeNotifier{
     setEventsList(ApiResponse.loading());
     setLoading(true);
     await _repository.listingApi(context: context, id: id).then((value) {
-      print(value);
       setLoading(false);
       if (value['success'] == true  ) {
         List eventsJson = value['data'];
@@ -76,6 +84,10 @@ class EventViewModel with ChangeNotifier{
           }
         }
         setEventsList(ApiResponse.completed(eventsData));
+        UserModel user = UserModel.fromJson(value['user']);
+        print("---------------------- user ----------------------");
+        print(value['user']);
+        UserViewModel().updateUser(user);
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
@@ -97,6 +109,28 @@ class EventViewModel with ChangeNotifier{
           categoriesData.add(EventCategoryModel.fromJson(element));
         }
         setCategories(categoriesData);
+      } else {
+        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
+      setLoading(false);
+    });
+    return true;
+  }
+
+  Future<bool> getQuestionsList(BuildContext context, int id) async {
+    await _repository.getGameQuestions(context: context, id: id).then((value) {
+      print(value);
+
+      if (value['success'] == true  ) {
+        List gamesQuestions = value['data'];
+        List<GameQuestionModel> gameQuestionsData = [];
+        for (var element in gamesQuestions) {
+          gameQuestionsData.add(GameQuestionModel.fromJson(element));
+        }
+        setGameQuestionsList(ApiResponse.completed(gameQuestionsData));
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
@@ -140,6 +174,101 @@ class EventViewModel with ChangeNotifier{
       setLoading(false);
     });
     return success;
+  }
+
+  Future<bool> removeGameAssertion(BuildContext context, int id) async {
+    bool success = false;
+    print("1111");
+    await _repository.removeGameAssertion(context: context, id: id).then((value) {
+      print(value);
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<bool> setGameAssertionCorrect(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.setGameAssertionCorrect(context: context, id: id).then((value) {
+      print(value);
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<bool> addGameQuestion(BuildContext context, Map data, int id) async {
+    bool success = false;
+    await _repository.addGameQuestion(context: context, data: data, id: id).then((value) {
+      print(value);
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<GameAssertionModel?> addAssertionToQuestion(BuildContext context, Map data, int id) async {
+    GameAssertionModel? returnValue;
+    await _repository.addAssertionToQuestion(context: context, data: data, id: id).then((value) {
+      print(value);
+      if (value['success'] == true  ) {
+        returnValue = GameAssertionModel.fromJson(value['data']);
+        Utils.toastMessage(value['message']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return returnValue;
+  }
+
+  Future<bool?> editGameQuestion(BuildContext context, Map data, int id) async {
+    bool returnValue = false;
+    await _repository.editGameQuestion(context: context, data: data, id: id).then((value) {
+      print(value);
+      if (value['success'] == true  ) {
+        Utils.toastMessage(value['message']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return returnValue;
+  }
+
+  Future<bool> removeGameQuestion(BuildContext context, int id) async {
+    bool returnValue = false;
+    await _repository.removeGameQuestion(context: context, id: id).then((value) {
+      print(value);
+      if (value['success'] == true  ) {
+        Utils.toastMessage(value['message']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return returnValue;
   }
 
   Future<bool> openBook(BuildContext context, int id) async {
@@ -375,10 +504,10 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
-  Future<bool> getEventDetailApi (BuildContext context, int id) async {
+  Future<bool> getEventDetailApi (BuildContext context, int id, int userId) async {
     setEvent(ApiResponse.loading());
     setLoading(true);
-    await _repository.getEventDetailApi(context: context, id: id).then((value) {
+    await _repository.getEventDetailApi(context: context, id: id, userId: userId).then((value) {
       setLoading(false);
       setEvent(ApiResponse.completed(EventModel.fromJson(value)));
     }).onError((error, stackTrace) {

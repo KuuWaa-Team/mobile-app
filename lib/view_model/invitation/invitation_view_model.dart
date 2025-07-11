@@ -12,6 +12,7 @@ import 'package:kuuwaa/repository/invitation/invitation_repository.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/screens/invitations/invitation_details_screen.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class InvitationViewModel with ChangeNotifier{
   final _repository = InvitationRepository();
@@ -58,6 +59,7 @@ class InvitationViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
+      print(error);
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
@@ -225,11 +227,12 @@ class InvitationViewModel with ChangeNotifier{
           Utils.flushBarErrorMessage(value['message'], context);
         }
       }
-    }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
-      print(error);
-      setLoading(false);
     });
+    // .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   print(error);
+    //   setLoading(false);
+    // });
     return true;
   }
 
@@ -259,138 +262,19 @@ class InvitationViewModel with ChangeNotifier{
 
   Future<bool> sendInvitation(BuildContext context, Map data, int id, EventModel event) async {
     setLoading(true);
+    bool success = false;
     await _repository.sendInvitationsApi(context: context, data: data, id: id).then((value) {
       setLoading(false);
       if (value['success'] == true  ) {
-        List invitationsJson = value['invitations'];
-        List<InvitationModel> invitationsData = [];
-        if (invitationsJson.isNotEmpty) {
-          for (var element in invitationsJson) {
-            invitationsData.add(InvitationModel.fromJson(element));
-          }
-        }
-        setInvitationsList(ApiResponse.completed(invitationsData));
-        Utils.toastMessage(value['message']);
-        Navigator.pop(context);
-      } else {
-        if (value['notpaid'] == true) {
-          Navigator.pop(context);
-          showDialog(
-            context: context,
-            builder: (context) {
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                              right: 0,
-                              top: 0,
-                              child: IconButton(onPressed: (){
-                                Navigator.pop(context);
-                              }, icon: const Icon(Icons.close)
-                              )
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                            child:
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  height: 60,
-                                  width: 60,
-                                  child: Center(
-                                    child: Icon(
-                                      CupertinoIcons.xmark_circle,
-                                      color: Colors.red,
-                                      size: 50,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10,),
-                                const Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text("Cet évenement n'est pas activé", style: TextStyle(
-                                        fontWeight: FontWeight.bold, color: Colors.red
-                                    ), textAlign: TextAlign.center,),
-                                    SizedBox(height: 10,),
-                                    Text("Vous ne pouvez pas partager les invitations d'un évenement non activé.", style: TextStyle(
-                                        fontSize: 12
-                                    ), textAlign: TextAlign.center,),
-                                    Divider(),
-                                    Text("Pour activer l'évenement, vous devez payer les frais d'abonnement.", style: TextStyle(
-                                        fontSize: 12
-                                    ), textAlign: TextAlign.center,),
-                                  ],
-                                ),
-                                const SizedBox(height: 20,),
-                                GestureDetector(
-                                  onTap: () async {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => PaymentScreen(event: event),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: appColors.appLightColor.withOpacity(.5), width: 1),
-                                        borderRadius: BorderRadius.circular(10)
-                                    ),
-                                    margin: const EdgeInsets.only(bottom: 10),
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: const EdgeInsets.all(10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            const Icon(CupertinoIcons.check_mark_circled, size: 20,),
-                                            const SizedBox(width: 7,),
-                                            MyTextView(
-                                              "Activer l'évenement",
-                                              textAligntNew: TextAlign.start,
-                                              maxLineWrap: true,
-                                              styleNew: MyTextStyle(
-                                                colorNew: appColors.black,
-                                                fontWeightNew: FontWeight.w500,
-                                                size: ResponsiveFlutter.of(context).fontSize(1.6),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                  );
-                },
-              );
-            },
-          );
-        } else {
-          Utils.flushBarErrorMessage(value['message'], context);
-        }
+        success = true;
+        UserViewModel().updateCredits(value['credits']);
+        setLoading(false);
       }
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
-    return true;
+    return success;
   }
 
   Future<bool> editInvitation(BuildContext context, Map data, int id) async {
@@ -540,7 +424,10 @@ class InvitationViewModel with ChangeNotifier{
 
   Future<void> playMusic(BuildContext context, String slug, {bool unPlay = false}) async {
     setLoading(true);
-    await _repository.playMusicApi(context: context, slug: slug, unPlay: unPlay);
+    await _repository.playMusicApi(context: context, slug: slug, unPlay: unPlay).then((value) {
+      print("------------------------------");
+      print(value);
+    });
   }
 
   Future<bool> sendAllInvitations(BuildContext context, Map data, EventModel event) async {

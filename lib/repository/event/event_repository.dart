@@ -50,6 +50,69 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> addGameQuestion ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/add-game-question", data, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> editGameQuestion ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.gameQuestionEndPoint + "/$id/edit", data, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> removeGameQuestion ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.gameQuestionEndPoint + "/$id/remove", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> addAssertionToQuestion ({required BuildContext context, required Map data, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.gameQuestionEndPoint + "/$id/add-assertion", data, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> setGameAssertionCorrect ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.gameAssertionEndPoint + "/$id/set-correct", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> removeGameAssertion ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.gameAssertionEndPoint + "/$id/remove", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getGameQuestions ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id/questions-list", context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> getTemplatesApi ({required BuildContext context}) async {
     try  {
       dynamic response = await _apiServices.getGetResponse(AppUrl.templatesEndPoint, context: context, auth: false);
@@ -151,9 +214,9 @@ class EventRepository {
     }
   }
 
-  Future<dynamic> getEventDetailApi ({required BuildContext context, required int id}) async {
+  Future<dynamic> getEventDetailApi ({required BuildContext context, required int id, required int userId}) async {
     try  {
-      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id", context: context);
+      dynamic response = await _apiServices.getGetResponse(AppUrl.eventEndPoint + "/$id?userId=$userId", context: context);
       return response;
     } catch(e) {
       rethrow;
