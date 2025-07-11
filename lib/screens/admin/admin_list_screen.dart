@@ -7,7 +7,9 @@ import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/data/response/status.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:kuuwaa/model/eventAdmin/event_admin_controller.dart';
+import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:kuuwaa/view_model/user/user_view_model.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
@@ -31,6 +33,8 @@ class _AdminListScreenState extends State<AdminListScreen> {
   bool loading = false;
   bool sending = false;
 
+  UserModel? user;
+
   final TextEditingController _nameController = TextEditingController();
 
   var maskFormatter = MaskTextInputFormatter(
@@ -42,6 +46,11 @@ class _AdminListScreenState extends State<AdminListScreen> {
   @override
   void initState() {
     adminViewModel.listingApi(context, widget.event.id!);
+    UserViewModel().getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
     super.initState();
   }
 
@@ -205,6 +214,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                     }).toList(),
 
                                     const SizedBox(height: 10),
+                                    if (user != null)
                                     GestureDetector(
                                       onTap: () async {
                                         if (_nameController.text.trim().isEmpty) {
@@ -221,6 +231,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                         Map data = {
                                           "name": _nameController.text.trim(),
                                           "eventId": widget.event.id!,
+                                          "userId": user!.id!,
                                           "permissions": selectedPermissions,
                                         };
 
@@ -584,7 +595,62 @@ class _AdminListScreenState extends State<AdminListScreen> {
                     ),
                   );
                 }).toList(),
-                const SizedBox(height: 25),
+                const SizedBox(height: 25),GestureDetector(
+                  onTap: () async {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text("Confirmer la suppression"),
+                        content: const Text("Voulez-vous vraiment supprimer cet administrateur ?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text("Annuler"),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text("Supprimer", style: TextStyle(color: Colors.red)),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (confirmed == true) {
+                      await adminViewModel.removeApi(context, admin.id!).then((value) {
+                        if (value) {
+                          adminViewModel.listingApi(context, widget.event.id!);
+                          Navigator.pop(context);
+                        }
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.red),
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.delete_outline_sharp, color: Colors.red, size: 20,),
+                          Text(
+                            "Supprimer",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w600,
+                              fontSize: ResponsiveFlutter.of(context).fontSize(1.7),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
                 GestureDetector(
                   onTap: () {
                     final labelRoles = rolesList.map((r) => "- ${EventAdminRoles.getLabel(r)}").join("\n");
@@ -600,7 +666,7 @@ ${admin.invitationCode}
 Rôles assignés :
 $labelRoles
                       
-Téléchargez KuuWaa pour accéder a l'évenement : https://kuuwaa.com/telecharger
+Ouvrez ce lien pour accéder a l'invitation : https://invitation.kuuwaa.com/event-admins/${admin.invitationCode}
                       ''';
 
                     Share.share(message);

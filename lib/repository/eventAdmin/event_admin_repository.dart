@@ -43,4 +43,13 @@ class EventAdminRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> removeApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventAdminEndPoint + "/$id/remove", {}, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
 }

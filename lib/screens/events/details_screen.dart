@@ -491,9 +491,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ],
                                       ),
                                     ),
-                                    if (event.shared != true || roles.contains(EventAdminRoles.verifyInvitations))
+
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
-                                    if (event.shared != true || roles.contains(EventAdminRoles.verifyInvitations))
                                     GestureDetector(
                                       onTap: () {
                                         if (event.invitationsCount == null || event.invitationsCount! < 1) {

@@ -118,4 +118,23 @@ class EventAdminViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> removeApi (BuildContext context, int id) async {
+    setLoading(true);
+    bool returnValue = false;
+    await _repository.removeApi(context: context, id: id).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        returnValue = true;
+        Utils.toastMessage(value['message']);
+        setLoading(false);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return returnValue;
+  }
+
 }

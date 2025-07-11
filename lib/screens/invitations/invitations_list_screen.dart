@@ -970,9 +970,12 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         const SizedBox(height: 10,),
                                                         if (user != null)
                                                         GestureDetector(
-                                                          onTap: () {
+                                                          onTap: sending ? null : () async {
                                                             if ((widget.event.template!.price ?? 0) <= (user!.credits ?? 0)) {
-                                                              invitationViewModel.sendInvitation(context, {
+                                                              setState(() async {
+                                                                sending = true;
+                                                              });
+                                                              await invitationViewModel.sendInvitation(context, {
                                                                 'userId': user!.id
                                                               }, invitation.id!, widget.event).then((value) {
                                                                 if (value) {
@@ -980,6 +983,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                       ShareParams(text: invitation.message)
                                                                   );
                                                                 }
+                                                              });
+                                                              setState(() async {
+                                                                sending = false;
                                                               });
                                                             }  else {
                                                               showDialog(
