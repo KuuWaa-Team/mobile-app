@@ -226,7 +226,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: ResponsiveFlutter.of(context).moderateScale(10),
+                  height: ResponsiveFlutter.of(context).moderateScale(30),
                 ),
                 MyTextView(
                   "Veuillez choisir un moyen de paiement pour recharger les credits",
@@ -239,7 +239,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                   maxLinesNew: 5,
                 ),
                 SizedBox(
-                  height: ResponsiveFlutter.of(context).moderateScale(20),
+                  height: ResponsiveFlutter.of(context).moderateScale(10),
                 ),
                 GestureDetector(
                   onTap: loading ? null : () {
@@ -396,18 +396,27 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                 ),
                 GestureDetector(
                   onTap: loading ? null : () async {
+                    final amount = double.tryParse(amountController.text) ?? 0;
+
+                    if (amount < 5) {
+                      _showMinimumAmountModal(context);
+                      return;
+                    }
+
                     if (selectedPaymentMethod == PaymentMethod.mobile) {
                       showPhoneNumberModal();
                     } else if (selectedPaymentMethod == PaymentMethod.card) {
                       setState(() {
                         loading = true;
                       });
+
                       await walletViewModel.recharge(context, {
                         'amount': amountController.text,
                         'payment_method': selectedPaymentMethod,
                         'phone_number': '',
-                        'user_id': user!.id
+                        'user_id': user!.id,
                       }, user!.id!);
+
                       setState(() {
                         loading = false;
                       });
@@ -431,4 +440,54 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       ),
     );
   }
+
+  void _showMinimumAmountModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      backgroundColor: appColors.appLightColor,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.orangeAccent, size: 40),
+              const SizedBox(height: 10),
+              Text(
+                "Montant insuffisant",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: appColors.darkGreyText,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Le montant minimum pour une recharge est de 5 \$ USD.\nVeuillez ajuster le montant.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: appColors.lightColor.withOpacity(.8),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                label: const Text("OK, compris", style: TextStyle(color: Colors.white),),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: appColors.btnColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }

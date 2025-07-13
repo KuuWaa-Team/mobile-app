@@ -15,6 +15,7 @@ import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kuuwaa/screens/add_money_screen.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:kuuwaa/screens/events/payment_screen.dart';
 import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
@@ -579,10 +580,11 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                 size: ResponsiveFlutter.of(context).fontSize(1.8),
                                                               ),
                                                             ),
-                                                            if (invitation.status != 'created' && invitation.status != 'refused')
                                                             const SizedBox(width: 10,),
                                                             if (invitation.status != 'created' && invitation.status != 'refused')
-                                                              const Icon(CupertinoIcons.check_mark_circled, color: Colors.green, size: 15,)
+                                                              const Icon(CupertinoIcons.lock, color: Colors.green, size: 15,),
+                                                            if (invitation.status == 'created' || invitation.status == 'refused')
+                                                              Icon(CupertinoIcons.lock, color: appColors.lightColor, size: 15,),
                                                           ],
                                                         ),
                                                         const SizedBox(height: 10,),
@@ -971,22 +973,22 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                         if (user != null)
                                                         GestureDetector(
                                                           onTap: sending ? null : () async {
-                                                            if ((widget.event.template!.price ?? 0) <= (user!.credits ?? 0)) {
-                                                              setState(() async {
-                                                                sending = true;
-                                                              });
-                                                              await invitationViewModel.sendInvitation(context, {
-                                                                'userId': user!.id
-                                                              }, invitation.id!, widget.event).then((value) {
-                                                                if (value) {
-                                                                  SharePlus.instance.share(
-                                                                      ShareParams(text: invitation.message)
-                                                                  );
-                                                                }
-                                                              });
-                                                              setState(() async {
-                                                                sending = false;
-                                                              });
+                                                            if (((widget.event.template!.price ?? 0) <= (user!.credits ?? 0)) || invitation.status != 'created') {
+                                                              sending = true;
+                                                              if (invitation.status == 'created') {
+                                                                await invitationViewModel.sendInvitation(context, {
+                                                                  'userId': user!.id
+                                                                }, invitation.id!, widget.event).then((value) {
+                                                                  if (value) {
+                                                                  }
+                                                                });
+                                                              } else {
+                                                                SharePlus.instance.share(
+                                                                    ShareParams(text: invitation.message)
+                                                                );
+                                                              }
+
+                                                              sending = false;
                                                             }  else {
                                                               showDialog(
                                                                   context: context,
@@ -1080,7 +1082,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                                           Navigator.push(
                                                                                             context,
                                                                                             MaterialPageRoute(
-                                                                                              builder: (context) => const BottomBarScreen(isFrom: "Wallet",),
+                                                                                              builder: (context) => const AddMoneyScreen(),
                                                                                             ),
                                                                                           );
                                                                                         },
@@ -1118,6 +1120,11 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                                     size: ResponsiveFlutter.of(context).fontSize(1.8),
                                                                   ),
                                                                 ),
+                                                                if (invitation.status == 'created' || invitation.status == 'refused')
+                                                                  Icon(CupertinoIcons.lock, color: appColors.white, size: 15,),
+                                                                if (sending)
+                                                                const CupertinoActivityIndicator(color: Colors.white,),
+                                                                if (!sending && !((invitation.status == 'created' || invitation.status == 'refused')))
                                                                 Icon(widget.event.canSendInvitations == true ? Icons.send : CupertinoIcons.lock_fill, color: appColors.white, size: 15,)
                                                               ],
                                                             ),
@@ -1200,7 +1207,10 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                                                   child: Row(
                                                     children: [
-                                                      Icon(Icons.menu, color: appColors.lightColor, size: 15,)
+                                                      if (invitation.status != 'created' && invitation.status != 'refused')
+                                                      const Icon(CupertinoIcons.lock_open, color: Colors.green, size: 15,),
+                                                      if (invitation.status == 'created' || invitation.status == 'refused')
+                                                        Icon(CupertinoIcons.lock, color: appColors.lightColor, size: 15,)
                                                     ],
                                                   ),
                                                 ),

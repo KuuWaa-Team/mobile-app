@@ -14,27 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "77651918174-5la9okfi0ic3a1d41dpvpud173i8pf3k.apps.googleusercontent.com",
+          "client_id": "77651918174-d5hh3bmf3gn38gcmcp9aplb58f1tnqu4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.app.kuuwaa",
-            "certificate_hash": "72090ffbed276277044a7fd92104bb76d4e6bf16"
-          }
-        },
-        {
-          "client_id": "77651918174-rk2fuikitbombnqgfq4pa4l6er4ps9fg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.app.kuuwaa",
-            "certificate_hash": "6a661b15842e6d204a0a5f898b29d11a318ea39e"
-          }
-        },
-        {
-          "client_id": "77651918174-rrp8e9evg6rnr21bd39b7oqo9udhu9qh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.app.kuuwaa",
-            "certificate_hash": "d20a7a1f6566c65b4aa1bba00da605ffc56b5fb5"
+            "certificate_hash": "e89294c98c8f97c226a018a86b6da54263bb382e"
           }
         },
         {
