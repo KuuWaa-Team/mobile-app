@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/firebase_options.dart';
+import 'package:kuuwaa/screens/on_boarding/on_boarding_screen.dart';
 import 'package:kuuwaa/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -80,7 +81,7 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: appColors.primarySwatchColors,
           fontFamily: Constants.carosSoft,
         ),
-        home: const SplashScreen(),
+        home: initScreen ? const OnBoardingView() : const SplashScreen(),
       )
     );
   }

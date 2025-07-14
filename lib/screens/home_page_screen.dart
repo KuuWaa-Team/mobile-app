@@ -48,6 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
         _showInvitationAcceptedDialog();
       });
     }
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _showFirstTimeInfoDialog();
+    });
     super.initState();
   }
 
@@ -403,9 +407,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                      child: Text("Fermer", style: TextStyle(color: Colors.white)),
+                      child: Text("Compris", style: TextStyle(color: appColors.btnColor)),
                     ),
                   ),
                 ],
@@ -432,6 +436,196 @@ class _HomeScreenState extends State<HomeScreen> {
     ).then((_) {
       _confettiController.dispose();
     });
+  }
+
+  void _showFirstTimeInfoDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: appColors.appLightColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          titlePadding: const EdgeInsets.only(top: 20),
+          title: Column(
+            children: [
+              Icon(Icons.info_outline_rounded, size: 30, color: appColors.appMediumColorDark),
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: MyTextView(
+                "Bienvenue sur KuuWaa",
+                  textAligntNew: TextAlign.center,
+                  maxLinesNew: 5,
+                  styleNew: MyTextStyle(
+                    colorNew: appColors.lightColor,
+                    fontWeightNew: FontWeight.w700,
+                    size: ResponsiveFlutter.of(context).fontSize(3),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDialogOption(
+                icon: Icons.event,
+                title: "Créer un évènement",
+                description:
+                "Lancez la création de votre évènement et commencez à envoyer des invitations électroniques personnalisées.",
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CreateEventScreen()),
+                  );
+                },
+              ),
+              const SizedBox(height: 15),
+              _buildDialogOption(
+                icon: Icons.lock_open,
+                title: "Rejoindre un évènement",
+                description:
+                "Utilisez un code d’invitation pour rejoindre un évènement en tant que co-gestionnaire.",
+                onTap: () {
+                  Navigator.pop(context);
+                  _showJoinEventModal(context);
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Compris",
+                style: TextStyle(color: appColors.btnColor, fontSize: 16),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  Widget _buildDialogOption({
+    required IconData icon,
+    required String title,
+    required String description,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: appColors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: appColors.btnColor, size: 30),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyTextView(
+                    title,
+                    textAligntNew: TextAlign.left,
+                    maxLinesNew: 5,
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.appMediumColorDark,
+                      fontWeightNew: FontWeight.w700,
+                      size: ResponsiveFlutter.of(context).fontSize(1.9),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  MyTextView(
+                    description,
+                    textAligntNew: TextAlign.left,
+                    maxLinesNew: 15,
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.appMediumColorDark.withOpacity(.6),
+                      fontWeightNew: FontWeight.w700,
+                      size: ResponsiveFlutter.of(context).fontSize(1.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoTile({
+    required IconData icon,
+    required String title,
+    required String description,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: appColors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 5,
+            )
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: appColors.btnColor, size: 30),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: appColors.btnColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: appColors.darkGreyText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
 }

@@ -40,6 +40,10 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
         });
       }
     });
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _showCreditsInfoDialog();
+    });
     super.initState();
   }
 
@@ -243,4 +247,95 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
       ),
     );
   }
+  void _showCreditsInfoDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: appColors.appLightColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          title: Column(
+            children: [
+              Icon(Icons.info_outline_rounded, size: 30, color: appColors.appMediumColorDark),
+              const SizedBox(height: 5),
+              MyTextView(
+                "À propos des crédits",
+                textAligntNew: TextAlign.center,
+                maxLinesNew: 5,
+                styleNew: MyTextStyle(
+                  colorNew: appColors.lightColor,
+                  fontWeightNew: FontWeight.w700,
+                  size: ResponsiveFlutter.of(context).fontSize(3.5),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              MyTextView(
+                "Les crédits permettent de partager les invitations électroniques.",
+                textAligntNew: TextAlign.left,
+                maxLinesNew: 5,
+                styleNew: MyTextStyle(
+                  colorNew: appColors.appMediumColorDark,
+                  fontWeightNew: FontWeight.w600,
+                  size: ResponsiveFlutter.of(context).fontSize(1.8),
+                ),
+              ),
+              const SizedBox(height: 10),
+              MyTextView(
+                "Chaque template de design a un prix en crédit par invitation (1 crédit pour le moins coûteux).",
+                textAligntNew: TextAlign.left,
+                maxLinesNew: 10,
+                styleNew: MyTextStyle(
+                  colorNew: appColors.appMediumColorDark.withOpacity(0.8),
+                  fontWeightNew: FontWeight.w500,
+                  size: ResponsiveFlutter.of(context).fontSize(1.7),
+                ),
+              ),
+              const SizedBox(height: 10),
+              MyTextView(
+                "5 \$ = 20 crédits",
+                textAligntNew: TextAlign.left,
+                styleNew: MyTextStyle(
+                  colorNew: appColors.btnColor,
+                  fontWeightNew: FontWeight.w700,
+                  size: ResponsiveFlutter.of(context).fontSize(3.5),
+                ),
+              ),
+              const SizedBox(height: 15),
+              MyTextView(
+                "La recharge peut se faire via Mobile Money ou carte de crédit.",
+                textAligntNew: TextAlign.left,
+                maxLinesNew: 10,
+                styleNew: MyTextStyle(
+                  colorNew: appColors.appMediumColorDark.withOpacity(0.8),
+                  fontWeightNew: FontWeight.w500,
+                  size: ResponsiveFlutter.of(context).fontSize(1.7),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Compris",
+                style: TextStyle(color: appColors.btnColor, fontSize: 16),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

@@ -118,11 +118,11 @@ class _LoginScreenState extends State<LoginScreen> {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          systemNavigationBarColor: appColors.white,
+          systemNavigationBarColor: appColors.appMediumColor,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.light, // For Android (dark icons)
           statusBarBrightness: Brightness.dark, // For iOS (dark icons)
-          systemNavigationBarDividerColor: appColors.white
+          systemNavigationBarDividerColor: appColors.appMediumColor
       ),
     );
     return Scaffold(
@@ -313,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 20.0, top: 20),
+              padding: EdgeInsets.only(left: 10.0, right: 10, bottom: MediaQuery.of(context).viewInsets.bottom + 20.0, top: 20),
               child: CupertinoButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -189,7 +189,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 MyTextView(
                   "Montant (USD)",
                   maxLinesNew: 3,
@@ -198,7 +198,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                     size: ResponsiveFlutter.of(context).fontSize(1.8),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: amountController,
                   keyboardType: TextInputType.number,

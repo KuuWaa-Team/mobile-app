@@ -130,14 +130,14 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: ResponsiveFlutter.of(context).moderateScale(20),
+                            width: ResponsiveFlutter.of(context).moderateScale(5),
                           ),
                           Expanded(
                             child: Container(
                               height: ResponsiveFlutter.of(context).verticalScale(150),
                               padding: EdgeInsets.symmetric(
                                 vertical: ResponsiveFlutter.of(context).moderateScale(25),
-                                horizontal: ResponsiveFlutter.of(context).moderateScale(20),
+                                horizontal: ResponsiveFlutter.of(context).moderateScale(10),
                               ),
                               decoration: BoxDecoration(
                                 color: appColors.appLightColor,
