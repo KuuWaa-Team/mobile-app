@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: appColors.primarySwatchColors,
           fontFamily: Constants.carosSoft,
         ),
-        home: initScreen ? const OnBoardingView() : const SplashScreen(),
+        home: initScreen ? const SplashScreen() : const OnBoardingView(),
       )
     );
   }

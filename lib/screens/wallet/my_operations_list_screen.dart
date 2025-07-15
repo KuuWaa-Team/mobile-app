@@ -13,6 +13,7 @@ import 'package:kuuwaa/shimmer/event_card_shimmer.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 import 'package:kuuwaa/view_model/wallet/wallet_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyOperationsListScreen extends StatefulWidget {
   const MyOperationsListScreen({Key? key}) : super(key: key);
@@ -26,8 +27,15 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
   WalletViewModel walletViewModel = WalletViewModel();
   UserModel user = UserModel();
 
+  bool initScreenCredits = false;
+
   @override
-  void initState() {
+  void initState() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    initScreenCredits = preferences.getBool('initScreenHome') == true;
+    if (initScreenCredits != true) {
+      await preferences.setBool('initScreenHome', true);
+    }
     UserViewModel().getUser().then((value) {
       setState(() {
         user = value;
@@ -41,9 +49,11 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
       }
     });
 
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _showCreditsInfoDialog();
-    });
+    if (initScreenCredits) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _showCreditsInfoDialog();
+      });
+    }
     super.initState();
   }
 

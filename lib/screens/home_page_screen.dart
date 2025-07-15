@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   bool invitationAccepted = false;
@@ -36,8 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
   EventViewModel eventViewModel = EventViewModel();
   EventAdminViewModel adminViewModel = EventAdminViewModel();
 
+  bool initScreenHome = false;
+
   @override
-  void initState() {
+  void initState() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    initScreenHome = preferences.getBool('initScreenHome') == true;
+    if (initScreenHome != true) {
+      await preferences.setBool('initScreenHome', true);
+    }
     UserViewModel().getUser().then((value) {
       setState(() {
         user = value;
@@ -49,10 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _showFirstTimeInfoDialog();
-    });
-    super.initState();
+    if (!initScreenHome) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _showFirstTimeInfoDialog();
+      });
+      super.initState();
+    }
   }
 
   @override
