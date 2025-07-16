@@ -41,6 +41,8 @@ class EventModel {
   bool? hasTables;
   bool? hasBeverage;
   bool? hasBook;
+  bool? hasMusic;
+  bool? hasGame;
 
   EventModel({
     this.id,
@@ -55,6 +57,8 @@ class EventModel {
     this.details,
     this.adminRoles,
     this.shared,
+    this.hasMusic,
+    this.hasGame,
     this.questions,
     this.adminId,
     this.category,
@@ -85,11 +89,13 @@ class EventModel {
     details = json['details'];
     canSendInvitations = json['canSendInvitations'];
     placeName = json['placeName'];
+    hasMusic = json['hasMusic'];
     imagePath = json['imagePath'];
     thumbPath = json['thumbPath'];
     paidEvent = json['paidEvent'];
     adminRoles = json['adminRoles'];
     hasBook = json['hasBook'];
+    hasGame = json['hasGame'];
     placeLongitude = json['placeLongitude'];
     placeLatitude = json['placeLatitude'];
     hasBeverage = json['hasBeverage'];
@@ -149,8 +155,10 @@ class EventModel {
     data['paidEvent'] = paidEvent;
     data['placeLongitude'] = placeLongitude;
     data['placeLongitude'] = placeLongitude;
+    data['hasGame'] = hasGame;
     data['category'] = category;
     data['adminId'] = adminId;
+    data['hasMusic'] = hasMusic;
     data['eventSpecifications'] = specifications;
     data['canSendInvitations'] = canSendInvitations;
     data['shared'] = shared;

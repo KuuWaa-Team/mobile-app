@@ -288,6 +288,40 @@ class EventViewModel with ChangeNotifier{
     return success;
   }
 
+  Future<bool> openMusic(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.openMusicApi(context: context, id: id).then((value) {
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+        UserViewModel().updateCredits(value['credits']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<bool> openGame(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.openGameApi(context: context, id: id).then((value) {
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+        UserViewModel().updateCredits(value['credits']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
+  }
+
   Future<bool> getTemplates(BuildContext context) async {
     await _repository.getTemplatesApi(context: context).then((value) {
       print(value);

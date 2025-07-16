@@ -137,6 +137,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ));
                       }
                     });
+                  } else if (key == "MUSIC") {
+                    eventViewModel.openMusic(context, widget.id).then((value) {
+                      if (value) {
+                        Navigator.push(context, CupertinoPageRoute(
+                          builder: (context) => DetailsScreen(id: widget.id),
+                        ));
+                      }
+                    });
+                  } else if (key == "GAME") {
+                    eventViewModel.openGame(context, widget.id).then((value) {
+                      if (value) {
+                        Navigator.push(context, CupertinoPageRoute(
+                          builder: (context) => DetailsScreen(id: widget.id),
+                        ));
+                      }
+                    });
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -883,7 +899,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     if (event.shared != true || roles.contains(EventAdminRoles.viewMusicRequests))
                                     GestureDetector(
                                       onTap: () {
-                                        if (event.hasBook == true) {
+                                        if (event.hasMusic == true) {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -932,7 +948,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageInteractiveGame))
                                     GestureDetector(
                                       onTap: () {
-                                        if (event.hasBook == true) {
+                                        if (event.hasGame == true) {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

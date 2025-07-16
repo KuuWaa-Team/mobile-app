@@ -119,7 +119,7 @@ class OnBoardingViewState extends State<OnBoardingView> {
                         margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 30),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: (index == _currentPage) ? dotsColor: appColors.mediumGrayColor.withOpacity(.5)
+                            color: (index == _currentPage) ? dotsColor: appColors.mediumGrayColor.withOpacity(.3)
                         ),
                       );
                     }
