@@ -40,12 +40,21 @@ class _HomeScreenState extends State<HomeScreen> {
   bool initScreenHome = false;
 
   @override
-  void initState() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    initScreenHome = preferences.getBool('initScreenHome') == true;
-    if (initScreenHome != true) {
-      await preferences.setBool('initScreenHome', true);
-    }
+  void initState() {
+    SharedPreferences preferences;
+    SharedPreferences.getInstance().then((value) async {
+      preferences = value;
+      initScreenHome = preferences.getBool('initScreenHome') == true;
+      if (initScreenHome != true) {
+        await preferences.setBool('initScreenHome', true);
+      }
+      if (!initScreenHome) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _showFirstTimeInfoDialog();
+        });
+        super.initState();
+      }
+    });
     UserViewModel().getUser().then((value) {
       setState(() {
         user = value;
@@ -55,13 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
       Future.delayed(Duration.zero, () {
         _showInvitationAcceptedDialog();
       });
-    }
-
-    if (!initScreenHome) {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        _showFirstTimeInfoDialog();
-      });
-      super.initState();
     }
   }
 
@@ -523,7 +525,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
 
   Widget _buildDialogOption({
     required IconData icon,

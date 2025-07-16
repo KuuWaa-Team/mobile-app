@@ -68,6 +68,7 @@
           picked = pick;
         });
       }
+      print(picked);
     }
 
     @override

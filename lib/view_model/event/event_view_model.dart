@@ -98,10 +98,10 @@ class EventViewModel with ChangeNotifier{
     return true;
   }
 
-  Future<bool> getCategories(BuildContext context) async {
-    await _repository.getCategoriesApi(context: context).then((value) {
-      print(value);
+  Future<List<EventCategoryModel>?> getCategories(BuildContext context) async {
+    List<EventCategoryModel>? returnData;
 
+    await _repository.getCategoriesApi(context: context).then((value) {
       if (value['success'] == true  ) {
         List categoriesJson = value['data'];
         List<EventCategoryModel> categoriesData = [];
@@ -109,15 +109,15 @@ class EventViewModel with ChangeNotifier{
           categoriesData.add(EventCategoryModel.fromJson(element));
         }
         setCategories(categoriesData);
+        returnData = categoriesData;
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
-      print(error);
       setLoading(false);
     });
-    return true;
+    return returnData;
   }
 
   Future<bool> getQuestionsList(BuildContext context, int id) async {

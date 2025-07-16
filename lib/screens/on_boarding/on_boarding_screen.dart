@@ -142,42 +142,50 @@ class OnBoardingViewState extends State<OnBoardingView> {
                           backgroundColor: Colors.white, // Facultatif
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_currentPage == _pages.length - 1)
-                          {
-                            Navigator.pushAndRemoveUntil(
-                              context, MaterialPageRoute(builder: (route) => LoginScreen()), (route) => false
-                            );
-                          } else {
-                            _controller.nextPage(
-                                duration: const Duration(milliseconds: 800),
-                                curve: Curves.easeInOutQuint
-                            );
-                          }
-                        },
-                        child: _currentPage == _pages.length - 1 ?
-                        Row(
-                          children: [
-                            MyTextView(
-                              "Commencer",
-                              textAligntNew: TextAlign.center,
-                              maxLinesNew: 5,
-                              styleNew: MyTextStyle(
-                                colorNew: appColors.lightColor,
-                                fontWeightNew: FontWeight.w500,
-                                size: ResponsiveFlutter.of(context).fontSize(1.7),
+                      Padding(
+                        padding: EdgeInsets.only(left: _currentPage == _pages.length - 1 ? 5 : 0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_currentPage == _pages.length - 1)
+                            {
+                              Navigator.pushAndRemoveUntil(
+                                context, MaterialPageRoute(builder: (route) => LoginScreen()), (route) => false
+                              );
+                            } else {
+                              _controller.nextPage(
+                                  duration: const Duration(milliseconds: 800),
+                                  curve: Curves.easeInOutQuint
+                              );
+                            }
+                          },
+                          child: _currentPage == _pages.length - 1 ?
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 3.0),
+                                child: MyTextView(
+                                  "Commencer",
+                                  textAligntNew: TextAlign.center,
+                                  maxLinesNew: 5,
+                                  styleNew: MyTextStyle(
+                                    colorNew: _currentPage == _pages.length - 1 ? Colors.white : appColors.lightColor,
+                                    fontWeightNew: FontWeight.w500,
+                                    size: ResponsiveFlutter.of(context).fontSize(1.7),
+                                  ),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 5,),
-                            const Icon(Icons.chevron_right, color: Colors.black),
-                          ],
-                        )
-                        : const Icon(Icons.chevron_right, color: Colors.black),
-                        style: ElevatedButton.styleFrom(
-                          shape: _currentPage == _pages.length - 1 ? null : const CircleBorder(),
-                          padding: const EdgeInsets.all(16), // Le padding fait le cercle
-                          backgroundColor: Colors.white, // Facultatif
+                              const SizedBox(width: 5,),
+                              Icon(Icons.chevron_right, color: _currentPage == _pages.length - 1 ? Colors.white : Colors.black),
+                            ],
+                          )
+                          : const Icon(Icons.chevron_right, color: Colors.black),
+                          style: ElevatedButton.styleFrom(
+                            shape: _currentPage == _pages.length - 1 ? null : const CircleBorder(),
+                            padding: const EdgeInsets.all(16), // Le padding fait le cercle
+                            backgroundColor: _currentPage == _pages.length - 1 ? appColors.btnColor : Colors.white, // Facultatif
+                          ),
                         ),
                       ),
                     ],

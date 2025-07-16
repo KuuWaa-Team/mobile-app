@@ -60,250 +60,278 @@ class _TemplatePreviewPageState extends State<TemplatePreviewPage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarDividerColor: Colors.transparent,
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Color(0xFFFDF2F8),
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          systemNavigationBarDividerColor: Color(0xFFFDF2F8)
       ),
     );
     return Scaffold(
       backgroundColor: appColors.white,
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          Positioned(
-            top: 50,
-            right: 20,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.close, color: Colors.white, size: 24),
-              ),
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFE6E6FA),
+                Color(0xFFFDF2F8),
+              ],
+              stops: [0.0, 1.0],
             ),
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 55,
-            right: 20,
-            child: InkWell(
-              onTap: () {
-                Navigator.pop(context, widget.template);
-              },
-              child: CommonButton(
-                context: context,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                icon: Icons.push_pin,
-                title: "Selectionner",
-              ),
-            )
-          ),
-          Positioned(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 50,
-            left: 20,
-            child: FloatingActionButton(
-              heroTag: "infoBtn",
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-              elevation: 3,
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                    shape: BoxShape.circle,
                   ),
-                  builder: (context) {
-                    return Padding(
-                      padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 50),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          MyTextView(
-                            "Spécificités du template",
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.black,
-                              fontWeightNew: FontWeight.w600,
-                              size: ResponsiveFlutter.of(context).fontSize(2.5),
-                            ),
+                  child: const Icon(Icons.close, color: Colors.white, size: 24),
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height - 250,
+                margin: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [Utils.customShadow()],
+                  border: Border.all(color: appColors.btnColor, width: 2),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: WebViewWidget(controller: _controller),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0, left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: "infoBtn",
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      elevation: 3,
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                           ),
-                          const SizedBox(height: 12),
-                          MyTextView(
-                            widget.template.name.toString(),
-                            textAligntNew: TextAlign.center,
-                            styleNew: MyTextStyle(
-                              colorNew: appColors.btnColor,
-                              fontWeightNew: FontWeight.w500,
-                              size: ResponsiveFlutter.of(context).fontSize(2),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              const Icon(Icons.monetization_on, size: 20),
-                              const SizedBox(width: 15),
-                              MyTextView(
-                                "${widget.template.price} crédits / invitation",
-                                textAligntNew: TextAlign.center,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.darkGreyText,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          if (widget.template.hasAnimations == true)
-                          Row(
-                            children: [
-                              const Icon(Icons.animation, size: 20),
-                              const SizedBox(width: 15),
-                              MyTextView(
-                                "Inclut des animations",
-                                textAligntNew: TextAlign.center,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.darkGreyText,
-                                  fontWeightNew: FontWeight.w500,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (widget.template.hasAnimations == true)
-                            const SizedBox(height: 15),
-                          if (widget.template.hasAnimations == true)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.check_circle, size: 20),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: MyTextView(
-                                  "Adapté pour ${widget.template.eventsAdapted}",
-                                  maxLinesNew: 5,
-                                  textAligntNew: TextAlign.left,
-                                  styleNew: MyTextStyle(
-                                    colorNew: appColors.darkGreyText,
-                                    fontWeightNew: FontWeight.w500,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                          builder: (context) {
+                            return Padding(
+                              padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 50),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  MyTextView(
+                                    "Spécificités du template",
+                                    textAligntNew: TextAlign.center,
+                                    styleNew: MyTextStyle(
+                                      colorNew: appColors.black,
+                                      fontWeightNew: FontWeight.w600,
+                                      size: ResponsiveFlutter.of(context).fontSize(2.5),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.animation, size: 20),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: MyTextView(
-                                  "Inclu des animations",
-                                  maxLinesNew: 5,
-                                  textAligntNew: TextAlign.left,
-                                  styleNew: MyTextStyle(
-                                    colorNew: appColors.darkGreyText,
-                                    fontWeightNew: FontWeight.w500,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  const SizedBox(height: 12),
+                                  MyTextView(
+                                    widget.template.name.toString(),
+                                    textAligntNew: TextAlign.center,
+                                    styleNew: MyTextStyle(
+                                      colorNew: appColors.btnColor,
+                                      fontWeightNew: FontWeight.w500,
+                                      size: ResponsiveFlutter.of(context).fontSize(2),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(widget.template.imageRequired == true ? Icons.image_outlined : Icons.image_not_supported, size: 20),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: MyTextView(
-                                  "Image${widget.template.imageRequired != true ? ' non' : ''} requise",
-                                  maxLinesNew: 5,
-                                  textAligntNew: TextAlign.left,
-                                  styleNew: MyTextStyle(
-                                    colorNew: appColors.darkGreyText,
-                                    fontWeightNew: FontWeight.w500,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.monetization_on, size: 20),
+                                      const SizedBox(width: 15),
+                                      MyTextView(
+                                        "${widget.template.price} crédits / invitation",
+                                        textAligntNew: TextAlign.center,
+                                        styleNew: MyTextStyle(
+                                          colorNew: appColors.darkGreyText,
+                                          fontWeightNew: FontWeight.w500,
+                                          size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Utils.hexToColor(widget.template.primaryColor!),
-                                  border: Border.all(color: Colors.black12),
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: MyTextView(
-                                  "Couleur principale : ${widget.template.primaryColor!.toUpperCase()}",
-                                  maxLinesNew: 2,
-                                  textAligntNew: TextAlign.left,
-                                  styleNew: MyTextStyle(
-                                    colorNew: Utils.hexToColor(widget.template.primaryColor!),
-                                    fontWeightNew: FontWeight.w500,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  const SizedBox(height: 15),
+                                  if (widget.template.hasAnimations == true)
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.animation, size: 20),
+                                        const SizedBox(width: 15),
+                                        MyTextView(
+                                          "Inclut des animations",
+                                          textAligntNew: TextAlign.center,
+                                          styleNew: MyTextStyle(
+                                            colorNew: appColors.darkGreyText,
+                                            fontWeightNew: FontWeight.w500,
+                                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  if (widget.template.hasAnimations == true)
+                                    const SizedBox(height: 15),
+                                  if (widget.template.hasAnimations == true)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.check_circle, size: 20),
+                                        const SizedBox(width: 15),
+                                        Expanded(
+                                          child: MyTextView(
+                                            "Adapté pour ${widget.template.eventsAdapted}",
+                                            maxLinesNew: 5,
+                                            textAligntNew: TextAlign.left,
+                                            styleNew: MyTextStyle(
+                                              colorNew: appColors.darkGreyText,
+                                              fontWeightNew: FontWeight.w500,
+                                              size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.animation, size: 20),
+                                      const SizedBox(width: 15),
+                                      Expanded(
+                                        child: MyTextView(
+                                          "Inclu des animations",
+                                          maxLinesNew: 5,
+                                          textAligntNew: TextAlign.left,
+                                          styleNew: MyTextStyle(
+                                            colorNew: appColors.darkGreyText,
+                                            fontWeightNew: FontWeight.w500,
+                                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Utils.hexToColor(widget.template.secondaryColor!),
-                                  border: Border.all(color: Colors.black12),
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: MyTextView(
-                                  "Couleur secondaire : ${widget.template.secondaryColor!.toUpperCase()}",
-                                  maxLinesNew: 2,
-                                  textAligntNew: TextAlign.left,
-                                  styleNew: MyTextStyle(
-                                    colorNew: Utils.hexToColor(widget.template.secondaryColor!),
-                                    fontWeightNew: FontWeight.w500,
-                                    size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(widget.template.imageRequired == true ? Icons.image_outlined : Icons.image_not_supported, size: 20),
+                                      const SizedBox(width: 15),
+                                      Expanded(
+                                        child: MyTextView(
+                                          "Image${widget.template.imageRequired != true ? ' non' : ''} requise",
+                                          maxLinesNew: 5,
+                                          textAligntNew: TextAlign.left,
+                                          styleNew: MyTextStyle(
+                                            colorNew: appColors.darkGreyText,
+                                            fontWeightNew: FontWeight.w500,
+                                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Utils.hexToColor(widget.template.primaryColor!),
+                                          border: Border.all(color: Colors.black12),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      Expanded(
+                                        child: MyTextView(
+                                          "Couleur principale : ${widget.template.primaryColor!.toUpperCase()}",
+                                          maxLinesNew: 2,
+                                          textAligntNew: TextAlign.left,
+                                          styleNew: MyTextStyle(
+                                            colorNew: Utils.hexToColor(widget.template.primaryColor!),
+                                            fontWeightNew: FontWeight.w500,
+                                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Utils.hexToColor(widget.template.secondaryColor!),
+                                          border: Border.all(color: Colors.black12),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      Expanded(
+                                        child: MyTextView(
+                                          "Couleur secondaire : ${widget.template.secondaryColor!.toUpperCase()}",
+                                          maxLinesNew: 2,
+                                          textAligntNew: TextAlign.left,
+                                          styleNew: MyTextStyle(
+                                            colorNew: Utils.hexToColor(widget.template.secondaryColor!),
+                                            fontWeightNew: FontWeight.w500,
+                                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                        ],
+                            );
+                          },
+                        );
+                      },
+                      backgroundColor: appColors.white,
+                      child: const Icon(Icons.info_outline),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context, widget.template);
+                      },
+                      child: CommonButton(
+                        context: context,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        icon: Icons.push_pin,
+                        title: "Utiliser ce model",
                       ),
-                    );
-                  },
-                );
-              },
-              backgroundColor: appColors.white,
-              child: const Icon(Icons.info_outline),
-            ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

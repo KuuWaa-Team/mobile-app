@@ -109,7 +109,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                   child: SizedBox(
                     height: ResponsiveFlutter.of(context).verticalScale(60),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,

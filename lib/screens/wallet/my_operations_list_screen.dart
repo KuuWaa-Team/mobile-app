@@ -30,12 +30,21 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
   bool initScreenCredits = false;
 
   @override
-  void initState() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    initScreenCredits = preferences.getBool('initScreenHome') == true;
-    if (initScreenCredits != true) {
-      await preferences.setBool('initScreenHome', true);
-    }
+  void initState() {
+    SharedPreferences preferences;
+    SharedPreferences.getInstance().then((value) async {
+      preferences = value;
+      initScreenCredits = preferences.getBool('initScreenCredits') == true;
+      if (initScreenCredits != true) {
+        await preferences.setBool('initScreenCredits', true);
+      }
+      if (!initScreenCredits) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _showCreditsInfoDialog();
+        });
+      }
+    });
+
     UserViewModel().getUser().then((value) {
       setState(() {
         user = value;
@@ -48,12 +57,6 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
         });
       }
     });
-
-    if (initScreenCredits) {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        _showCreditsInfoDialog();
-      });
-    }
     super.initState();
   }
 

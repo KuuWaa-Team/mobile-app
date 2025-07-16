@@ -244,6 +244,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           decoration: BoxDecoration(
                                             color: appColors.appDarkColor,
                                             borderRadius: BorderRadius.circular(40),
+                                              boxShadow: [Utils.customShadow()]
                                           ),
                                           child: Center(
                                             child: Icon(
@@ -274,6 +275,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         decoration: BoxDecoration(
                                           color: appColors.appDarkColor,
                                           borderRadius: BorderRadius.circular(40),
+                                            boxShadow: [Utils.customShadow()]
                                         ),
                                         child: Center(
                                           child: Icon(
@@ -300,6 +302,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           decoration: BoxDecoration(
                                             color: appColors.appDarkColor,
                                             borderRadius: BorderRadius.circular(40),
+                                            boxShadow: [Utils.customShadow()]
                                           ),
                                           child: Center(
                                             child: Icon(
@@ -408,6 +411,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           decoration: BoxDecoration(
                                             color: appColors.appDarkColor,
                                             borderRadius: BorderRadius.circular(40),
+                                            boxShadow: [Utils.customShadow()]
                                           ),
                                           child: Center(
                                             child: Icon(
@@ -425,8 +429,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             Container(
                               margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.22),
                               padding: EdgeInsets.only(
-                                right: ResponsiveFlutter.of(context).moderateScale(20),
-                                left: ResponsiveFlutter.of(context).moderateScale(20),
                                 top: MediaQuery.of(context).padding.top + ResponsiveFlutter.of(context).moderateScale(50),
                                 // bottom: MediaQuery.of(context).padding.bottom + ResponsiveFlutter.of(context).moderateScale(20),
                               ),
@@ -439,30 +441,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Column(
-                                            children: [
-                                              MyTextView(
-                                                event.title.toString(),
-                                                textAligntNew: TextAlign.start,
-                                                maxLinesNew: 3,
-                                                styleNew: MyTextStyle(
-                                                  colorNew: appColors.lightColor,
-                                                  fontWeightNew: FontWeight.w600,
-                                                  size: ResponsiveFlutter.of(context).fontSize(2.1),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                MyTextView(
+                                                  event.title.toString(),
+                                                  textAligntNew: TextAlign.start,
+                                                  maxLinesNew: 3,
+                                                  styleNew: MyTextStyle(
+                                                    colorNew: appColors.lightColor,
+                                                    fontWeightNew: FontWeight.w600,
+                                                    size: ResponsiveFlutter.of(context).fontSize(2.1),
+                                                  ),
                                                 ),
-                                              ),
-                                              MyTextView(
-                                                event.category!.name.toString(),
-                                                textAligntNew: TextAlign.center,
-                                                maxLineWrap: true,
-                                                styleNew: MyTextStyle(
-                                                  colorNew: appColors.btnColor,
-                                                  fontWeightNew: FontWeight.w500,
-                                                  size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                MyTextView(
+                                                  event.category!.name.toString(),
+                                                  textAligntNew: TextAlign.start,
+                                                  maxLineWrap: true,
+                                                  styleNew: MyTextStyle(
+                                                    colorNew: appColors.btnColor,
+                                                    fontWeightNew: FontWeight.w500,
+                                                    size: ResponsiveFlutter.of(context).fontSize(1.5),
+                                                  ),
                                                 ),
-                                              ),
-                                              const SizedBox(height: 10,),
-                                            ],
+                                                const SizedBox(height: 10,),
+                                              ],
+                                            ),
                                           ),
                                           if (event.shared == true)
                                             Container(
@@ -572,8 +578,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
+                                            boxShadow: [Utils.customShadow()]
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                        margin: const EdgeInsets.symmetric(horizontal: 20),
                                         child: Row (
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
@@ -611,8 +619,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
+                                            boxShadow: [Utils.customShadow()]
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                        margin: const EdgeInsets.symmetric(horizontal: 20),
                                         child: Row (
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
@@ -635,7 +645,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     if (event.shared != true || roles.contains(EventAdminRoles.sendInvitations))
                                     SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true || roles.contains(EventAdminRoles.sendInvitations))
-                                      GestureDetector(
+                                    GestureDetector(
                                       onTap: () {
                                           Navigator.push(
                                             context,
@@ -648,15 +658,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
-                                          border: Border.all(color: appColors.darkGreyText, width: 1)
+                                          border: Border.all(color: appColors.darkGreyText, width: 1),
+                                          boxShadow: [Utils.customShadow()]
                                         ),
+                                        margin: const EdgeInsets.symmetric(horizontal: 20),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row (
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Icon(
-                                              CupertinoIcons.mail_solid, 
-                                              size: 15, 
+                                              CupertinoIcons.mail_solid,
+                                              size: 15,
                                               color: appColors.btnColor,
                                             ),
                                             SizedBox(width: ResponsiveFlutter.of(context).moderateScale(10)),
@@ -677,7 +689,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     if (event.shared != true || roles.contains(EventAdminRoles.addAdmins))
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true || roles.contains(EventAdminRoles.addAdmins))
-                                        GestureDetector(
+                                      GestureDetector(
                                         onTap: () {
                                           Navigator.push(
                                             context,
@@ -690,7 +702,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           decoration: BoxDecoration(
                                             color: appColors.appLightColor,
                                             borderRadius: BorderRadius.circular(5),
+                                              boxShadow: [Utils.customShadow()]
                                           ),
+                                          margin: const EdgeInsets.symmetric(horizontal: 20),
                                           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                           child: Row (
                                             mainAxisSize: MainAxisSize.max,
@@ -714,11 +728,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     if (event.shared != true)
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
-                                    Divider(color: Colors.black.withOpacity(.05),),
+                                      Divider(color: Colors.black.withOpacity(.05),),
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageTables))
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageTables))
-                                      GestureDetector(
+                                    GestureDetector(
                                       onTap: () {
                                         if (event.hasTables == true) {
                                           Navigator.push(
@@ -735,7 +749,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
+                                          boxShadow: [Utils.customShadow()]
                                         ),
+                                        margin: const EdgeInsets.symmetric(horizontal: 20),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -766,7 +782,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageDrinks))
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageDrinks))
-                                      GestureDetector(
+                                    GestureDetector(
                                       onTap: () {
                                         if (event.hasBeverage == true) {
                                           Navigator.push(
@@ -780,9 +796,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         }
                                       },
                                       child: Container(
+                                        margin: const EdgeInsets.symmetric(horizontal: 20),
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
+                                          boxShadow: [Utils.customShadow()]
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row(
@@ -814,7 +832,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageGuestbook))
                                       SizedBox(height: ResponsiveFlutter.of(context).moderateScale(10)),
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageGuestbook))
-                                      GestureDetector(
+                                    GestureDetector(
                                       onTap: () {
                                         if (event.hasBook == true) {
                                           Navigator.push(
@@ -828,10 +846,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         }
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.only(bottom: 10),
+                                        margin: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
+                                            boxShadow: [Utils.customShadow()]
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row(
@@ -862,7 +881,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     if (event.shared != true || roles.contains(EventAdminRoles.viewMusicRequests))
-                                      GestureDetector(
+                                    GestureDetector(
                                       onTap: () {
                                         if (event.hasBook == true) {
                                           Navigator.push(
@@ -876,10 +895,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         }
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.only(bottom: 10),
+                                        margin: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
+                                            boxShadow: [Utils.customShadow()]
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row(
@@ -910,7 +930,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     if (event.shared != true || roles.contains(EventAdminRoles.manageInteractiveGame))
-                                      GestureDetector(
+                                    GestureDetector(
                                       onTap: () {
                                         if (event.hasBook == true) {
                                           Navigator.push(
@@ -924,10 +944,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         }
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.only(bottom: 10),
+                                        margin: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
                                         decoration: BoxDecoration(
                                           color: appColors.appLightColor,
                                           borderRadius: BorderRadius.circular(5),
+                                            boxShadow: [Utils.customShadow()]
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                         child: Row(

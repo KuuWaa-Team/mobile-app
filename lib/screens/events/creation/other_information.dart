@@ -35,6 +35,25 @@ class _OtherInformationState extends State<OtherInformation> {
         horizontal: ResponsiveFlutter.of(context).moderateScale(20),
       ),
       children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.orange.withOpacity(.3),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: MyTextView(
+            "Ce menu est optionnel, vous pouvez le passer",
+            maxLinesNew: 5,
+            styleNew: MyTextStyle(
+              colorNew: Colors.orange,
+              fontWeightNew: FontWeight.w400,
+              size: ResponsiveFlutter.of(context).fontSize(1.4),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: ResponsiveFlutter.of(context).verticalScale(10),
+        ),
         MyTextView(
           "Veuillez ajouter d'autres informations rélatives à votre événement (Dress code, cadeau non embalé,...)",
           maxLinesNew: 5,

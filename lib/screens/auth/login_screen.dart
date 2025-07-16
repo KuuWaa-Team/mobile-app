@@ -105,7 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     } catch (error) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
     } finally {
       setState(() {
         loading = false;
