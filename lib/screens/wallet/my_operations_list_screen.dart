@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
@@ -17,8 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MyOperationsListScreen extends StatefulWidget {
   const MyOperationsListScreen({Key? key}) : super(key: key);
+
   @override
-  _MyOperationsListScreenState createState() => _MyOperationsListScreenState();
+  State<MyOperationsListScreen> createState() => _MyOperationsListScreenState();
 }
 
 class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
@@ -27,239 +29,270 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
   WalletViewModel walletViewModel = WalletViewModel();
   UserModel user = UserModel();
 
-  bool initScreenCredits = false;
-
   @override
   void initState() {
-    SharedPreferences preferences;
-    SharedPreferences.getInstance().then((value) async {
-      preferences = value;
-      initScreenCredits = preferences.getBool('initScreenCredits') == true;
-      if (initScreenCredits != true) {
-        await preferences.setBool('initScreenCredits', true);
-      }
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) async {
+      final initScreenCredits = prefs.getBool('initScreenCredits') == true;
       if (!initScreenCredits) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          _showCreditsInfoDialog();
-        });
+        await prefs.setBool('initScreenCredits', true);
+        Future.delayed(const Duration(milliseconds: 300), _showCreditsInfoDialog);
       }
     });
 
     UserViewModel().getUser().then((value) {
-      setState(() {
-        user = value;
-      });
-
+      user = value;
       if (!fetched && user.id != null) {
         walletViewModel.operations(context, user.id!);
-        setState(() {
-          fetched = true;
-        });
+        fetched = true;
       }
     });
-    super.initState();
+  }
+  void _showOperationDetails(OperationModel op) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      builder: (context) {
+        Color statusColor;
+        String statusText;
+
+        switch (op.status?.toUpperCase()) {
+          case 'STATUS_PAID':
+            statusColor = Colors.green;
+            statusText = "Succès";
+            break;
+          case 'STATUS_FAILED':
+            statusColor = Colors.red;
+            statusText = "Échec";
+            break;
+          default:
+            statusColor = Colors.orange;
+            statusText = "En attente";
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Wrap(
+            runSpacing: 10,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    Icon(Icons.receipt_long, size: 40, color: appColors.btnColor),
+                    const SizedBox(height: 8),
+                    MyTextView(
+                      "Détails de l'opération",
+                      styleNew: MyTextStyle(
+                        colorNew: appColors.btnColor,
+                        fontWeightNew: FontWeight.bold,
+                        size: ResponsiveFlutter.of(context).fontSize(2.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              _detailRow("Référence", op.reference.toString()),
+              _detailRow("Montant", "${op.amount}\$"),
+              _detailRow("Crédits", op.credits?.toString() ?? "-"),
+              _detailRow("Titre", op.title ?? "-"),
+              _detailRow("Tél.", op.phoneNumber ?? "-"),
+              _detailRow("Méthode", op.paymentMethod ?? "-"),
+              Row(
+                children: [
+                  Expanded(child: _detailRow("Statut", "")),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: statusColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      statusText,
+                      style: TextStyle(
+                        color: statusColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              _detailRow("Date", _formatDate(op.date)),
+              _detailRow("Type", op.type.toString()),
+              _detailRow("Commande", op.orderNumber ?? "-"),
+              const SizedBox(height: 20),
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close, color: Colors.white,),
+                  label: const Text("Fermer", style: TextStyle(
+                    color: Colors.white
+                  ),),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: appColors.btnColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+// Utilitaire pour formater la date proprement
+  String _formatDate(DateTime? date) {
+    if (date == null) return "-";
+    final formatter = DateFormat("dd/MM/yyyy à HH:mm");
+    return formatter.format(date);
+  }
+
+
+  Widget _detailRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(child: Text(title, style: TextStyle(color: Colors.black.withOpacity(.6)))),
+          Text(value, style: TextStyle(fontWeight: FontWeight.w600),),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      bottom: false,
-      top: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
-        body: ChangeNotifierProvider<WalletViewModel>(
-            create: (BuildContext context) => walletViewModel,
-            child: Consumer<WalletViewModel>(
-                builder: (context, value, _) {
-                  switch (value.operationsList.status) {
-                    case Status.LOADING:
-                      return const Column(
-                        children: [
-                          SizedBox(height: 20,),
-                          EventShimmer(),
-                          SizedBox(height: 20,),
-                          EventShimmer(),
-                          SizedBox(height: 20,),
-                          EventShimmer(),
-                        ],
-                      );
-                    case Status.ERROR:
-                      return Center(
-                        child: Text(value.operationsList.message.toString()),
-                      );
-                    case Status.COMPLETED:
-                      List<OperationModel>? operations = value.operationsList.data?.reversed.toList();
-                      if (operations == null || operations.isEmpty) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              color: appColors.appLightColor,
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          margin: const EdgeInsets.all(20),
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(Icons.block_outlined, color: appColors.lightColor.withOpacity(.2),),
-                              const SizedBox(width: 10,),
-                              MyTextView(
-                                "Vous n'avez aucune opération",
-                                textAligntNew: TextAlign.start,
-                                maxLinesNew: 3,
-                                styleNew: MyTextStyle(
-                                  colorNew: appColors.lightColor.withOpacity(.2),
-                                  fontWeightNew: FontWeight.w400,
-                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: ListView.separated(
-                          itemCount: operations.length,
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            OperationModel operation = operations[index];
-                            return SizedBox(
-                              height: ResponsiveFlutter.of(context).moderateScale(50),
-                              width: double.infinity,
-                              child: Row(
-                                children: [
-                                  operation.type == OperationType.recharge ? Container(
-                                    height: ResponsiveFlutter.of(context).moderateScale(50),
-                                    width: ResponsiveFlutter.of(context).moderateScale(50),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        width: 1.5,
-                                        color: operation.status == OperationStatus.paid ? appColors.greenOpacity :
-                                          (operation.status == OperationStatus.waiting ? Colors.orange.withOpacity(.5) : Colors.red.withOpacity(.5)),
-                                      ),
-                                    ),
-                                    child: operation.status == OperationStatus.paid ?
-                                    Image.asset(
-                                      ImagePath.greenUp,
-                                      height: ResponsiveFlutter.of(context).moderateScale(8),
-                                    ) :
-                                    (operation.status == OperationStatus.waiting ? const Icon(Icons.refresh, color: Colors.orange,) : const Icon(CupertinoIcons.xmark, color: Colors.red,)),
-                                  )
-                                      : Container(
-                                    height: ResponsiveFlutter.of(context).moderateScale(50),
-                                    width: ResponsiveFlutter.of(context).moderateScale(50),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        width: 1.5,
-                                        color: appColors.redOpacity,
-                                      ),
-                                    ),
-                                    child: Image.asset(
-                                      ImagePath.redDown,
-                                      height: ResponsiveFlutter.of(context).moderateScale(8),
-                                      alignment: Alignment.center,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: ResponsiveFlutter.of(context).moderateScale(15),
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          MyTextView(
-                                            operation.title.toString(),
-                                            textAligntNew: TextAlign.start,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.lightColor,
-                                              fontWeightNew: FontWeight.w500,
-                                              size: ResponsiveFlutter.of(context).fontSize(2.1),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: ResponsiveFlutter.of(context).moderateScale(2),
-                                      ),
-                                      Row(
-                                        children: [
-                                          MyTextView(
-                                            "#",
-                                            textAligntNew: TextAlign.start,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.black,
-                                              fontWeightNew: FontWeight.w400,
-                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                            ),
-                                          ),
-                                          MyTextView(
-                                            operation.reference.toString(),
-                                            textAligntNew: TextAlign.start,
-                                            styleNew: MyTextStyle(
-                                              colorNew: appColors.transactionText,
-                                              fontWeightNew: FontWeight.w400,
-                                              size: ResponsiveFlutter.of(context).fontSize(1.5),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      MyTextView(
-                                        operation.amount.toString() + "\$",
-                                        textAligntNew: TextAlign.start,
-                                        styleNew: MyTextStyle(
-                                          colorNew: operation.type == OperationType.recharge ? appColors.greenText : appColors.redText,
-                                          fontWeightNew: FontWeight.w500,
-                                          size: ResponsiveFlutter.of(context).fontSize(2.2),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: ResponsiveFlutter.of(context).moderateScale(2),
-                                      ),
-                                      // MyTextView(
-                                      //   operation.date.toString(),
-                                      //   textAligntNew: TextAlign.start,
-                                      //   styleNew: MyTextStyle(
-                                      //     colorNew: appColors.transactionText,
-                                      //     fontWeightNew: FontWeight.w400,
-                                      //     size: ResponsiveFlutter.of(context).fontSize(1.4),
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              height: ResponsiveFlutter.of(context).verticalScale(15),
-                            );
-                          },
-                        ),
-                      );
-                  }
-                }
-            )
+        body: ChangeNotifierProvider.value(
+          value: walletViewModel,
+          child: Consumer<WalletViewModel>(
+            builder: (_, viewModel, __) {
+              final status = viewModel.operationsList.status;
+              if (status == Status.LOADING) return _buildShimmerList();
+              if (status == Status.ERROR) return Center(child: Text(viewModel.operationsList.message ?? 'Erreur'));
+
+              final operations = viewModel.operationsList.data?.reversed.toList();
+              if (operations == null || operations.isEmpty) return _buildEmptyMessage();
+
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: ListView.separated(
+                  itemCount: operations.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) => _buildOperationTile(operations[index]),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
   }
+
+  Widget _buildOperationTile(OperationModel op) {
+    final icon = op.type == OperationType.recharge ? ImagePath.greenUp : ImagePath.redDown;
+    final iconColor = op.status == OperationStatus.paid ? Colors.green : (op.status == OperationStatus.waiting ? Colors.orange : Colors.red);
+
+    return InkWell(
+      onTap: () => _showOperationDetails(op),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: appColors.appLightColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: iconColor, width: 2),
+              ),
+              child: Center(
+                child: op.status == OperationStatus.paid
+                    ? Image.asset(icon, height: 12)
+                    : Icon(
+                  op.status == OperationStatus.waiting ? Icons.refresh : Icons.close,
+                  color: iconColor,
+                  size: 16,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyTextView(
+                    op.title ?? '-',
+                    styleNew: MyTextStyle(
+                      colorNew: appColors.lightColor,
+                      fontWeightNew: FontWeight.bold,
+                      size: ResponsiveFlutter.of(context).fontSize(2.1),
+                    ),
+                  ),
+                  Text(
+                    "#${op.reference}",
+                    style: TextStyle(color: appColors.transactionText, fontSize: 12),
+                  )
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "${op.amount}\$",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: op.type == OperationType.recharge ? Colors.green : Colors.red,
+                  ),
+                ),
+                if (op.date != null)
+                  Text(
+                    Utils.formatDate(op.date!),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerList() => Column(children: const [EventShimmer(), SizedBox(height: 10), EventShimmer()]);
+
+  Widget _buildEmptyMessage() => Center(
+    child: Padding(
+      padding: const EdgeInsets.all(24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.block, color: Colors.grey.shade400),
+          const SizedBox(width: 10),
+          Text("Aucune opération enregistrée", style: TextStyle(color: Colors.grey.shade500)),
+        ],
+      ),
+    ),
+  );
+
+
   void _showCreditsInfoDialog() {
     showDialog(
       context: context,
@@ -350,5 +383,4 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
       },
     );
   }
-
 }

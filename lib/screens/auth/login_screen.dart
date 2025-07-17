@@ -316,6 +316,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: EdgeInsets.only(left: 10.0, right: 10, bottom: MediaQuery.of(context).viewInsets.bottom + 20.0, top: 20),
               child: CupertinoButton(
+                borderRadius: BorderRadius.circular(30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

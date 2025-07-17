@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:geocoding/geocoding.dart';
@@ -31,6 +32,39 @@ class _MapPickerPageState extends State<MapPickerPage> {
   void initState() {
     super.initState();
     googlePlace = GooglePlace("AIzaSyAvXtXVRVf5OMYoeRtzGc-6TIKc_TnL8ys");
+    print("------------------------- 1111111 ---------------------------");
+    _determinePosition();
+  }
+
+  Future<void> _determinePosition() async {
+    print("------------------------- 2222222222 ---------------------------");
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    print("------------------------- 33333333333 ---------------------------");
+    print(serviceEnabled);
+    if (!serviceEnabled) {
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever ||
+          permission == LocationPermission.denied) {
+        return;
+      }
+    }
+
+    print("------------------------- 44444444444444 ---------------------------");
+    Position position = await Geolocator.getCurrentPosition();
+    final userLatLng = LatLng(position.latitude, position.longitude);
+    print("------------------------- pos ---------------------------");
+    print(userLatLng);
+
+    setState(() {
+      _pickedLocation = userLatLng;
+    });
+
+    _controller?.animateCamera(CameraUpdate.newLatLngZoom(userLatLng, 16));
   }
 
   void autoCompleteSearch(String value) async {

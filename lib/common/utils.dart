@@ -37,6 +37,10 @@ class Utils {
     );
   }
 
+  static String formatDate(DateTime date) {
+    return DateFormat('dd MMM yyyy à HH:mm', 'fr').format(date);
+  }
+
   static BoxShadow customShadow () {
     return BoxShadow(
       color: Colors.grey.withOpacity(0.3),

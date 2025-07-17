@@ -10,19 +10,13 @@ import 'package:kuuwaa/common/check_dialog.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
-import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
 import 'package:kuuwaa/model/event/event_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
-import 'package:kuuwaa/screens/events/creation/event_general_information.dart';
-import 'package:kuuwaa/screens/events/edit_event_screen.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
-import 'package:kuuwaa/view_model/invitation/invitation_view_model.dart';
-import 'package:kuuwaa/view_model/user/user_view_model.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class InformationsScreen extends StatefulWidget {
   EventModel event;

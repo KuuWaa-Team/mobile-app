@@ -58,5 +58,11 @@
         </array>
       </dict>
     </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Nous avons besoin de votre position pour vous localiser sur la carte.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Nous avons besoin de votre position pour vous localiser sur la carte.</string>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 </plist>
