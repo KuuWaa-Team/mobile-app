@@ -195,18 +195,15 @@ class _SettingScreenState extends State<SettingScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image(
-                              image: const AssetImage(ImagePath.logout),
-                              height: ResponsiveFlutter.of(context).moderateScale(15),
-                            ),
+                            Icon(Icons.logout, color: Colors.white,),
                             SizedBox(
                               width: ResponsiveFlutter.of(context).scale(10),
                             ),
                             MyTextView(
-                              Strings.logout.toUpperCase(),
+                              "Se déconnecter",
                               textAligntNew: TextAlign.center,
                               styleNew: MyTextStyle(
-                                colorNew: appColors.lightColor,
+                                colorNew: appColors.white,
                                 fontWeightNew: FontWeight.w600,
                                 size: ResponsiveFlutter.of(context).fontSize(2),
                               ),

@@ -32,4 +32,22 @@ class AuthRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> deleteAccountApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.userEndPoint + "/$id/remove", {}, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> restoreAccountApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.userEndPoint + "/$id/restore", {}, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
 }
