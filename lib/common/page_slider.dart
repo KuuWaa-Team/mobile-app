@@ -146,6 +146,7 @@ class PageSlider extends StatelessWidget {
             styleNew: MyTextStyle(
               colorNew: appColors.lightColor,
               size: ResponsiveFlutter.of(context).fontSize(1.9),
+              fontWeightNew: FontWeight.w600
             ),
           ),
           const SizedBox(height: 60,)

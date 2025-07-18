@@ -7,12 +7,14 @@ class UserModel {
   String? provider;
   String? token;
   int? credits;
+  DateTime? deletedAt;
 
   UserModel({
     this.id,
     this.uid,
     this.displayName,
     this.email,
+    this.deletedAt,
     this.credits,
     this.photoUrl,
     this.provider,
@@ -25,6 +27,7 @@ class UserModel {
       uid: json['uid'],
       displayName: json['displayName'],
       email: json['email'],
+      deletedAt: json['deleted_at'] == null ? null : DateTime.parse(json['deleted_at'].toString()),
       credits: json['credits'],
       photoUrl: json['photoUrl'],
       provider: json['provider'],
@@ -36,6 +39,7 @@ class UserModel {
     return {
       'id': id,
       'uid': uid,
+      'deleted_at': deletedAt,
       'displayName': displayName,
       'email': email,
       'credits': credits,

@@ -92,6 +92,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
+      print(error);
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
@@ -274,6 +275,40 @@ class EventViewModel with ChangeNotifier{
   Future<bool> openBook(BuildContext context, int id) async {
     bool success = false;
     await _repository.openBookApi(context: context, id: id).then((value) {
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+        UserViewModel().updateCredits(value['credits']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<bool> openMusic(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.openMusicApi(context: context, id: id).then((value) {
+      if (value['success'] == true  ) {
+        success = true;
+        Utils.toastMessage(value['message']);
+        UserViewModel().updateCredits(value['credits']);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return success;
+  }
+
+  Future<bool> openGame(BuildContext context, int id) async {
+    bool success = false;
+    await _repository.openGameApi(context: context, id: id).then((value) {
       if (value['success'] == true  ) {
         success = true;
         Utils.toastMessage(value['message']);

@@ -50,6 +50,24 @@ class EventRepository {
     }
   }
 
+  Future<dynamic> openMusicApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/open-music", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> openGameApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/open-game", {}, context: context, auth: false);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> addGameQuestion ({required BuildContext context, required Map data, required int id}) async {
     try  {
       dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint + "/$id/add-game-question", data, context: context, auth: false);

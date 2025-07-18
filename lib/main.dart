@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/firebase_options.dart';
+import 'package:kuuwaa/screens/auth/deleted_account_screen.dart';
 import 'package:kuuwaa/screens/on_boarding/on_boarding_screen.dart';
 import 'package:kuuwaa/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
