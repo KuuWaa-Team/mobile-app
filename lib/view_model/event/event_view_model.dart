@@ -543,6 +543,7 @@ class EventViewModel with ChangeNotifier{
     setEvent(ApiResponse.loading());
     setLoading(true);
     await _repository.getEventDetailApi(context: context, id: id, userId: userId).then((value) {
+      print(value);
       setLoading(false);
       setEvent(ApiResponse.completed(EventModel.fromJson(value)));
     }).onError((error, stackTrace) {

@@ -20,7 +20,8 @@ import 'package:provider/provider.dart';
 
 class AdminListScreen extends StatefulWidget {
   EventModel event;
-  AdminListScreen({Key? key, required this.event}) : super(key: key);
+  List<String> roles;
+  AdminListScreen({Key? key, required this.event, required this.roles}) : super(key: key);
 
   @override
   _AdminListScreenState createState() => _AdminListScreenState();
@@ -86,8 +87,9 @@ class _AdminListScreenState extends State<AdminListScreen> {
                       "Consulter les demandes musicales": EventAdminRoles.viewMusicRequests,
                       "Gérer le jeu interactif": EventAdminRoles.manageInteractiveGame,
                     };
+                    permissionLabels.removeWhere((label, value) => !widget.roles.contains(value));
 
-                    final String alwaysCheckedLabel = "Vérifier les invitations";
+                    const String alwaysCheckedLabel = "Vérifier les invitations";
 
                     showModalBottomSheet(
                       context: context,

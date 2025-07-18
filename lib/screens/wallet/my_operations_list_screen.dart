@@ -170,30 +170,28 @@ class _MyOperationsListScreenState extends State<MyOperationsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: ChangeNotifierProvider.value(
-          value: walletViewModel,
-          child: Consumer<WalletViewModel>(
-            builder: (_, viewModel, __) {
-              final status = viewModel.operationsList.status;
-              if (status == Status.LOADING) return _buildShimmerList();
-              if (status == Status.ERROR) return Center(child: Text(viewModel.operationsList.message ?? 'Erreur'));
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: ChangeNotifierProvider.value(
+        value: walletViewModel,
+        child: Consumer<WalletViewModel>(
+          builder: (_, viewModel, __) {
+            final status = viewModel.operationsList.status;
+            if (status == Status.LOADING) return _buildShimmerList();
+            if (status == Status.ERROR) return Center(child: Text(viewModel.operationsList.message ?? 'Erreur'));
 
-              final operations = viewModel.operationsList.data?.reversed.toList();
-              if (operations == null || operations.isEmpty) return _buildEmptyMessage();
+            final operations = viewModel.operationsList.data?.reversed.toList();
+            if (operations == null || operations.isEmpty) return _buildEmptyMessage();
 
-              return Padding(
-                padding: const EdgeInsets.all(16),
-                child: ListView.separated(
-                  itemCount: operations.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) => _buildOperationTile(operations[index]),
-                ),
-              );
-            },
-          ),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView.separated(
+                itemCount: operations.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, index) => _buildOperationTile(operations[index]),
+              ),
+            );
+          },
         ),
       ),
     );

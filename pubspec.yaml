@@ -37,7 +37,7 @@ dependencies:
   intl: ^0.19.0                         # For Date and Time
   crypto: ^3.0.1                        # For encrypt and decrypt data
   url_launcher: ^6.0.18
-  flutter_native_splash: ^2.2.18
+  flutter_native_splash: ^2.4.0
   http: ^0.13.5
   firebase_core: ^3.12.1
   sign_in_button: ^3.2.0
@@ -87,10 +87,11 @@ dependency_overrides:
   geolocator_android: 4.6.1
 
 flutter_native_splash:
-  color: "#2F2644"
-  image: "assets/images/logo.png"
+  color: "#FFFFFF"
+  image: assets/icon/icon.png
   android_12:
-    color: "#42a5f5"
+    image: assets/icon/icon.png
+    color: "#FFFFFF"
   android: true
   ios: true
 

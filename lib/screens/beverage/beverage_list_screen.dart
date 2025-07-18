@@ -61,9 +61,8 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
             ),
             const SizedBox(height: 20,),
             Row(
-              mainAxisAlignment: widget.event.shared != true ? MainAxisAlignment.start : MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (widget.event.shared != true)
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(

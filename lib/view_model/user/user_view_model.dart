@@ -57,6 +57,8 @@ class UserViewModel with ChangeNotifier {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.clear();
     await sp.setBool('initScreen', true);
+    await sp.setBool('initScreenHome', true);
+    await sp.setBool('initScreenCredits', true);
     return true;
   }
 }

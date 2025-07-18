@@ -198,7 +198,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       case Status.COMPLETED:
                         EventModel event = value.event.data!;
 
-                        List roles = [];
+                        List<String> roles = [];
                         if (event.shared == true && event.adminRoles != null) {
                           roles = event.adminRoles!.split(',');
                         }
@@ -710,7 +710,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => AdminListScreen(event: event),
+                                              builder: (context) => AdminListScreen(event: event, roles: roles,),
                                             ),
                                           );
                                         },
@@ -939,7 +939,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 const SizedBox(width: 10),
                                               ],
                                             ),
-                                            if (event.hasBook != true)
+                                            if (event.hasMusic != true)
                                               Icon(CupertinoIcons.lock_fill, color: appColors.black, size: 20),
                                           ],
                                         ),
@@ -988,7 +988,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 const SizedBox(width: 10),
                                               ],
                                             ),
-                                            if (event.hasBook != true)
+                                            if (event.hasGame != true)
                                               Icon(CupertinoIcons.lock_fill, color: appColors.black, size: 20),
                                           ],
                                         ),
