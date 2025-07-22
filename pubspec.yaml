@@ -1,8 +1,8 @@
 name: kuuwaa
-description: Music event creat and booking flutter app
+description: Music event create and booking flutter app
 
 publish_to: 'none'
-version: 1.0.19+19
+version: 1.0.21+21
 
 environment:
   sdk: ">=2.17.0 <3.0.0"

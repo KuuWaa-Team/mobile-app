@@ -87,7 +87,10 @@ class _AdminListScreenState extends State<AdminListScreen> {
                       "Consulter les demandes musicales": EventAdminRoles.viewMusicRequests,
                       "Gérer le jeu interactif": EventAdminRoles.manageInteractiveGame,
                     };
-                    permissionLabels.removeWhere((label, value) => !widget.roles.contains(value));
+
+                    if (widget.roles.isNotEmpty) {
+                      permissionLabels.removeWhere((label, value) => !widget.roles.contains(value));
+                    }
 
                     const String alwaysCheckedLabel = "Vérifier les invitations";
 

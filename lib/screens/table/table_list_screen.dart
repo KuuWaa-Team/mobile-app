@@ -32,6 +32,8 @@ class _TableListScreenState extends State<TableListScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _countController = TextEditingController();
 
+  bool editing = false;
+
   var maskFormatter = MaskTextInputFormatter(
       mask: '### ### ###',
       filter: { "#": RegExp(r'\d') },
@@ -482,7 +484,147 @@ class _TableListScreenState extends State<TableListScreen> {
                                                         ),
                                                       ),
                                                       const SizedBox(height: 20,),
-                                                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(5)),
+                                                      Divider(),
+                                                      SizedBox(height: ResponsiveFlutter.of(context).verticalScale(5)),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            _nameController.text = table.name.toString();
+                                                            _countController.text = table.count.toString();
+                                                          });
+                                                          showModalBottomSheet(
+                                                              isScrollControlled: true,
+                                                              context: context,
+                                                              backgroundColor: appColors.appMediumColor,
+                                                              shape: const RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.only( // <-- SEE HERE
+                                                                  topLeft: Radius.circular(30.0),
+                                                                  topRight: Radius.circular(30.0),
+                                                                ),
+                                                              ),
+                                                              builder: (context) {
+                                                                return StatefulBuilder(
+                                                                    builder: (context, setState) {
+                                                                      return Padding(
+                                                                        padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                                                                        child: SingleChildScrollView(
+                                                                          child: Column(
+                                                                            children: [
+                                                                              MyTextView(
+                                                                                "Modifier la table " + table.name.toString(),
+                                                                                textAligntNew: TextAlign.center,
+                                                                                maxLinesNew: 4,
+                                                                                styleNew: MyTextStyle(
+                                                                                  colorNew: appColors.black,
+                                                                                  fontWeightNew: FontWeight.w600,
+                                                                                  size: ResponsiveFlutter.of(context).fontSize(2),
+                                                                                ),
+                                                                              ),
+                                                                              const SizedBox(height: 10,),
+                                                                              Container(
+                                                                                height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                                padding: EdgeInsets.symmetric(
+                                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                                ),
+                                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                                                decoration: BoxDecoration(
+                                                                                  color: appColors.appLightColor,
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                    ResponsiveFlutter.of(context).moderateScale(25),
+                                                                                  ),
+                                                                                ),
+                                                                                child: commonTestField(
+                                                                                  context: context,
+                                                                                  controller: _nameController,
+                                                                                  hintText: "Nom de la table",
+                                                                                  keyboardType: TextInputType.text,
+                                                                                  icon: true,
+                                                                                ),
+                                                                              ),
+                                                                              Container(
+                                                                                height: ResponsiveFlutter.of(context).verticalScale(40),
+                                                                                padding: EdgeInsets.symmetric(
+                                                                                  vertical: ResponsiveFlutter.of(context).moderateScale(6),
+                                                                                  horizontal: ResponsiveFlutter.of(context).moderateScale(15),
+                                                                                ),
+                                                                                margin: EdgeInsets.only(bottom: ResponsiveFlutter.of(context).moderateScale(10)),
+                                                                                decoration: BoxDecoration(
+                                                                                  color: appColors.appLightColor,
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                    ResponsiveFlutter.of(context).moderateScale(25),
+                                                                                  ),
+                                                                                ),
+                                                                                child: commonTestField(
+                                                                                  context: context,
+                                                                                  controller: _countController,
+                                                                                  hintText: "Nombre de places",
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  icon: true,
+                                                                                ),
+                                                                              ),
+                                                                              GestureDetector(
+                                                                                onTap: () {
+                                                                                  if (_nameController.text == "") {
+                                                                                    Utils.flushBarErrorMessage("Vous devez enter le nom de la table", context);
+                                                                                  } else if (_countController.text == "") {
+                                                                                    Utils.flushBarErrorMessage("Vous devez enter le nombre des places", context);
+                                                                                  } else {
+                                                                                    setState(() {
+                                                                                      editing = true;
+                                                                                    });
+
+                                                                                    Map data = {
+                                                                                      "name": _nameController.text,
+                                                                                      "count": int.parse(_countController.text),
+                                                                                    };
+
+                                                                                    tableViewModel.editTable(context, data, table.id!).then((value) {
+                                                                                      setState(() {
+                                                                                        editing = false;
+                                                                                      });
+                                                                                    });
+                                                                                  }
+                                                                                },
+                                                                                child: CommonButton(
+                                                                                  title: "Enrégistrer",
+                                                                                  loading: editing,
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    }
+                                                                );
+                                                              }
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(5),
+                                                              color: appColors.appLightColor
+                                                          ),
+                                                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              MyTextView(
+                                                                "Modifier",
+                                                                textAligntNew: TextAlign.center,
+                                                                styleNew: MyTextStyle(
+                                                                  fontWeightNew: FontWeight.w400,
+                                                                  colorNew: Colors.black,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                ),
+                                                              ),
+                                                              Icon(Icons.edit, color: appColors.black, size: 15,)
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -572,7 +714,7 @@ class _TableListScreenState extends State<TableListScreen> {
                                                           "Remplie",
                                                           textAligntNew: TextAlign.center,
                                                           styleNew: MyTextStyle(
-                                                            colorNew: appColors.lightColor,
+                                                            colorNew: appColors.white,
                                                             fontWeightNew: FontWeight.w700,
                                                             size: ResponsiveFlutter.of(context).fontSize(1.3),
                                                           ),

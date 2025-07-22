@@ -419,9 +419,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                      child: Text("Compris", style: TextStyle(color: appColors.btnColor)),
+                      child: Text("Compris", style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ],
