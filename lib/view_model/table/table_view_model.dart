@@ -77,4 +77,30 @@ class TableViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> editTable(BuildContext context, Map data, int id) async {
+    setLoading(true);
+    await _repository.editTableApi(context: context, data: data, id: id).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        List tablesJson = value['tables'];
+        List<TableModel> tablesData = [];
+        if (tablesJson.isNotEmpty) {
+          for (var element in tablesJson) {
+            tablesData.add(TableModel.fromJson(element));
+          }
+        }
+        setTablesList(ApiResponse.completed(tablesData));
+        Utils.toastMessage(value['message']);
+        Navigator.pop(context);
+      } else {
+        Utils.flushBarErrorMessage(value['message'], context);
+      }
+    }).onError((error, stackTrace) {
+      print("-----------------------------------");
+      print(error);
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      setLoading(false);
+    });
+    return true;
+  }
 }
