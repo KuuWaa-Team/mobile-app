@@ -22,7 +22,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Column(

@@ -70,7 +70,6 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
       ),
     );
     return SafeArea(
-      bottom: false,
       top: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,

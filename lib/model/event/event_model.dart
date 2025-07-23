@@ -202,12 +202,10 @@ class EventModel {
     }
   }
 
-
   String formattedHour() {
-    if (startDate == null || endDate == null) return "";
-
+    if (startDate == null && endDate == null) return "";
     final hourFormat = DateFormat.Hm();
+    if (endDate == null) return hourFormat.format(startDate!);
     return 'De ${hourFormat.format(startDate!)} à ${hourFormat.format(endDate!)}';
   }
-
 }

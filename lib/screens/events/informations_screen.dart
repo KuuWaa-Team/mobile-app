@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kuuwaa/common/app_colors.dart';
-import 'package:kuuwaa/common/check_dialog.dart';
-import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/model/event/event_category_model.dart';
@@ -16,6 +12,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/resource/config/app_url.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
+import 'package:kuuwaa/screens/events/details_screen.dart';
+import 'package:kuuwaa/screens/events/edition/edit_general_informations.dart';
+import 'package:kuuwaa/screens/events/edition/edit_place_date_hour.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 
 class InformationsScreen extends StatefulWidget {
@@ -103,12 +102,11 @@ class _InformationsScreenState extends State<InformationsScreen> {
         systemNavigationBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-        statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+        statusBarBrightness: Brightness.light, // For iOS (dark icons)
         systemNavigationBarDividerColor: appColors.white
       ),
     );
     return SafeArea(
-        bottom: false,
         top: false,
         child: Scaffold(
           backgroundColor: appColors.appMediumColor,
@@ -119,6 +117,9 @@ class _InformationsScreenState extends State<InformationsScreen> {
                 context: context,
                 title: "Details de l'événement",
                 backArrow: true,
+                backClick: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (route) => DetailsScreen(id: widget.event.id!)));
+                }
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -139,36 +140,13 @@ class _InformationsScreenState extends State<InformationsScreen> {
                                 size: ResponsiveFlutter.of(context).fontSize(2),
                               ),
                             ),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //
-                            //   },
-                            //   child: Icon(Icons.edit, color: appColors.btnColor,),
-                            // )
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (route) => EditGeneralInformation(event: widget.event)));
+                              },
+                              icon: Icon(Icons.edit, color: appColors.btnColor,),
+                            )
                           ],
-                        ),
-                        const SizedBox(height: 10,),
-                        MyTextView(
-                          "Image",
-                          textAligntNew: TextAlign.start,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.lightColor.withOpacity(.5),
-                            fontWeightNew: FontWeight.w400,
-                            size: ResponsiveFlutter.of(context).fontSize(1.5),
-                          ),
-                        ),
-                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(5)),
-                        Container(
-                          width: 100, height: 100,
-                          decoration: BoxDecoration(
-                            color: appColors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 1, color: Colors.black),
-                            image: DecorationImage(
-                              image: NetworkImage(AppUrl.domainName + widget.event.imagePath!),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
                         ),
                         const SizedBox(height: 10,),
                         MyTextView(
@@ -233,14 +211,25 @@ class _InformationsScreenState extends State<InformationsScreen> {
                         SizedBox(height: ResponsiveFlutter.of(context).moderateScale(8)),
                         const Divider(),
                         SizedBox(height: ResponsiveFlutter.of(context).moderateScale(8)),
-                        MyTextView(
-                          "Date, heure et addresse",
-                          textAligntNew: TextAlign.start,
-                          styleNew: MyTextStyle(
-                            colorNew: appColors.btnColor,
-                            fontWeightNew: FontWeight.w500,
-                            size: ResponsiveFlutter.of(context).fontSize(2),
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MyTextView(
+                              "Date, heure et addresse",
+                              textAligntNew: TextAlign.start,
+                              styleNew: MyTextStyle(
+                                colorNew: appColors.btnColor,
+                                fontWeightNew: FontWeight.w500,
+                                size: ResponsiveFlutter.of(context).fontSize(2),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (route) => EditPlaceDateHour(event: widget.event)));
+                              },
+                              icon: Icon(Icons.edit, color: appColors.btnColor,),
+                            )
+                          ],
                         ),
                         const SizedBox(height: 10,),
                         MyTextView(
@@ -363,16 +352,12 @@ class _InformationsScreenState extends State<InformationsScreen> {
                                 size: ResponsiveFlutter.of(context).fontSize(2),
                               ),
                             ),
-                            // Row(
-                            //   children: [
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //
-                            //       },
-                            //       child: Icon(Icons.edit, color: appColors.btnColor,),
-                            //     ),
-                            //   ],
-                            // )
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (route) => EditPlaceDateHour(event: widget.event)));
+                              },
+                              icon: Icon(Icons.edit, color: appColors.btnColor,),
+                            )
                           ],
                         ),
                         const SizedBox(height: 8,),
@@ -469,7 +454,7 @@ class _InformationsScreenState extends State<InformationsScreen> {
                             size: ResponsiveFlutter.of(context).fontSize(1.5),
                           ),
                         ),
-                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(1)),
+                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
                         MyTextView(
                           widget.event.template!.hasAnimations == true ? "Oui" : "Non",
                           maxLinesNew: 20,
@@ -479,7 +464,6 @@ class _InformationsScreenState extends State<InformationsScreen> {
                             size: ResponsiveFlutter.of(context).fontSize(1.6),
                           ),
                         ),
-                        SizedBox(height: ResponsiveFlutter.of(context).moderateScale(20)),
                       ],
                     ),
                   ),

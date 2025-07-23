@@ -58,7 +58,6 @@ class _AdminListScreenState extends State<AdminListScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      bottom: false,
       top: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,

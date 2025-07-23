@@ -508,25 +508,17 @@ class EventViewModel with ChangeNotifier{
     return response;
   }
 
-  Future<bool> editEventApi (BuildContext context, Map data, int id) async {
+  Future<Map> editEventApi (BuildContext context, Map data, int id) async {
     setLoading(true);
+    Map returnValue = {};
 
     await _repository.editEventApi(context: context, data: data, id: id).then((value) {
       if (value['success'] == true  ) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const BottomBarScreen(),
-          ),
-        );
         Utils.toastMessage("Évenement modifié avec succès");
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailsScreen(id: id),
-          ),
-              (route) => false,
-        );
+        returnValue = {
+          'success': true,
+          'event': EventModel.fromJson(value['event'])
+        };
         setLoading(false);
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
@@ -536,7 +528,7 @@ class EventViewModel with ChangeNotifier{
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
-    return true;
+    return returnValue;
   }
 
   Future<bool> getEventDetailApi (BuildContext context, int id, int userId) async {

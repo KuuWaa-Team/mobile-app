@@ -27,7 +27,6 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      bottom: false,
       top: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,

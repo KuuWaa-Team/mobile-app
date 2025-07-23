@@ -44,7 +44,6 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: SizedBox(

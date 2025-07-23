@@ -20,7 +20,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      bottom: false,
       top: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,

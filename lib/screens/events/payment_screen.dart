@@ -67,7 +67,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Column(

@@ -19,7 +19,6 @@ class _PaymentSuccessedScreenState extends State<PaymentSuccessedScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.btnColor,
         body: SizedBox(

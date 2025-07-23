@@ -367,7 +367,6 @@ class _BookScreenState extends State<BookScreen> {
       ...books
     ];
     return SafeArea(
-      bottom: false,
       top: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,

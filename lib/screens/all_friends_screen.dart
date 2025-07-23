@@ -17,7 +17,6 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Column(

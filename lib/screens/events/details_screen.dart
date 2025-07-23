@@ -179,7 +179,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: SizedBox(
@@ -247,11 +246,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.push(
+                                          Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => const BottomBarScreen(),
                                             ),
+                                              (route) => false
                                           );
                                         },
                                         child: Container(

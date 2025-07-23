@@ -25,7 +25,6 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: DefaultTabController(
         length: 2,
         child: Scaffold(

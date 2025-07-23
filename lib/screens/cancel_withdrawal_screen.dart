@@ -20,7 +20,6 @@ class _CancelWithdrawalScreenState extends State<CancelWithdrawalScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.btnColor,
         body: SizedBox(

@@ -32,7 +32,6 @@ class _InviteFriendsScreenState extends State<InviteFriendsScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Column(

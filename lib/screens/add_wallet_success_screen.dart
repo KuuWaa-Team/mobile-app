@@ -31,7 +31,6 @@ class _AddWalletSuccessScreenState extends State<AddWalletSuccessScreen> {
     );
     return SafeArea(
       top: false,
-      bottom: false,
       child: Scaffold(
         backgroundColor: appColors.btnColor,
         body: SizedBox(
