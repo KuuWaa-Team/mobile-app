@@ -35,8 +35,6 @@ class NetworkApiService extends BaseApiServices {
         Uri.parse(url),
         headers: auth ? headerAuth : header,
       ).timeout(const Duration(seconds: 600));
-      print("response.body");
-      print(response.body);
       responseJson = returnResponse(response, context);
     } on SocketException {
       Navigator.pushNamed(context, RoutesName.networkError);

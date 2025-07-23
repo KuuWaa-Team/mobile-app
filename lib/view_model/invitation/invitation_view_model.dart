@@ -44,7 +44,7 @@ class InvitationViewModel with ChangeNotifier{
       {bool withMusicRequest = false}) async {
     setInvitationsList(ApiResponse.loading());
     setLoading(true);
-    await _repository.getEventInvitationsApi(context: context, id: id, withMusicRequest: true).then((value) {
+    await _repository.getEventInvitationsApi(context: context, id: id, withMusicRequest: false).then((value) {
       setLoading(false);
       if (value['success'] == true  ) {
         List invitationsJson = value['data'];

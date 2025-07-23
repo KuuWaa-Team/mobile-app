@@ -13,6 +13,9 @@ class InvitationRepository {
         url += "?wm=1";
       }
       dynamic response = await _apiServices.getGetResponse(url, context: context, auth: false);
+
+      print("---------------- invitations ----------------");
+      print(url);
       return response;
     } catch(e) {
       rethrow;
