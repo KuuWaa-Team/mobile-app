@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
       loading = true;
     });
 
-    try {
+    // try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser != null) {
@@ -104,14 +104,15 @@ class _LoginScreenState extends State<LoginScreen> {
           await authViewModel.loginApi(userData, context);
         });
       }
-    } catch (error) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
-      print(error);
-    } finally {
-      setState(() {
-        loading = false;
-      });
-    }
+    // }
+    // catch (error) {
+    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   print(error);
+    // } finally {
+    //   setState(() {
+    //     loading = false;
+    //   });
+    // }
   }
 
   @override

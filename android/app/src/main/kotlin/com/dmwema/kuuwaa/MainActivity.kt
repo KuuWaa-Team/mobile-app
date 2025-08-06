@@ -1,4 +1,4 @@
-package com.app.kuuwaa
+package com.dmwema.kuuwaa
 
 import io.flutter.embedding.android.FlutterActivity
 
