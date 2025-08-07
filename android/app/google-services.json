@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:77651918174:android:14ff0e9b862f2e86a823cf",
+        "mobilesdk_app_id": "1:77651918174:android:6132f601582eb5a5a823cf",
         "android_client_info": {
-          "package_name": "com.app.kuuwaa"
+          "package_name": "com.dmwema.kuuwaa"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "77651918174-d5hh3bmf3gn38gcmcp9aplb58f1tnqu4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.app.kuuwaa",
-            "certificate_hash": "e89294c98c8f97c226a018a86b6da54263bb382e"
-          }
-        },
         {
           "client_id": "77651918174-trvf19uu6sf3335opv1toimslgp9afhf.apps.googleusercontent.com",
           "client_type": 3
