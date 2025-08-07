@@ -14,11 +14,10 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
   AppColors appColors = AppColors();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: Column(
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: SafeArea(
+        child: Column(
           children: [
             commonAppBar(
               title: Strings.termsCondition,

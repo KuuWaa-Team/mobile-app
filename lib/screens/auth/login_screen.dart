@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
           systemNavigationBarColor: appColors.appMediumColor,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.light, // For Android (dark icons)
-          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
           systemNavigationBarDividerColor: appColors.appMediumColor
       ),
     );

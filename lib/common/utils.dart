@@ -87,7 +87,7 @@ class Utils {
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
         systemNavigationBarColor: appColors.lightColor,
         systemNavigationBarDividerColor: Colors.grey.shade500,
         systemNavigationBarIconBrightness: Brightness.dark,

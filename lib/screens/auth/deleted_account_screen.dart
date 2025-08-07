@@ -54,10 +54,9 @@ class _DeletedAccountScreenState extends State<DeletedAccountScreen> {
       ),
     );
 
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        body: SizedBox(
+    return Scaffold(
+      body: SafeArea(
+        child: SizedBox(
           width: double.infinity,
           child: Container(
             decoration: const BoxDecoration(

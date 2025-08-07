@@ -17,11 +17,10 @@ class _PaymentSuccessedScreenState extends State<PaymentSuccessedScreen> {
   AppColors appColors = AppColors();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.btnColor,
-        body: SizedBox(
+    return Scaffold(
+      backgroundColor: appColors.btnColor,
+      body: SafeArea(
+        child: SizedBox(
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

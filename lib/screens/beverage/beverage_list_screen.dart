@@ -47,11 +47,10 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: Column(
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: SafeArea(
+        child: Column(
           children: [
             commonAppBar(
               context: context,
@@ -155,17 +154,17 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                               Utils.flushBarErrorMessage("Veuillez sélectionner le type de boisson", context);
                                               return;
                                             }
-
+            
                                             setState(() {
                                               loading = true;
                                             });
-
+            
                                             Map data = {
                                               "name": _nameController.text.trim(),
                                               "type": selectedType,
                                               "eventId": widget.event.id
                                             };
-
+            
                                             beverageViewModel.addBeverage(context, data).then((value) {
                                               setState(() {
                                                 loading = false;
@@ -236,7 +235,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                 ),
               ],
             ),
-
+            
             ChangeNotifierProvider<BeverageViewModel>(
                 create: (BuildContext context) => beverageViewModel,
                 child: Consumer<BeverageViewModel>(
@@ -300,7 +299,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                   itemCount: beverageViewModel.beveragesList.data!.length,
                                   itemBuilder: (context, index) {
                                     BeverageModel beverage = beverageViewModel.beveragesList.data![index];
-
+            
                                     return GestureDetector(
                                       onTap: () {
                                         showModalBottomSheet(
@@ -328,7 +327,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                         ),
                                                       ),
                                                       const SizedBox(height: 10,),
-
+            
                                                       const SizedBox(height: 10,),
                                                       GestureDetector(
                                                         onTap: true ? null : () {
@@ -422,7 +421,7 @@ class _BeverageListScreenState extends State<BeverageListScreen> {
                                                               ],
                                                             ),
                                                           );
-
+            
                                                           if (confirm == true) {
                                                             await beverageViewModel.removeBeverage(context, beverage.id!);
                                                           }

@@ -41,11 +41,10 @@ class _SharedEventInvitationScreenState extends State<SharedEventInvitationScree
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               commonAppBar(

@@ -14,6 +14,7 @@ class InvitationModel {
   String? slug;
   String? message;
   bool? bookSent;
+  bool? willBePresent;
   bool? musicPlayed;
   String? codePath;
   String? code;
@@ -29,6 +30,7 @@ class InvitationModel {
     this.phoneNumber,
     this.slug,
     this.bookSent,
+    this.willBePresent,
     this.beverage,
     this.message,
     this.decryptKey,
@@ -44,6 +46,7 @@ class InvitationModel {
   InvitationModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    willBePresent = json['willBePresent'];
     slug = json['slug'];
     musicPlayed = json['musicPlayed'];
     civility = json['civility'];
@@ -80,6 +83,7 @@ class InvitationModel {
     data['decryptKey'] = decryptKey;
     data['codePath'] = codePath;
     data['count'] = count;
+    data['willBePresent'] = willBePresent;
     data['status'] = status;
     data['phoneNumber'] = phoneNumber;
     data['message'] = message;

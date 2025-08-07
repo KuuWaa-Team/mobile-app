@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
-import 'package:kuuwaa/common/constants.dart';
 import 'package:kuuwaa/common/image_path.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:kuuwaa/screens/home_page_screen.dart';
@@ -64,8 +63,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
           statusBarColor: Colors.transparent,
           systemNavigationBarColor: appColors.white,
           systemNavigationBarIconBrightness: Brightness.dark,
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
           systemNavigationBarDividerColor: appColors.white
       ),
     );

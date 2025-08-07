@@ -489,6 +489,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           if (event.shared == true)
                                             Container(
                                               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                              margin: const EdgeInsets.symmetric(horizontal: 20),
                                               decoration: BoxDecoration(
                                                 color: appColors.btnColor.withOpacity(0.1),
                                                 borderRadius: BorderRadius.circular(30),

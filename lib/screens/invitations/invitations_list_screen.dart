@@ -581,11 +581,30 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                             ),
                                                             const SizedBox(width: 10,),
                                                             if (invitation.status != 'created' && invitation.status != 'refused')
-                                                              const Icon(CupertinoIcons.lock, color: Colors.green, size: 15,),
+                                                              const Icon(CupertinoIcons.lock_open, color: Colors.green, size: 15,),
                                                             if (invitation.status == 'created' || invitation.status == 'refused')
                                                               Icon(CupertinoIcons.lock, color: appColors.lightColor, size: 15,),
                                                           ],
                                                         ),
+                                                        if (invitation.willBePresent == true)
+                                                        const SizedBox(height: 10,),
+                                                        if (invitation.willBePresent == true)
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              MyTextView(
+                                                                "Présence confirmée",
+                                                                textAligntNew: TextAlign.center,
+                                                                styleNew: MyTextStyle(
+                                                                  colorNew: Colors.green,
+                                                                  fontWeightNew: FontWeight.w400,
+                                                                  size: ResponsiveFlutter.of(context).fontSize(1.8),
+                                                                ),
+                                                              ),
+                                                              const SizedBox(width: 10,),
+                                                              const Icon(CupertinoIcons.check_mark_circled  , color: Colors.green, size: 15,),
+                                                            ],
+                                                          ),
                                                         const SizedBox(height: 10,),
                                                         if (invitation.count! > 1)
                                                         const SizedBox(height: 10,),
@@ -974,19 +993,18 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                           onTap: sending ? null : () async {
                                                             if (((widget.event.template!.price ?? 0) <= (user!.credits ?? 0)) || invitation.status != 'created') {
                                                               sending = true;
+                                                              SharePlus.instance.share(
+                                                                  ShareParams(text: invitation.message)
+                                                              );
                                                               if (invitation.status == 'created') {
                                                                 await invitationViewModel.sendInvitation(context, {
                                                                   'userId': user!.id
                                                                 }, invitation.id!, widget.event).then((value) {
                                                                   if (value) {
+                                                                    invitation.status = 'sent';
                                                                   }
                                                                 });
-                                                              } else {
-                                                                SharePlus.instance.share(
-                                                                    ShareParams(text: invitation.message)
-                                                                );
                                                               }
-
                                                               sending = false;
                                                             }  else {
                                                               showDialog(
@@ -1206,7 +1224,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                                                   child: Row(
                                                     children: [
-                                                      if (invitation.status != 'created' && invitation.status != 'refused')
+                                                      if (invitation.willBePresent == true)
+                                                        const Icon(CupertinoIcons.check_mark_circled, color: Colors.green, size: 17,),
+                                                      if (invitation.willBePresent != true && invitation.status != 'created' && invitation.status != 'refused')
                                                       const Icon(CupertinoIcons.lock_open, color: Colors.green, size: 15,),
                                                       if (invitation.status == 'created' || invitation.status == 'refused')
                                                         Icon(CupertinoIcons.lock, color: appColors.lightColor, size: 15,)

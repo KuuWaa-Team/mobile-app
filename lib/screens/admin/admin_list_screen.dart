@@ -57,11 +57,10 @@ class _AdminListScreenState extends State<AdminListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: Column(
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: SafeArea(
+        child: Column(
           children: [
             commonAppBar(
               context: context,
@@ -74,7 +73,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                 GestureDetector(
                   onTap: () {
                     List<String> selectedPermissions = [EventAdminRoles.verifyInvitations];
-
+            
                     final Map<String, String> permissionLabels = {
                       "Vérifier les invitations": EventAdminRoles.verifyInvitations,
                       "Envoyer des invitations": EventAdminRoles.sendInvitations,
@@ -86,13 +85,13 @@ class _AdminListScreenState extends State<AdminListScreen> {
                       "Consulter les demandes musicales": EventAdminRoles.viewMusicRequests,
                       "Gérer le jeu interactif": EventAdminRoles.manageInteractiveGame,
                     };
-
+            
                     if (widget.roles.isNotEmpty) {
                       permissionLabels.removeWhere((label, value) => !widget.roles.contains(value));
                     }
-
+            
                     const String alwaysCheckedLabel = "Vérifier les invitations";
-
+            
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -108,7 +107,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                           builder: (context, setState) {
                             bool isAllChecked() =>
                                 selectedPermissions.length == permissionLabels.length;
-
+            
                             void toggleAll(bool value) {
                               setState(() {
                                 selectedPermissions = value
@@ -116,7 +115,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                     : [EventAdminRoles.verifyInvitations];
                               });
                             }
-
+            
                             return Padding(
                               padding: EdgeInsets.only(
                                 top: 20,
@@ -160,7 +159,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                         icon: true,
                                       ),
                                     ),
-
+            
                                     // Tout cocher
                                     CheckboxListTile(
                                       title: MyTextView(
@@ -176,13 +175,13 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                       onChanged: (val) => toggleAll(val ?? false),
                                       visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
                                     ),
-
+            
                                     // Liste des permissions
                                     ...permissionLabels.entries.map((entry) {
                                       final label = entry.key;
                                       final value = entry.value;
                                       final isMandatory = label == alwaysCheckedLabel;
-
+            
                                       return Column(
                                         children: [
                                           Divider(
@@ -216,7 +215,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                         ],
                                       );
                                     }).toList(),
-
+            
                                     const SizedBox(height: 10),
                                     if (user != null)
                                     GestureDetector(
@@ -229,16 +228,16 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                           Utils.flushBarErrorMessage("Veuillez sélectionner au moins une autorisation", context);
                                           return;
                                         }
-
+            
                                         setState(() => loading = true);
-
+            
                                         Map data = {
                                           "name": _nameController.text.trim(),
                                           "eventId": widget.event.id!,
                                           "userId": user!.id!,
                                           "permissions": selectedPermissions,
                                         };
-
+            
                                         await adminViewModel.addAdmin(context, data).then((value) {
                                           setState(() {
                                             loading = false;
@@ -309,7 +308,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                 ),
               ],
             ),
-
+            
             ChangeNotifierProvider<EventAdminViewModel>(
                 create: (BuildContext context) => adminViewModel,
                 child: Consumer<EventAdminViewModel>(
@@ -373,7 +372,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                                   itemCount: adminViewModel.adminsList.data!.length,
                                   itemBuilder: (context, index) {
                                     EventAdminModel admin = adminViewModel.adminsList.data![index];
-
+            
                                     return GestureDetector(
                                       onTap: () => _showAdminDetailsModal(context, admin),
                                       child: Container(

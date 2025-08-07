@@ -15,11 +15,10 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
   AppColors appColors = AppColors();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: Column(
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: SafeArea(
+        child: Column(
           children: [
             commonAppBar(
               context: context,

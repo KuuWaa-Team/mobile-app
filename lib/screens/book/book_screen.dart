@@ -366,11 +366,10 @@ class _BookScreenState extends State<BookScreen> {
       ),
       ...books
     ];
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: appColors.appMediumColor,
-        body: Column(
+    return Scaffold(
+      backgroundColor: appColors.appMediumColor,
+      body: SafeArea(
+        child: Column(
           children: [
             commonAppBar(
               context: context,
