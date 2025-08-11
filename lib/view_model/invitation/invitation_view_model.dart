@@ -236,6 +236,29 @@ class InvitationViewModel with ChangeNotifier{
     return true;
   }
 
+  Future<bool> removeInvitation(BuildContext context, int id) async {
+    setLoading(true);
+    await _repository.removeInvitationApi(context: context, id: id).then((value) {
+      setLoading(false);
+      if (value['success'] == true  ) {
+        List invitationsJson = value['invitations'];
+        List<InvitationModel> invitationsData = [];
+        if (invitationsJson.isNotEmpty) {
+          for (var element in invitationsJson) {
+            invitationsData.add(InvitationModel.fromJson(element));
+          }
+        }
+        setInvitationsList(ApiResponse.completed(invitationsData));
+        Navigator.pop(context);
+      }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      print(error);
+      setLoading(false);
+    });
+    return true;
+  }
+
   Future<bool> selectInvitation(BuildContext context, int id, Map data) async {
     setLoading(true);
     await _repository.selectInvitationsApi(context: context, data: data, id: id).then((value) {

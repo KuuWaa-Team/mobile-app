@@ -111,4 +111,13 @@ class InvitationRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> removeInvitationApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$id/remove", {}, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
 }

@@ -33,6 +33,15 @@ class TableRepository {
     }
   }
 
+  Future<dynamic> removeTablesApi ({required BuildContext context, required int id}) async {
+    try  {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.tableEndPoint + "/$id/remove", {}, context: context, auth: true);
+      return response;
+    } catch(e) {
+      rethrow;
+    }
+  }
+
   // Future<dynamic> sendInvitationsApi ({required BuildContext context, required Map data, required int id}) async {
   //   try  {
   //     dynamic response = await _apiServices.getPostApiResponse(AppUrl.invitationEndPoint + "/$id/send", data, context: context, auth: true);
