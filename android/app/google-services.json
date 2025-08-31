@@ -1,40 +1,48 @@
 {
   "project_info": {
-    "project_number": "77651918174",
-    "project_id": "kuuwaa-adcc4",
-    "storage_bucket": "kuuwaa-adcc4.firebasestorage.app"
+    "project_number": "1035641961455",
+    "project_id": "kuuwaa-b09e1",
+    "storage_bucket": "kuuwaa-b09e1.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:77651918174:android:6132f601582eb5a5a823cf",
+        "mobilesdk_app_id": "1:1035641961455:android:48bcf4985170c3268c941a",
         "android_client_info": {
           "package_name": "com.dmwema.kuuwaa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "77651918174-trvf19uu6sf3335opv1toimslgp9afhf.apps.googleusercontent.com",
+          "client_id": "1035641961455-8kscr15ib1hqh4nf1s1q1cmbcs01esi4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dmwema.kuuwaa",
+            "certificate_hash": "34657f2d943899accc63a05f73dc47767ce930ea"
+          }
+        },
+        {
+          "client_id": "1035641961455-4v7sprfm1htmvcjeplk4v6a50vo2i3rg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAWhee9Ghkg9QHach2Ye2c5v1QjTzqTFoE"
+          "current_key": "AIzaSyDh3gRXE6CdcjvSjCfnA1XJculENHSoTeo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "77651918174-trvf19uu6sf3335opv1toimslgp9afhf.apps.googleusercontent.com",
+              "client_id": "1035641961455-4v7sprfm1htmvcjeplk4v6a50vo2i3rg.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "77651918174-3ljaij0anninqvnc7uv7t68nvicqbtki.apps.googleusercontent.com",
+              "client_id": "1035641961455-1601vom860rvp4jjguh701ung9n90vhl.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.app.kuuwaa"
+                "bundle_id": "com.dmwema.kuuwaa"
               }
             }
           ]
