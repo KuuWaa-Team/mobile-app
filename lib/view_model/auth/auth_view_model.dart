@@ -21,6 +21,8 @@ class AuthViewModel with ChangeNotifier{
   Future<bool> loginApi(dynamic data, BuildContext context) async {
     setLoading(true);
     await _repository.loginApi(data, context: context).then((value) {
+      print("*************************** Data *****************************");
+      print(value);
       setLoading(false);
       if (value['success'] == true  ) {
         UserModel user = UserModel.fromJson(value['user']);
@@ -40,6 +42,8 @@ class AuthViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
+      print("*************************** Err *****************************");
+      print(error);
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });

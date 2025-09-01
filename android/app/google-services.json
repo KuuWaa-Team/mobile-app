@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "77651918174",
-    "project_id": "kuuwaa-adcc4",
-    "storage_bucket": "kuuwaa-adcc4.firebasestorage.app"
+    "project_number": "394265327019",
+    "project_id": "kuuwaa-c1990",
+    "storage_bucket": "kuuwaa-c1990.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:77651918174:android:6132f601582eb5a5a823cf",
+        "mobilesdk_app_id": "1:394265327019:android:3f77a57dc46317730f4eee",
         "android_client_info": {
           "package_name": "com.dmwema.kuuwaa"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "77651918174-trvf19uu6sf3335opv1toimslgp9afhf.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAWhee9Ghkg9QHach2Ye2c5v1QjTzqTFoE"
+          "current_key": "AIzaSyA1wWqLQrRHnlf-S25iQO-mpEBqZzFcwOI"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "77651918174-trvf19uu6sf3335opv1toimslgp9afhf.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "77651918174-3ljaij0anninqvnc7uv7t68nvicqbtki.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.app.kuuwaa"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
