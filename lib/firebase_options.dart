@@ -112,5 +112,8 @@ class DefaultFirebaseOptions {
     storageBucket: 'kuuwaa-b09e1.firebasestorage.app',
     measurementId: 'G-F2CDFL72ZR',
   );
+<<<<<<< HEAD
 // >>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
+=======
+>>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
 }

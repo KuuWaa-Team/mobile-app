@@ -42,6 +42,10 @@ class AuthViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
+<<<<<<< HEAD
+=======
+      print("*************************** Error *****************************");
+>>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
       print(error);
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);

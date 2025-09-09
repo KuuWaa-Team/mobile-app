@@ -53,11 +53,15 @@ android {
     }
     signingConfigs {
         release {
+<<<<<<< HEAD
 //<<<<<<< HEAD
             keyAlias 'release'
 //=======
 //            keyAlias 'my-key-alias'
 //>>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
+=======
+            keyAlias 'my-key-alias'
+>>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
             keyPassword 'Qd2022'
             storeFile file('../../my-release-key.keystore')
             storePassword 'Qd2022'
