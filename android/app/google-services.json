@@ -1,26 +1,59 @@
 {
   "project_info": {
-    "project_number": "394265327019",
-    "project_id": "kuuwaa-c1990",
-    "storage_bucket": "kuuwaa-c1990.firebasestorage.app"
+    "project_number": "1035641961455",
+    "project_id": "kuuwaa-b09e1",
+    "storage_bucket": "kuuwaa-b09e1.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:394265327019:android:3f77a57dc46317730f4eee",
+        "mobilesdk_app_id": "1:1035641961455:android:48bcf4985170c3268c941a",
         "android_client_info": {
           "package_name": "com.dmwema.kuuwaa"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1035641961455-0efbivkvc8gbpl8e7p1ufjmev8tkr9gb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dmwema.kuuwaa",
+            "certificate_hash": "0dd75986e4ad7ff79915a400e5ff4a72fbf3cb65"
+          }
+        },
+        {
+          "client_id": "1035641961455-8kscr15ib1hqh4nf1s1q1cmbcs01esi4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dmwema.kuuwaa",
+            "certificate_hash": "34657f2d943899accc63a05f73dc47767ce930ea"
+          }
+        },
+        {
+          "client_id": "1035641961455-4v7sprfm1htmvcjeplk4v6a50vo2i3rg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyA1wWqLQrRHnlf-S25iQO-mpEBqZzFcwOI"
+          "current_key": "AIzaSyDh3gRXE6CdcjvSjCfnA1XJculENHSoTeo"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1035641961455-4v7sprfm1htmvcjeplk4v6a50vo2i3rg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1035641961455-1601vom860rvp4jjguh701ung9n90vhl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dmwema.kuuwaa"
+              }
+            }
+          ]
         }
       }
     }

@@ -49,20 +49,68 @@ class DefaultFirebaseOptions {
     }
   }
 
+// <<<<<<< HEAD
+//   static const FirebaseOptions android = FirebaseOptions(
+//     apiKey: 'AIzaSyA1wWqLQrRHnlf-S25iQO-mpEBqZzFcwOI',
+//     appId: '1:394265327019:android:3f77a57dc46317730f4eee',
+//     messagingSenderId: '394265327019',
+//     projectId: 'kuuwaa-c1990',
+//     storageBucket: 'kuuwaa-c1990.firebasestorage.app',
+//   );
+//
+//   static const FirebaseOptions ios = FirebaseOptions(
+//     apiKey: 'AIzaSyCKT6E2RZHL6vVTUmKUvSVIes1v2ZaV1eA',
+//     appId: '1:394265327019:ios:08e7dd52ce117d2b0f4eee',
+//     messagingSenderId: '394265327019',
+//     projectId: 'kuuwaa-c1990',
+//     storageBucket: 'kuuwaa-c1990.firebasestorage.app',
+//     iosBundleId: 'com.dmwema.kuuwaa',
+//   );
+// =======
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAym7tzpeCNKaYJQvfNWbK_q8oPw_IauMg',
+    appId: '1:1035641961455:web:99b21d0a454e2c808c941a',
+    messagingSenderId: '1035641961455',
+    projectId: 'kuuwaa-b09e1',
+    authDomain: 'kuuwaa-b09e1.firebaseapp.com',
+    storageBucket: 'kuuwaa-b09e1.firebasestorage.app',
+    measurementId: 'G-E4P37Y1FRZ',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA1wWqLQrRHnlf-S25iQO-mpEBqZzFcwOI',
-    appId: '1:394265327019:android:3f77a57dc46317730f4eee',
-    messagingSenderId: '394265327019',
-    projectId: 'kuuwaa-c1990',
-    storageBucket: 'kuuwaa-c1990.firebasestorage.app',
+    apiKey: 'AIzaSyDh3gRXE6CdcjvSjCfnA1XJculENHSoTeo',
+    appId: '1:1035641961455:android:48bcf4985170c3268c941a',
+    messagingSenderId: '1035641961455',
+    projectId: 'kuuwaa-b09e1',
+    storageBucket: 'kuuwaa-b09e1.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCKT6E2RZHL6vVTUmKUvSVIes1v2ZaV1eA',
-    appId: '1:394265327019:ios:08e7dd52ce117d2b0f4eee',
-    messagingSenderId: '394265327019',
-    projectId: 'kuuwaa-c1990',
-    storageBucket: 'kuuwaa-c1990.firebasestorage.app',
+    apiKey: 'AIzaSyBRMgoATOu85Ty6sf-6LIm53zV3s7q5P5s',
+    appId: '1:1035641961455:ios:46c9da4221079c9c8c941a',
+    messagingSenderId: '1035641961455',
+    projectId: 'kuuwaa-b09e1',
+    storageBucket: 'kuuwaa-b09e1.firebasestorage.app',
     iosBundleId: 'com.dmwema.kuuwaa',
   );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBRMgoATOu85Ty6sf-6LIm53zV3s7q5P5s',
+    appId: '1:1035641961455:ios:46c9da4221079c9c8c941a',
+    messagingSenderId: '1035641961455',
+    projectId: 'kuuwaa-b09e1',
+    storageBucket: 'kuuwaa-b09e1.firebasestorage.app',
+    iosBundleId: 'com.dmwema.kuuwaa',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAym7tzpeCNKaYJQvfNWbK_q8oPw_IauMg',
+    appId: '1:1035641961455:web:c27b613ee1e4ce208c941a',
+    messagingSenderId: '1035641961455',
+    projectId: 'kuuwaa-b09e1',
+    authDomain: 'kuuwaa-b09e1.firebaseapp.com',
+    storageBucket: 'kuuwaa-b09e1.firebasestorage.app',
+    measurementId: 'G-F2CDFL72ZR',
+  );
+// >>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
 }
