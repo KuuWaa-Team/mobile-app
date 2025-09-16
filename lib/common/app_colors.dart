@@ -14,7 +14,7 @@ Map<int, Color> darkTheme = {
   900: const Color(0xE6261E39),
 };
 
-Map<int, Color> lightTheme = {
+Map<int, Color> lightTheme = {  
   50: const Color(0x1AFFFFFF),
   100: const Color(0x26FFFFFF),
   200: const Color(0x33FFFFFF),

@@ -75,6 +75,7 @@ class TemplateChoice extends StatelessWidget {
               );
 
               if (shouldUse == true) {
+                print(template.toJson());
                 onTemplateSelected(template);
               }
             },

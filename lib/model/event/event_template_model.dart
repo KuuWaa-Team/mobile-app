@@ -4,6 +4,9 @@ class EventTemplateModel {
   String? code;
   String? eventsAdapted;
   double? price;
+  double? widthImage;
+  double? heighImage;
+  bool? imageRounded;
   bool? hasAnimations;
   bool? imageRequired;
   String? imagePath;
@@ -14,7 +17,10 @@ class EventTemplateModel {
     this.id,
     this.name,
     this.code,
+    this.widthImage,
+    this.heighImage,
     this.price,
+    this.imageRounded,
     this.hasAnimations,
     this.eventsAdapted,
     this.imageRequired,
@@ -34,6 +40,13 @@ class EventTemplateModel {
     imagePath = json['imagePath'];
     imageRequired = json['imageRequired'];
     primaryColor = json['primaryColor'];
+    if (json['widthImage'] != null) {
+      widthImage = double.parse(json['widthImage'].toString());
+    }
+    if (json['widthImage'] != null) {
+      heighImage = double.parse(json['heighImage'].toString());
+    }
+    imageRounded = json['imageRounded'];
     secondaryColor = json['secondaryColor'];
   }
 
@@ -48,6 +61,9 @@ class EventTemplateModel {
     data['imagePath'] = imagePath;
     data['imageRequired'] = imageRequired;
     data['primaryColor'] = primaryColor;
+    data['widthImage'] = widthImage;
+    data['heighImage'] = heighImage;
+    data['imageRounded'] = imageRounded;
     data['secondaryColor'] = secondaryColor;
     return data;
   }

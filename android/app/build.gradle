@@ -1,14 +1,17 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+    id "com.google.firebase.crashlytics"
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
     }
-}
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -21,23 +24,18 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 android {
     namespace "com.dmwema.kuuwaa"
     compileSdk 35
-    compileSdkVersion 35
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 
     sourceSets {
@@ -51,22 +49,16 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+
     signingConfigs {
         release {
-<<<<<<< HEAD
-//<<<<<<< HEAD
             keyAlias 'release'
-//=======
-//            keyAlias 'my-key-alias'
-//>>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
-=======
-            keyAlias 'my-key-alias'
->>>>>>> 129ce5c0aa5db4549de9016b1fa8386c0d17bc7c
             keyPassword 'Qd2022'
-            storeFile file('../../my-release-key.keystore')
+            storeFile file('../../keystore.jks')
             storePassword 'Qd2022'
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
@@ -79,5 +71,6 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
+    implementation "com.google.firebase:firebase-auth:23.2.1"
 }

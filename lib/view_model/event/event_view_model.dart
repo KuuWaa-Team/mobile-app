@@ -123,8 +123,6 @@ class EventViewModel with ChangeNotifier{
 
   Future<bool> getQuestionsList(BuildContext context, int id) async {
     await _repository.getGameQuestions(context: context, id: id).then((value) {
-      print(value);
-
       if (value['success'] == true  ) {
         List gamesQuestions = value['data'];
         List<GameQuestionModel> gameQuestionsData = [];

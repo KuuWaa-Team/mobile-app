@@ -32,14 +32,11 @@ class _MapPickerPageState extends State<MapPickerPage> {
   void initState() {
     super.initState();
     googlePlace = GooglePlace("AIzaSyAvXtXVRVf5OMYoeRtzGc-6TIKc_TnL8ys");
-    print("------------------------- 1111111 ---------------------------");
     _determinePosition();
   }
 
   Future<void> _determinePosition() async {
-    print("------------------------- 2222222222 ---------------------------");
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    print("------------------------- 33333333333 ---------------------------");
     print(serviceEnabled);
     if (!serviceEnabled) {
       return;

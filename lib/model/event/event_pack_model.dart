@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class EventPackModel {
   int? id;
   String? name;
