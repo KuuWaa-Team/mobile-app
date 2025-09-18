@@ -25,6 +25,7 @@ class EventViewModel with ChangeNotifier{
   ApiResponse<dynamic> eventsList = ApiResponse.loading();
   ApiResponse<dynamic> packList = ApiResponse.loading();
   ApiResponse<List<GameQuestionModel>> questionsList = ApiResponse.loading();
+  ApiResponse<List<GameResultModel>> gameResultsList = ApiResponse.loading();
   ApiResponse<EventModel> event = ApiResponse.loading();
   List<EventCategoryModel> categories = [];
   List<EventTemplateModel> templates = [];
@@ -52,6 +53,11 @@ class EventViewModel with ChangeNotifier{
 
   setGameQuestionsList (ApiResponse<List<GameQuestionModel>> response) {
     questionsList = response;
+    notifyListeners();
+  }
+
+  setGameResultList (ApiResponse<List<GameResultModel>> response) {
+    gameResultsList = response;
     notifyListeners();
   }
 
@@ -123,6 +129,8 @@ class EventViewModel with ChangeNotifier{
 
   Future<bool> getQuestionsList(BuildContext context, int id) async {
     await _repository.getGameQuestions(context: context, id: id).then((value) {
+      print("valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue");
+      print(value);
       if (value['success'] == true  ) {
         List gamesQuestions = value['data'];
         List<GameQuestionModel> gameQuestionsData = [];
@@ -130,6 +138,13 @@ class EventViewModel with ChangeNotifier{
           gameQuestionsData.add(GameQuestionModel.fromJson(element));
         }
         setGameQuestionsList(ApiResponse.completed(gameQuestionsData));
+
+        List gamesResults = value['results'];
+        List<GameResultModel> gameResultsData = [];
+        for (var element in gamesResults) {
+          gameResultsData.add(GameResultModel.fromJson(element));
+        }
+        setGameResultList(ApiResponse.completed(gameResultsData));
       } else {
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
@@ -404,10 +419,12 @@ class EventViewModel with ChangeNotifier{
         setLoading(false);
         Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (route) => BottomBarScreen()), (route) => false);
       } else {
+        print("error");
         print(value);
         Utils.flushBarErrorMessage(Utils.errorMessage, context);
       }
     }).onError((error, stackTrace) {
+      print("error");
       print(error);
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);

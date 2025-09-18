@@ -63,6 +63,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   EventCategoryModel selectedCategory = EventCategoryModel(id: 0, name: "Catégorie");
   EventTemplateModel? eventTemplateModel;
   File? imageFile;
+  File? templateImageFile;
   DateTime? startDate;
   DateTime? endDate;
   LatLng? placeCoords;
@@ -126,6 +127,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           "title": titleController.text,
           "category_id": selectedCategory.id,
           "image": imageFile,
+          "template_image": templateImageFile,
           "details": detailsController.text,
           "category_name": categoryController.text,
           "start_date": startDate.toString(),
@@ -190,12 +192,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         addressController: addressController,
         detailsController: detailsController,
         imageFile: imageFile,
+        templateImageFile: templateImageFile,
         selectedCategory: selectedCategory,
         titleController: titleController,
         onTemplateSelected: (template) => setState(() => eventTemplateModel = template),
+        onTemplateImageSelected: (imageFile) => setState(() => templateImageFile = imageFile),
       ),
       Resume(
-        titles: ["Informations générales", "Lieu, date et heure", "Autres informations", "Modèle de design", "Vérifier et confirmer"],
+        titles: const ["Informations générales", "Lieu, date et heure", "Autres informations", "Modèle de design", "Vérifier et confirmer"],
         imageFile: imageFile,
         titleController: titleController,
         selectedCategory: selectedCategory,

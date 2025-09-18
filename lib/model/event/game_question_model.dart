@@ -26,3 +26,29 @@ class GameQuestionModel {
         'assertions': assertions?.map((e) => e.toJson()).toList(),
       };
 }
+
+class GameResultModel {
+  String? name;
+  double? percentage;
+  DateTime? date;
+
+  GameResultModel({
+    required this.name,
+    required this.percentage,
+    required this.date,
+  });
+
+  GameResultModel.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    if (json['percentage'] != null) {
+      percentage = double.parse(json['percentage'].toString());
+    }
+    if (json['date'] != null && json['date']['date'] != null) {
+      date = DateTime.parse(json['date']['date']);
+    }
+  }
+
+  String get dateTimeFormatted {
+    return "${date?.day}/${date?.month}/${date?.year} ${date?.hour}:${date?.minute.toString().padLeft(2, '0')}";
+  }
+}

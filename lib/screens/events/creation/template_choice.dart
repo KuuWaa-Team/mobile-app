@@ -15,7 +15,9 @@ class TemplateChoice extends StatelessWidget {
   final List<EventTemplateModel> templates;
   final EventTemplateModel? selectedTemplate;
   final ValueChanged<EventTemplateModel> onTemplateSelected;
+  final ValueChanged<File?> onTemplateImageSelected;
   final File? imageFile;
+  final File? templateImageFile;
   final EventCategoryModel selectedCategory;
   final TextEditingController detailsController;
   final TextEditingController titleController;
@@ -29,9 +31,11 @@ class TemplateChoice extends StatelessWidget {
     required this.templates,
     required this.selectedTemplate,
     required this.onTemplateSelected,
+    required this.onTemplateImageSelected,
     required this.selectedCategory,
     required this.detailsController,
     required this.imageFile,
+    required this.templateImageFile,
     required this.titleController,
     required this.startDate,
     required this.endDate,
@@ -67,7 +71,10 @@ class TemplateChoice extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => TemplateDetailsPage(
                     template: template,
-                    onUseTemplate: () {
+                    onUseTemplate: (File? templateImage) {
+                      if (templateImage != null) {
+                        onTemplateImageSelected(templateImage);
+                      }
                       Navigator.pop(context, true);
                     },
                   ),
@@ -75,7 +82,6 @@ class TemplateChoice extends StatelessWidget {
               );
 
               if (shouldUse == true) {
-                print(template.toJson());
                 onTemplateSelected(template);
               }
             },

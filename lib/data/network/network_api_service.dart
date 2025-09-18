@@ -135,7 +135,8 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future getMultipartApiResponse(String url, data, {required BuildContext context, required String filename}) async {
+  Future getMultipartApiResponse(String url, data, {required BuildContext context, required String filename,
+    String? secondaryFilename,}) async {
     dynamic responseJson;
     await getUserData ().then((value) {
       user = value;
@@ -154,12 +155,20 @@ class NetworkApiService extends BaseApiServices {
         if (key != "image") {
           request.fields[key] = value.toString();
         }
+        if (key != "template_image") {
+          request.fields[key] = value.toString();
+        }
       });
 
       request.headers['Content-Type'] = 'multipart/form-data';
 
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(filename, data[filename].path);
       request.files.add(multipartFile);
+
+      if (secondaryFilename != null) {
+        http.MultipartFile multipartFile2 = await http.MultipartFile.fromPath(secondaryFilename, data[secondaryFilename].path);
+        request.files.add(multipartFile2);
+      }
 
       http.StreamedResponse response = await request.send();
       var responseData = await http.Response.fromStream(response);

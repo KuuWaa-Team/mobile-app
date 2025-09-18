@@ -21,8 +21,6 @@ class AuthViewModel with ChangeNotifier{
   Future<bool> loginApi(dynamic data, BuildContext context) async {
     setLoading(true);
     await _repository.loginApi(data, context: context).then((value) {
-      print("*************************** Data *****************************");
-      print(value);
       setLoading(false);
       if (value['success'] == true  ) {
         UserModel user = UserModel.fromJson(value['user']);
@@ -60,9 +58,6 @@ class AuthViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      print("----------------------------------------------");
-      print(error);
-      print("----------------------------------------------");
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });
@@ -80,15 +75,12 @@ class AuthViewModel with ChangeNotifier{
         returnValue = true;
         Utils.toastMessage("Compte restauré avec succès");
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-          builder: (route) => LoginScreen()
+          builder: (route) => const LoginScreen()
         ), (route) => false);
       } else {
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      print("----------------------------------------------");
-      print(error);
-      print("----------------------------------------------");
       Utils.flushBarErrorMessage(Utils.errorMessage, context);
       setLoading(false);
     });

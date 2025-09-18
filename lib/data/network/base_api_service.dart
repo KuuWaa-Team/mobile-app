@@ -31,7 +31,8 @@ abstract class BaseApiServices {
     dynamic data,
     {
       required BuildContext context,
-      required String filename
+      required String filename,
+      String? secondaryFilename,
     }
   );
 

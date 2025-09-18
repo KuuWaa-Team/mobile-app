@@ -24,6 +24,7 @@ class _GameScreenState extends State<GameScreen> {
   AppColors appColors = AppColors();
   EventViewModel eventViewModel = EventViewModel();
   bool loading = false;
+  List<GameResultModel> gameResults = [];
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _GameScreenState extends State<GameScreen> {
                     builder: (context) => DetailsScreen(id: widget.event.id!),
                   ),
                 );
-              }
+              },
             ),
             ChangeNotifierProvider<EventViewModel>(
               create: (BuildContext context) => eventViewModel,
@@ -71,6 +72,7 @@ class _GameScreenState extends State<GameScreen> {
                       );
                     case Status.COMPLETED:
                       List<GameQuestionModel> questions = value.questionsList.data!;
+                      gameResults = value.gameResultsList.data ?? [];
                       return Expanded(
                       child: questions?.isNotEmpty == true
                   ? ListView.builder(
@@ -157,11 +159,25 @@ class _GameScreenState extends State<GameScreen> {
             )
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: appColors.btnColor,
-          onPressed: _showAddQuestionDialog,
-          child: const Icon(Icons.add, color: Colors.white,),
-        ),
+        floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: "resultsBtn",
+            backgroundColor: appColors.appLightColor,
+            onPressed: _showResultsModal,
+            child: const Icon(Icons.leaderboard, color: Colors.black),
+          ),
+          const SizedBox(height: 12),
+          FloatingActionButton(
+            heroTag: "addBtn",
+            backgroundColor: appColors.btnColor,
+            onPressed: _showAddQuestionDialog,
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        ],
+      ),
+
       ),
     );
   }
@@ -539,5 +555,63 @@ class _GameScreenState extends State<GameScreen> {
       },
     );
   }
+
+  void _showResultsModal() async {
+    gameResults.sort((a, b) => b.percentage!.compareTo(a.percentage!));
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Résultats du Quiz",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const Divider(),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: ListView.builder(
+                  itemCount: gameResults.length,
+                  itemBuilder: (context, index) {
+                    final r = gameResults[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: appColors.btnColor,
+                          child: Text(
+                            "${index + 1}",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        title: Text(r.name!),
+                        subtitle: Text("Le ${r.dateTimeFormatted}"),
+                        trailing: Text(
+                          "${r.percentage}%",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: index == 0 ? Colors.green : appColors.darkGreyText,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
 }

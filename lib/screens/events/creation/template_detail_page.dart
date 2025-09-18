@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart'; // <--- ajout cropper
+import 'package:image_cropper/image_cropper.dart';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/utils.dart';
@@ -12,7 +12,7 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 
 class TemplateDetailsPage extends StatefulWidget {
   final EventTemplateModel template;
-  final VoidCallback onUseTemplate;
+  final Function(File?) onUseTemplate; // Modifié de VoidCallback à Function(File?)
 
   const TemplateDetailsPage({
     Key? key,
@@ -40,17 +40,15 @@ class _TemplateDetailsPageState extends State<TemplateDetailsPage> {
   }
 
   Future<File?> _cropImage(String path) async {
-    // ratio défini par le template
     final ratioX = widget.template.widthImage ?? 1;
     final ratioY = widget.template.heighImage ?? 1;
 
-    final cropStyle = widget.template.imageRounded == true
+    final cropStyleToApply = widget.template.imageRounded == true
         ? CropStyle.circle
         : CropStyle.rectangle;
 
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: path,
-      // cropStyle: cropStyle,
       aspectRatio: CropAspectRatio(ratioX: ratioX.toDouble(), ratioY: ratioY.toDouble()),
       uiSettings: [
         AndroidUiSettings(
@@ -59,10 +57,12 @@ class _TemplateDetailsPageState extends State<TemplateDetailsPage> {
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: true,
+          cropStyle: cropStyleToApply, 
         ),
         IOSUiSettings(
           title: 'Recadrer l’image',
           aspectRatioLockEnabled: true,
+          cropStyle: cropStyleToApply, 
         ),
       ],
     );
@@ -72,64 +72,7 @@ class _TemplateDetailsPageState extends State<TemplateDetailsPage> {
   }
 
   void _handleUseTemplate() {
-    if (widget.template.imageRequired == true) {
-      _showImageRequiredDialog();
-    } else {
-      widget.onUseTemplate();
-    }
-  }
-
-  void _showImageRequiredDialog() {
-    final appColors = AppColors();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Image requise"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Ce template exige une image. Veuillez en uploader une avant de continuer."),
-              const SizedBox(height: 12),
-              if (_selectedImage != null)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(widget.template.imageRounded == true ? 100 : 8),
-                  child: Image.file(_selectedImage!, height: 120, fit: BoxFit.cover),
-                ),
-              const SizedBox(height: 12),
-              ElevatedButton.icon(
-                onPressed: _pickImage,
-                icon: const Icon(Icons.upload),
-                label: const Text("Uploader une image"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: appColors.btnColor,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Annuler"),
-            ),
-            ElevatedButton(
-              onPressed: _selectedImage == null
-                  ? null
-                  : () {
-                Navigator.pop(context);
-                widget.onUseTemplate(); // on continue
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: appColors.btnColor,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text("Continuer"),
-            ),
-          ],
-        );
-      },
-    );
+    widget.onUseTemplate(_selectedImage);
   }
 
   @override
@@ -151,100 +94,124 @@ class _TemplateDetailsPageState extends State<TemplateDetailsPage> {
         backgroundColor: appColors.btnColor,
         foregroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width - 180,
-                decoration: BoxDecoration(
-                  boxShadow: [Utils.customShadow()],
-                ),
-                child: Image.network(
-                  "${AppUrl.domainName}/images/templates/${widget.template.imagePath}",
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            MyTextView(
-              widget.template.name ?? "",
-              textAligntNew: TextAlign.center,
-              styleNew: MyTextStyle(
-                colorNew: appColors.btnColor,
-                fontWeightNew: FontWeight.w600,
-                size: ResponsiveFlutter.of(context).fontSize(2),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            _buildInfoRow(
-              icon: Icons.monetization_on,
-              text: "${widget.template.price} crédits / invitation",
-              context: context,
-            ),
-
-            if (widget.template.hasAnimations == true)
-              _buildInfoRow(
-                icon: Icons.animation,
-                text: "Inclut des animations",
-                context: context,
-              ),
-
-            if (widget.template.eventsAdapted != null)
-              _buildInfoRow(
-                icon: Icons.event_available,
-                text: "Adapté pour ${widget.template.eventsAdapted}",
-                context: context,
-              ),
-
-            _buildInfoRow(
-              icon: widget.template.imageRequired == true
-                  ? Icons.image
-                  : Icons.image_not_supported,
-              text: "Image${widget.template.imageRequired != true ? " non" : ""} requise",
-              context: context,
-            ),
-
-            if (widget.template.primaryColor != null)
-              _buildColorRow(
-                label: "Couleur principale",
-                color: Utils.hexToColor(widget.template.primaryColor!),
-                hex: widget.template.primaryColor!,
-                context: context,
-              ),
-
-            if (widget.template.secondaryColor != null)
-              _buildColorRow(
-                label: "Couleur secondaire",
-                color: Utils.hexToColor(widget.template.secondaryColor!),
-                hex: widget.template.secondaryColor!,
-                context: context,
-              ),
-
-            const SizedBox(height: 30),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.check, color: Colors.white),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: appColors.btnColor,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 180,
+                  decoration: BoxDecoration(
+                    boxShadow: [Utils.customShadow()],
+                  ),
+                  child: Image.network(
+                    "${AppUrl.domainName}/images/templates/${widget.template.imagePath}",
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                onPressed: _handleUseTemplate,
-                label: const Text("Utiliser ce modèle",
-                    style: TextStyle(fontSize: 16, color: Colors.white)),
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+        
+              MyTextView(
+                widget.template.name ?? "",
+                textAligntNew: TextAlign.center,
+                styleNew: MyTextStyle(
+                  colorNew: appColors.btnColor,
+                  fontWeightNew: FontWeight.w600,
+                  size: ResponsiveFlutter.of(context).fontSize(2),
+                ),
+              ),
+              const SizedBox(height: 12),
+        
+              _buildInfoRow(
+                icon: Icons.monetization_on,
+                text: "${widget.template.price} crédits / invitation",
+                context: context,
+              ),
+        
+              if (widget.template.hasAnimations == true)
+                _buildInfoRow(
+                  icon: Icons.animation,
+                  text: "Inclut des animations",
+                  context: context,
+                ),
+        
+              if (widget.template.eventsAdapted != null)
+                _buildInfoRow(
+                  icon: Icons.event_available,
+                  text: "Adapté pour ${widget.template.eventsAdapted}",
+                  context: context,
+                ),
+        
+              _buildInfoRow(
+                icon: widget.template.imageRequired == true
+                    ? Icons.image
+                    : Icons.image_not_supported,
+                text: "Image${widget.template.imageRequired != true ? " non" : ""} requise",
+                context: context,
+              ),
+        
+              if (widget.template.primaryColor != null)
+                _buildColorRow(
+                  label: "Couleur principale",
+                  color: Utils.hexToColor(widget.template.primaryColor!),
+                  hex: widget.template.primaryColor!,
+                  context: context,
+                ),
+        
+              if (widget.template.secondaryColor != null)
+                _buildColorRow(
+                  label: "Couleur secondaire",
+                  color: Utils.hexToColor(widget.template.secondaryColor!),
+                  hex: widget.template.secondaryColor!,
+                  context: context,
+                ),
+
+
+              const SizedBox(height: 20),
+              // Le texte suivant et le bouton d'upload ne devraient s'afficher que si widget.template.imageRequired == true
+              if (widget.template.imageRequired == true) ...[
+                const Text("Ce template exige une image. Veuillez en uploader une avant de continuer."),
+                const SizedBox(height: 12),
+                if (_selectedImage != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(widget.template.imageRounded == true ? 100 : 8),
+                    child: Image.file(_selectedImage!, height: 120, fit: BoxFit.cover),
+                  ),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  onPressed: _pickImage,
+                  icon: const Icon(Icons.upload),
+                  label: const Text("Uploader une image"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: appColors.btnColor,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
+              const SizedBox(height: 30),
+        
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.check, color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: appColors.btnColor,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: widget.template.imageRequired == true && _selectedImage == null ? null : _handleUseTemplate,
+                  label: const Text("Utiliser ce modèle",
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
