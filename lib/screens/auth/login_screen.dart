@@ -91,15 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
           final userData = {
             "firebase_token": idToken,
             "email": email,
+            "password": "password",
             "displayName": name,
             "photoUrl": avatar,
             "provider": "google",
             "uid": user?.uid,
             "phoneId": phoneId
           };
-
-          print("*************************** User Data *****************************");
-          print(userData);
 
           await authViewModel.loginApi(userData, context);
         });
@@ -108,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
     catch (error) {
       print("*************************** Expt *****************************");
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
     } finally {
       setState(() {

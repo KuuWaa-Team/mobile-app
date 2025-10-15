@@ -2,7 +2,7 @@ name: kuuwaa
 description: Music event create and booking
 
 publish_to: 'none'
-version: 1.0.25+25
+version: 2.0.0+100
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   flutter_datetime_picker:
   cupertino_icons: ^1.0.2               # For ios icons
   fluttertoast: ^8.0.8                  # For show toast massage
