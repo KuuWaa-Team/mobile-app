@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId "com.dmwema.kuuwaa"
-        minSdkVersion 23
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 35
         versionCode 3
         versionName "2.0.1"
