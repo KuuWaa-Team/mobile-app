@@ -59,7 +59,7 @@ class WalletViewModel with ChangeNotifier{
     }).onError((error, stackTrace) {
       print("***************** ERROR ********************");
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
 
@@ -85,7 +85,7 @@ class WalletViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
     });
     return true;

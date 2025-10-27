@@ -12,7 +12,7 @@ class BookViewModel with ChangeNotifier{
       return true;
     });
     // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   Utils.flushBarErrorMessage(error.toString(), context);
     //   return false;
     // });
     return false;

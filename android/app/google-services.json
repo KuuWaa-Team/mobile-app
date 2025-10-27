@@ -1,51 +1,51 @@
 {
   "project_info": {
-    "project_number": "564288324525",
-    "project_id": "kuuwaa-auth",
-    "storage_bucket": "kuuwaa-auth.firebasestorage.app"
+    "project_number": "20793118775",
+    "project_id": "kuuwaa-fbc0b",
+    "storage_bucket": "kuuwaa-fbc0b.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:564288324525:android:21599392291849173f1724",
+        "mobilesdk_app_id": "1:20793118775:android:2d903c54677bfd1b202fb2",
         "android_client_info": {
           "package_name": "com.dmwema.kuuwaa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "564288324525-2vv21vvvc2gpu56rur4hhrg7edujbc69.apps.googleusercontent.com",
+          "client_id": "20793118775-4oj80sh8oud09uduse9fr70ov235qn4k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dmwema.kuuwaa",
-            "certificate_hash": "df12384285849aeabc7915432d37e848509b639a"
+            "certificate_hash": "4cfd03f36d58248b97c401ccd3108947691eee63"
           }
         },
         {
-          "client_id": "564288324525-mg49knev21seuookptkdeitihuvig2eb.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "20793118775-nluuorv7sfnc4ftmtrhkq3onn6r8okj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dmwema.kuuwaa",
+            "certificate_hash": "631b6cfdb89b7305a8e63b9ea638feda1aa6f900"
+          }
+        },
+        {
+          "client_id": "20793118775-vgp13j3m5urdqiaf8liuogc7ensop2kf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dmwema.kuuwaa",
+            "certificate_hash": "d0127bb6ebd495d4d76e670cfed1f1f8c02c69a0"
+          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAOO3PxlZy37gn_JPCIVdEETLobI9Jq9kc"
+          "current_key": "AIzaSyDATpzOaCVALulYbv4587LOh4-HJ6CMyuM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "564288324525-g2jrju5r5bpqoeq4ernv279aaph07o9t.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "564288324525-ech4k0t1qvps66e35bideln8l74hvste.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.dmwema.kuuwaa"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
