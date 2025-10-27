@@ -22,7 +22,7 @@
         android:label="KuuWaa">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAvXtXVRVf5OMYoeRtzGc-6TIKc_TnL8ys" />
+            android:value="AIzaSyCv184kDIZmum-L9mRwLgurIcbQHxgt7zc" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

@@ -169,7 +169,7 @@ class EventRepository {
 
   Future<dynamic> createEventApi ({required BuildContext context, required Map data}) async {
     try  {
-      dynamic response = await _apiServices.getMultipartApiResponse(AppUrl.eventEndPoint, data, context: context, filename: 'image', secondaryFilename: 'template_image');
+      dynamic response = await _apiServices.getMultipartApiResponse(AppUrl.eventEndPoint, data, context: context, filename: 'image', secondaryFilename: data['template_image'] == null ? null : 'template_image');
       return response;
     } catch(e) {
       rethrow;

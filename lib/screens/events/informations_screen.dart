@@ -77,7 +77,7 @@ class _InformationsScreenState extends State<InformationsScreen> {
         '&zoom=16'
         '&size=600x300'
         '&markers=color:red%7C$latitude,$longitude'
-        '&key=AIzaSyAvXtXVRVf5OMYoeRtzGc-6TIKc_TnL8ys';
+        '&key=AIzaSyCv184kDIZmum-L9mRwLgurIcbQHxgt7zc';
 
     return Container(
       decoration: BoxDecoration(

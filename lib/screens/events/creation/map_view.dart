@@ -44,9 +44,9 @@ class _MapViewScreenState extends State<MapViewScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Localisation sur la carte')),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : location == null
-          ? Center(child: Text("Adresse non localisée"))
+          ? const Center(child: Text("Adresse non localisée"))
           : GoogleMap(
         initialCameraPosition: CameraPosition(
           target: location!,
@@ -54,7 +54,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
         ),
         markers: {
           Marker(
-            markerId: MarkerId("event_location"),
+            markerId: const MarkerId("event_location"),
             position: location!,
           )
         },

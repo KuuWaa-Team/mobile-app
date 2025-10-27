@@ -14,7 +14,6 @@ import 'package:kuuwaa/model/event/game_question_model.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/repository/event/event_repository.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
-import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class EventViewModel with ChangeNotifier{
@@ -421,10 +420,11 @@ class EventViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
-    }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
-      setLoading(false);
     });
+    //     .onError((error, stackTrace) {
+    //   Utils.flushBarErrorMessage(error.toString(), context);
+    //   setLoading(false);
+    // });
   }
 
   Future<bool> editEventImageApi (BuildContext context, var image, int id) async {

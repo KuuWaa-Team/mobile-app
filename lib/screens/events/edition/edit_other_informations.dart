@@ -159,12 +159,12 @@ class _EditOtherInformationsState extends State<EditOtherInformations> {
                     ),
                   ),
                   SizedBox(height: ResponsiveFlutter.of(context).verticalScale(20)),
-                  specifications.map((spec) => Container(
+                  ...specifications.map((spec) => Container(
                     padding: EdgeInsets.symmetric(
                       vertical: ResponsiveFlutter.of(context).moderateScale(10),
                       horizontal: ResponsiveFlutter.of(context).moderateScale(15),
                     ),
-                    margin: EdgeInsets.only(bottom: 8),
+                    margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
                       color: appColors.appLightColor,
                       borderRadius: BorderRadius.circular(15),
@@ -186,14 +186,14 @@ class _EditOtherInformationsState extends State<EditOtherInformations> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              widget.removeSpecification(spec);
+                              specifications.remove(spec);
                             });
                           },
                           child: Icon(Icons.close, color: appColors.btnColor, size: 18,),
                         )
                       ],
                     ),
-                  )),
+                  )).toList(),
                   const SizedBox(height: 20,),
                   GestureDetector(
                     onTap: () async {
