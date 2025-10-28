@@ -28,7 +28,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   List<CommonModel>? settingsList = [
     CommonModel(image: ImagePath.question, title: Strings.helpAndSupport),
-    CommonModel(image: ImagePath.lock, title: Strings.privacyPolicy +  "ssss"),
+    CommonModel(image: ImagePath.lock, title: Strings.privacyPolicy),
     // CommonModel(image: ImagePath.question, title: Strings.termsAndCondition),
     // CommonModel(image: ImagePath.info, title: Strings.aboutUs),
   ];

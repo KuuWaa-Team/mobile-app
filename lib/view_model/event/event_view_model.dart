@@ -191,7 +191,6 @@ class EventViewModel with ChangeNotifier{
 
   Future<bool> removeGameAssertion(BuildContext context, int id) async {
     bool success = false;
-    print("1111");
     await _repository.removeGameAssertion(context: context, id: id).then((value) {
       print(value);
     }).onError((error, stackTrace) {
@@ -420,11 +419,10 @@ class EventViewModel with ChangeNotifier{
       } else {
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage("Une erreir est survenue.", context);
+      setLoading(false);
     });
-    //     .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(error.toString(), context);
-    //   setLoading(false);
-    // });
   }
 
   Future<bool> editEventImageApi (BuildContext context, var image, int id) async {
@@ -492,7 +490,7 @@ class EventViewModel with ChangeNotifier{
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) =>  BottomBarScreen(),
+            builder: (context) =>  const BottomBarScreen(),
           ),
               (route) => false,
         );
@@ -546,7 +544,6 @@ class EventViewModel with ChangeNotifier{
     setEvent(ApiResponse.loading());
     setLoading(true);
     await _repository.getEventDetailApi(context: context, id: id, userId: userId).then((value) {
-      print(value);
       setLoading(false);
       setEvent(ApiResponse.completed(EventModel.fromJson(value)));
     }).onError((error, stackTrace) {

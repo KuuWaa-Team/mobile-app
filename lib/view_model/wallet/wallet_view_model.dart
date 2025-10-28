@@ -6,6 +6,7 @@ import 'package:kuuwaa/data/response/api_response.dart';
 import 'package:kuuwaa/model/wallet/operation_model.dart';
 import 'package:kuuwaa/repository/wallet/wallet_repository.dart';
 import 'package:kuuwaa/screens/add_wallet_success_screen.dart';
+import 'package:kuuwaa/screens/bottom_bar_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WalletViewModel with ChangeNotifier{
@@ -45,6 +46,12 @@ class WalletViewModel with ChangeNotifier{
               await launchUrl(uri, mode: LaunchMode.externalApplication);
             } else {
               Utils.flushBarErrorMessage("Impossible d'ouvrir le lien de paiement.", context);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const BottomBarScreen()),
+                    (route) => false,
+              );
+              return;
             }
           }
           Navigator.pushAndRemoveUntil(
@@ -57,8 +64,6 @@ class WalletViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      print("***************** ERROR ********************");
-      print(error);
       Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
@@ -86,7 +91,6 @@ class WalletViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context);
-      print(error);
     });
     return true;
   }

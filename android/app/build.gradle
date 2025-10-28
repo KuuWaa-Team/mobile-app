@@ -26,7 +26,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.dmwema.kuuwaa"
-    compileSdk 35
+    compileSdk 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -45,9 +45,9 @@ android {
     defaultConfig {
         applicationId "com.dmwema.kuuwaa"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 35
-        versionCode 106
-        versionName "3.0.5"
+        targetSdkVersion 36
+        versionCode 107
+        versionName "3.0.6"
     }
 
     signingConfigs {

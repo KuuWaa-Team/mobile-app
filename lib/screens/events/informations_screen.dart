@@ -17,6 +17,8 @@ import 'package:kuuwaa/screens/events/edition/edit_general_informations.dart';
 import 'package:kuuwaa/screens/events/edition/edit_place_date_hour.dart';
 import 'package:kuuwaa/view_model/event/event_view_model.dart';
 
+import 'edition/edit_other_informations.dart';
+
 class InformationsScreen extends StatefulWidget {
   EventModel event;
   InformationsScreen({Key? key, required this.event}) : super(key: key);
@@ -354,7 +356,7 @@ class _InformationsScreenState extends State<InformationsScreen> {
                             ),
                             IconButton(
                               onPressed: () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (route) => EditPlaceDateHour(event: widget.event)));
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (route) => EditOtherInformations(event: widget.event)));
                               },
                               icon: Icon(Icons.edit, color: appColors.btnColor,),
                             )
@@ -445,6 +447,7 @@ class _InformationsScreenState extends State<InformationsScreen> {
                             size: ResponsiveFlutter.of(context).fontSize(1.6),
                           ),
                         ),
+                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
                         MyTextView(
                           "Inclu des animations ?",
                           textAligntNew: TextAlign.start,
@@ -454,7 +457,7 @@ class _InformationsScreenState extends State<InformationsScreen> {
                             size: ResponsiveFlutter.of(context).fontSize(1.5),
                           ),
                         ),
-                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(10)),
+                        SizedBox(height: ResponsiveFlutter.of(context).verticalScale(1)),
                         MyTextView(
                           widget.event.template!.hasAnimations == true ? "Oui" : "Non",
                           maxLinesNew: 20,
