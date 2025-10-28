@@ -41,7 +41,7 @@ class BeverageViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -65,7 +65,7 @@ class BeverageViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -90,7 +90,7 @@ class BeverageViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;

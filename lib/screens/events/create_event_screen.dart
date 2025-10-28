@@ -123,6 +123,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       if (step < 4) {
         controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.linear);
       } else {
+        print("1111111111111111111111");
         final data = {
           "title": titleController.text,
           "category_id": selectedCategory.id,
@@ -140,6 +141,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           "template_id": eventTemplateModel!.id,
           "user_uid": user.uid,
         };
+        print("222222222222222222222222222");
         await eventViewModel.createEventApi(context, data);
       }
     }

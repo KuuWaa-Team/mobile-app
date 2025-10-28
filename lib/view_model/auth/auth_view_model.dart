@@ -58,7 +58,7 @@ class AuthViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
 
@@ -81,7 +81,7 @@ class AuthViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
 

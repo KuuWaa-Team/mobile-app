@@ -14,7 +14,6 @@ import 'package:kuuwaa/model/event/game_question_model.dart';
 import 'package:kuuwaa/model/user/user_model.dart';
 import 'package:kuuwaa/repository/event/event_repository.dart';
 import 'package:kuuwaa/screens/bottom_bar_screen.dart';
-import 'package:kuuwaa/screens/events/details_screen.dart';
 import 'package:kuuwaa/view_model/user/user_view_model.dart';
 
 class EventViewModel with ChangeNotifier{
@@ -99,7 +98,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -118,10 +117,10 @@ class EventViewModel with ChangeNotifier{
         setCategories(categoriesData);
         returnData = categoriesData;
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return returnData;
@@ -146,10 +145,10 @@ class EventViewModel with ChangeNotifier{
         }
         setGameResultList(ApiResponse.completed(gameResultsData));
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
       setLoading(false);
     });
@@ -167,7 +166,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return success;
@@ -184,7 +183,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return success;
@@ -192,11 +191,10 @@ class EventViewModel with ChangeNotifier{
 
   Future<bool> removeGameAssertion(BuildContext context, int id) async {
     bool success = false;
-    print("1111");
     await _repository.removeGameAssertion(context: context, id: id).then((value) {
       print(value);
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
       setLoading(false);
     });
@@ -208,7 +206,7 @@ class EventViewModel with ChangeNotifier{
     await _repository.setGameAssertionCorrect(context: context, id: id).then((value) {
       print(value);
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
       setLoading(false);
     });
@@ -227,7 +225,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return success;
@@ -245,7 +243,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return returnValue;
@@ -262,7 +260,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return returnValue;
@@ -279,7 +277,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return returnValue;
@@ -296,7 +294,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return success;
@@ -313,7 +311,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return success;
@@ -330,7 +328,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return success;
@@ -349,10 +347,10 @@ class EventViewModel with ChangeNotifier{
         }
         setTemplates(templatesData);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
       setLoading(false);
     });
@@ -374,10 +372,10 @@ class EventViewModel with ChangeNotifier{
         setPacksList(ApiResponse.completed(packsData));
         setLoading(false);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -402,10 +400,10 @@ class EventViewModel with ChangeNotifier{
         setFeatures(featuresData);
         setLoading(false);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -419,14 +417,10 @@ class EventViewModel with ChangeNotifier{
         setLoading(false);
         Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (route) => BottomBarScreen()), (route) => false);
       } else {
-        print("error");
-        print(value);
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      print("error");
-      print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage("Une erreir est survenue.", context);
       setLoading(false);
     });
   }
@@ -443,10 +437,10 @@ class EventViewModel with ChangeNotifier{
         Utils.toastMessage("Image modifiée avec succès");
         setLoading(false);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -459,10 +453,10 @@ class EventViewModel with ChangeNotifier{
       if (value['success'] == true  ) {
         setLoading(false);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -476,11 +470,11 @@ class EventViewModel with ChangeNotifier{
         response = value;
         // setLoading(false);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     });
     // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   Utils.flushBarErrorMessage(error.toString(), context);
     //   setLoading(false);
     // });
     return response;
@@ -496,16 +490,16 @@ class EventViewModel with ChangeNotifier{
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) =>  BottomBarScreen(),
+            builder: (context) =>  const BottomBarScreen(),
           ),
               (route) => false,
         );
         // setLoading(false);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return response;
@@ -517,7 +511,7 @@ class EventViewModel with ChangeNotifier{
     await _repository.checkPayStatus(context: context, id: event.id!, orderNumber: orderNumber).then((value) {
       response = value;
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return response;
@@ -536,11 +530,11 @@ class EventViewModel with ChangeNotifier{
         };
         setLoading(false);
       } else {
-        Utils.flushBarErrorMessage(Utils.errorMessage, context);
+        Utils.flushBarErrorMessage("Une erreur est survenue", context);
         setLoading(false);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return returnValue;
@@ -550,11 +544,10 @@ class EventViewModel with ChangeNotifier{
     setEvent(ApiResponse.loading());
     setLoading(true);
     await _repository.getEventDetailApi(context: context, id: id, userId: userId).then((value) {
-      print(value);
       setLoading(false);
       setEvent(ApiResponse.completed(EventModel.fromJson(value)));
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;

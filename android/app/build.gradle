@@ -26,7 +26,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.dmwema.kuuwaa"
-    compileSdk 35
+    compileSdk 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -45,9 +45,9 @@ android {
     defaultConfig {
         applicationId "com.dmwema.kuuwaa"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 35
-        versionCode 3
-        versionName "2.0.1"
+        targetSdkVersion 36
+        versionCode 107
+        versionName "3.0.6"
     }
 
     signingConfigs {
@@ -76,4 +76,5 @@ flutter {
 dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
     implementation "com.google.firebase:firebase-auth:23.2.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0"
 }

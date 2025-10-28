@@ -50,7 +50,7 @@ class Utils {
     );
   }
 
-  static String errorMessage = "Une erreur est survénue, veuillez réssayer plutard.";
+  // static String errorMessage = "Une erreur est survénue, veuillez réssayer plutard.";
 
   /// Dark Status Bar ------------>>
   void darkStatusBar() {

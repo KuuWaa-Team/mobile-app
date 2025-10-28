@@ -365,9 +365,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                                 const Column(
                                                                   mainAxisSize: MainAxisSize.min,
                                                                   children: [
-                                                                    Text("Êtes vous sûr de vouloir supprimer cet évenement ?", style: TextStyle(
-                                                                        fontWeight: FontWeight.bold
-                                                                    ), textAlign: TextAlign.center,),
+                                                                    Text(
+                                                                      "Souhaitez-vous vraiment supprimer cet événement ?",
+                                                                      style: TextStyle(
+                                                                        fontWeight: FontWeight.bold,
+                                                                      ),
+                                                                      textAlign: TextAlign.center,
+                                                                    ),
+                                                                    SizedBox(height: 8),
+                                                                    Text(
+                                                                      "Toutes les données associées à cet événement seront également supprimées de manière définitive.",
+                                                                      style: TextStyle(
+                                                                        color: Colors.redAccent,
+                                                                        fontSize: 13,
+                                                                      ),
+                                                                      textAlign: TextAlign.center,
+                                                                    ),
                                                                   ],
                                                                 ),
                                                                 const SizedBox(height: 20,),
@@ -399,7 +412,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                                       },
                                                                       child: CommonButton(
                                                                         loading: false,
-                                                                        btnColor: appColors.appLightColor,
+                                                                        btnColor: appColors.white,
+                                                                        textColor: appColors.black,
                                                                         title: "Annuler",
                                                                         padding: const EdgeInsets.symmetric(horizontal: 20),
                                                                       ),

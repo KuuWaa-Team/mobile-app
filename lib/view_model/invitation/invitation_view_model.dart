@@ -60,7 +60,7 @@ class InvitationViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -84,7 +84,7 @@ class InvitationViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -97,7 +97,7 @@ class InvitationViewModel with ChangeNotifier{
       setLoading(false);
       setInvitation(ApiResponse.completed(InvitationModel.fromJson(value)));
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -229,7 +229,7 @@ class InvitationViewModel with ChangeNotifier{
       }
     });
     // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(Utils.errorMessage, context);
+    //   Utils.flushBarErrorMessage(error.toString(), context);
     //   print(error);
     //   setLoading(false);
     // });
@@ -252,7 +252,7 @@ class InvitationViewModel with ChangeNotifier{
         Navigator.pop(context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
       setLoading(false);
     });
@@ -277,7 +277,7 @@ class InvitationViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -294,7 +294,7 @@ class InvitationViewModel with ChangeNotifier{
         setLoading(false);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return success;
@@ -319,7 +319,7 @@ class InvitationViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;
@@ -434,7 +434,7 @@ class InvitationViewModel with ChangeNotifier{
       setLoading(false);
       return value;
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return null;
@@ -583,7 +583,7 @@ class InvitationViewModel with ChangeNotifier{
         }
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(Utils.errorMessage, context);
+      Utils.flushBarErrorMessage(error.toString(), context);
       setLoading(false);
     });
     return true;

@@ -10,6 +10,20 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+
 
     <application
         android:allowBackup="false"
@@ -22,7 +36,7 @@
         android:label="KuuWaa">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAvXtXVRVf5OMYoeRtzGc-6TIKc_TnL8ys" />
+            android:value="AIzaSyCv184kDIZmum-L9mRwLgurIcbQHxgt7zc" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
