@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   flutter_datetime_picker:
   cupertino_icons: ^1.0.2               # For ios icons
   fluttertoast: ^8.0.8                  # For show toast massage
@@ -33,7 +34,7 @@ dependencies:
   shimmer: ^3.0.0
   timer_count_down: ^2.2.2
   flutter_launcher_icons: ^0.13.1
-  intl: ^0.20.2                         # For Date and Time
+  intl: ^0.20.2                      # For Date and Time
   crypto: ^3.0.1                        # For encrypt and decrypt data
   url_launcher: ^6.0.18
   flutter_native_splash: ^2.4.0
