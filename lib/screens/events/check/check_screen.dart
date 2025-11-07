@@ -221,7 +221,7 @@ class _CheckScreenState extends State<CheckScreen> {
     super.dispose();
   }
 
-  void _handleScannedCode(String code) {
+  void _handleScannedCode(String code) async {
     bool unknown = true;
     Map result = {};
     try {
@@ -236,7 +236,20 @@ class _CheckScreenState extends State<CheckScreen> {
     } else if (int.parse(result['kwEv'].toString().replaceAll('KW000', '')) != widget.event.id!) {
       _showDialogError("Vous essayez de vérifier une invitation d'un autre événement.");
     } else {
-      _showDialogValid(result);
+      String code = result['code'];
+      setState(() {
+        loadingCode = true;
+      });
+      Map data = {
+        "code": code
+      };
+      await invitationViewModel.checkInvitation(context, data, widget.event).then((value) {
+        setState(() {
+          loadingCode = false;
+          _codeController.text = "";
+        });
+      });
+      // _showDialogValid(result);
     }
   }
 

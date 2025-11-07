@@ -2,7 +2,7 @@ name: kuuwaa
 description: Music event create and booking
 
 publish_to: 'none'
-version: 4.0.2+202
+version: 4.0.3+203
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
