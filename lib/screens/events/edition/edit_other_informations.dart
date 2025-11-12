@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -67,6 +69,7 @@ class _EditOtherInformationsState extends State<EditOtherInformations> {
       backgroundColor: appColors.appMediumColor,
       body: SafeArea(
         top: false,
+        bottom: !Platform.isIOS,
         child: Column(
           children: [
             commonAppBar(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
@@ -110,6 +111,7 @@ class _InformationsScreenState extends State<InformationsScreen> {
     );
     return SafeArea(
         top: false,
+bottom: !Platform.isIOS,
         child: Scaffold(
           backgroundColor: appColors.appMediumColor,
           body: Column(

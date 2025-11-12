@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -83,6 +86,7 @@ class _EditPlaceDateHourState extends State<EditPlaceDateHour> {
       backgroundColor: appColors.appMediumColor,
       body: SafeArea(
         top: false,
+        bottom: !Platform.isIOS,
         child: Column(
           children: [
             commonAppBar(

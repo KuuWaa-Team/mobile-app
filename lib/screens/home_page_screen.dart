@@ -1,6 +1,7 @@
 import 'package:confetti/confetti.dart';
 import 'package:kuuwaa/view_model/eventAdmin/event_admin_view_model.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -82,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: SafeArea(
         top: false,
+bottom: !Platform.isIOS,
         child: Scaffold(
           backgroundColor: appColors.appMediumColor,
           body: Column(

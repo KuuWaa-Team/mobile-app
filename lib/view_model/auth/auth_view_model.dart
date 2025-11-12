@@ -22,7 +22,7 @@ class AuthViewModel with ChangeNotifier{
     setLoading(true);
     await _repository.loginApi(data, context: context).then((value) {
       setLoading(false);
-      if (value['success'] == true  ) {
+      if (value['success'] == true ) {
         UserModel user = UserModel.fromJson(value['user']);
         if (user.deletedAt == null) {
           user.token = value['token'];
@@ -37,10 +37,12 @@ class AuthViewModel with ChangeNotifier{
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (route) => DeletedAccountScreen(id: user.id!, deletedAt: user.deletedAt!)), (route)=>false);
         }
       } else {
-        Utils.flushBarErrorMessage(value['message'], context);
+        if (value['message'].toString().isNotEmpty) {
+          Utils.flushBarErrorMessage(value['message'], context);
+        }
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -58,7 +60,7 @@ class AuthViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
 
@@ -81,7 +83,7 @@ class AuthViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
 

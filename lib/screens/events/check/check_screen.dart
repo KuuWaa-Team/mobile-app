@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/check_dialog.dart';
 import 'package:kuuwaa/common/common_button.dart';
@@ -55,6 +56,7 @@ class _CheckScreenState extends State<CheckScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
+bottom: !Platform.isIOS,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Column(
@@ -249,8 +251,18 @@ class _CheckScreenState extends State<CheckScreen> {
         message: message,
         status: "Erreur",
         icon: CupertinoIcons.xmark_circle_fill,
-        onClose: () => setState(() => checked = false),
-        onValidate: () => setState(() => checked = false),
+        onClose: () {
+          setState(() {
+            checked = false;
+          });
+          Navigator.pop(context);
+        },
+        onValidate: () {
+          setState(() {
+            checked = false;
+          });
+          Navigator.pop(context);
+        },
         btnTitle: "D'accord",
       ),
     );

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
@@ -14,6 +15,7 @@ import 'package:kuuwaa/responsive/responsive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:kuuwaa/service/notifications_service.dart';
 import 'package:kuuwaa/view_model/auth/auth_view_model.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -25,7 +27,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   AppColors appColors = AppColors();
   ImagePath imagePath = ImagePath();
-  bool loading = false;
+  bool loadingGoogle = false;
+  bool loadingApple = false;
   AuthViewModel authViewModel = AuthViewModel();
   NotificationsService? notificationsService;
 
@@ -55,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleGoogleSignIn() async {
     setState(() {
-      loading = true;
+      loadingGoogle = true;
     });
 
     try {
@@ -104,10 +107,79 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
     catch (error) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
     } finally {
       setState(() {
-        loading = false;
+        loadingGoogle = false;
+      });
+    }
+  }
+
+  void _handleAppleSignIn() async {
+    setState(() {
+      loadingApple = true;
+    });
+
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final oAuthCredentials = OAuthProvider("apple.com").credential(
+        idToken: credential.identityToken,
+        accessToken: credential.authorizationCode
+      );
+
+      await _firebaseAuth.signInWithCredential(oAuthCredentials).then((value) async {
+        final user = value.user;
+        final idToken = await user?.getIdToken();
+        final email = user?.email;
+
+        String name = "";
+        if (credential.givenName != null && credential.familyName != null) {
+          name = "${credential.givenName} ${credential.familyName}";
+        } else {
+          name = user?.displayName ?? ""; // fallback
+        }
+
+        Utils.flushBarErrorMessage(name, context);
+
+        final avatar = user?.photoURL;
+        String phoneId = "";
+
+        if (notificationsService != null) {
+          try {
+            notificationsService!.isTokenRefresh();
+            await notificationsService!.getDeviceToken().then((value) {
+              phoneId = value ?? "";
+            });
+          } catch (e) {
+            print(e.toString());
+          }
+        }
+
+        final userData = {
+          "firebase_token": idToken,
+          "email": email,
+          "password": "password",
+          "displayName": name,
+          "photoUrl": avatar,
+          "provider": "Apple",
+          "uid": user?.uid,
+          "phoneId": phoneId
+        };
+
+        await authViewModel.loginApi(userData, context);
+      });
+    } catch (error) {
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
+      print(error.toString());
+    } finally {
+      setState(() {
+        loadingApple = false;
       });
     }
   }
@@ -128,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: appColors.appMediumColor,
       body: SafeArea(
         top: false,
+        bottom: Platform.isIOS ? false : true,
         child: Column(
           children: [
             Stack(
@@ -312,38 +385,84 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Padding(
               padding: EdgeInsets.only(left: 10.0, right: 10, bottom: MediaQuery.of(context).viewInsets.bottom + 20.0, top: 20),
-              child: CupertinoButton(
-                borderRadius: BorderRadius.circular(30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/icon/google.png", width: 20,),
-                    const SizedBox(width: 8,),
-                    MyTextView(
-                      "Continuer avec Google",
-                      maxLinesNew: 1,
-                      textAligntNew: TextAlign.left,
-                      styleNew: MyTextStyle(
-                        colorNew: appColors.white,
-                        size: ResponsiveFlutter.of(context).fontSize(1.8),
-                        fontWeightNew: FontWeight.w600,
-                      ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1, color: Colors.black)
                     ),
-                    if (loading)
-                      const SizedBox(width: 15,),
-                    if (loading)
-                      const SizedBox(
-                        width: 15,
-                        height: 15,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
+                    child: CupertinoButton(
+                      borderRadius: BorderRadius.circular(30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/icon/google.png", width: 20,),
+                          const SizedBox(width: 8,),
+                          MyTextView(
+                            "Se connecter avec Google",
+                            maxLinesNew: 1,
+                            textAligntNew: TextAlign.left,
+                            styleNew: MyTextStyle(
+                              colorNew: appColors.black,
+                              size: ResponsiveFlutter.of(context).fontSize(1.8),
+                              fontWeightNew: FontWeight.w600,
+                            ),
+                          ),
+                          if (loadingGoogle)
+                            const SizedBox(width: 15,),
+                          if (loadingGoogle)
+                            const SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 2,
+                              ),
+                            )
+                        ],
+                      ),
+                      color: CupertinoColors.white,
+                      onPressed: loadingApple ? null : _handleGoogleSignIn,
+                    ),
+                  ),
+                  if (Platform.isIOS || Platform.isMacOS)
+                  const SizedBox(height: 10,),
+                  if (Platform.isIOS || Platform.isMacOS)
+                  CupertinoButton(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/icon/apple.png", width: 20,),
+                        const SizedBox(width: 8,),
+                        MyTextView(
+                          "Se connecter avec Apple",
+                          maxLinesNew: 1,
+                          textAligntNew: TextAlign.left,
+                          styleNew: MyTextStyle(
+                            colorNew: appColors.white,
+                            size: ResponsiveFlutter.of(context).fontSize(1.8),
+                            fontWeightNew: FontWeight.w600,
+                          ),
                         ),
-                      )
-                  ],
-                ),
-                color: appColors.black,
-                onPressed: _handleGoogleSignIn,
+                        if (loadingApple)
+                          const SizedBox(width: 15,),
+                        if (loadingApple)
+                            const SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                      ],
+                    ),
+                    color: appColors.black,
+                    onPressed: loadingGoogle ? null : _handleAppleSignIn,
+                  ),
+                ],
               ),
             ),
           ],

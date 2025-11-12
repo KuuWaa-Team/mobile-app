@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/common/image_path.dart';
@@ -20,6 +21,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
+bottom: !Platform.isIOS,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: SizedBox(

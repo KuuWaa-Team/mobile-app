@@ -12,7 +12,7 @@ class BookViewModel with ChangeNotifier{
       return true;
     });
     // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(error.toString(), context);
+    //   Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
     //   return false;
     // });
     return false;

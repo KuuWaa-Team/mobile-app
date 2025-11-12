@@ -64,7 +64,7 @@ class WalletViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
 
@@ -90,7 +90,7 @@ class WalletViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
     });
     return true;
   }

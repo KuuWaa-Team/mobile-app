@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -44,6 +47,7 @@ class _InvitationDetailsScreenState extends State<InvitationDetailsScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
+      bottom: !Platform.isIOS,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: SizedBox(

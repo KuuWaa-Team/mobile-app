@@ -98,7 +98,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -120,7 +120,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return returnData;
@@ -148,7 +148,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       print(error);
       setLoading(false);
     });
@@ -166,7 +166,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return success;
@@ -183,7 +183,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return success;
@@ -194,7 +194,7 @@ class EventViewModel with ChangeNotifier{
     await _repository.removeGameAssertion(context: context, id: id).then((value) {
       print(value);
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       print(error);
       setLoading(false);
     });
@@ -206,7 +206,7 @@ class EventViewModel with ChangeNotifier{
     await _repository.setGameAssertionCorrect(context: context, id: id).then((value) {
       print(value);
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       print(error);
       setLoading(false);
     });
@@ -225,7 +225,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return success;
@@ -243,7 +243,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return returnValue;
@@ -260,7 +260,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return returnValue;
@@ -277,7 +277,7 @@ class EventViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return returnValue;
@@ -294,7 +294,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return success;
@@ -311,7 +311,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return success;
@@ -328,7 +328,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return success;
@@ -350,7 +350,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       print(error);
       setLoading(false);
     });
@@ -375,7 +375,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -403,7 +403,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -440,7 +440,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -456,7 +456,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -474,7 +474,7 @@ class EventViewModel with ChangeNotifier{
       }
     });
     // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(error.toString(), context);
+    //   Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
     //   setLoading(false);
     // });
     return response;
@@ -499,7 +499,7 @@ class EventViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage("Une erreur est survenue", context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return response;
@@ -511,7 +511,7 @@ class EventViewModel with ChangeNotifier{
     await _repository.checkPayStatus(context: context, id: event.id!, orderNumber: orderNumber).then((value) {
       response = value;
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return response;
@@ -534,7 +534,7 @@ class EventViewModel with ChangeNotifier{
         setLoading(false);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return returnValue;
@@ -547,7 +547,7 @@ class EventViewModel with ChangeNotifier{
       setLoading(false);
       setEvent(ApiResponse.completed(EventModel.fromJson(value)));
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -129,6 +132,7 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
+      bottom: !Platform.isIOS,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Column(
@@ -993,9 +997,9 @@ class _InvitationsListScreenState extends State<InvitationsListScreen> {
                                                           onTap: sending ? null : () async {
                                                             if (((widget.event.template!.price ?? 0) <= (user!.credits ?? 0)) || invitation.status != 'created') {
                                                               sending = true;
-                                                              SharePlus.instance.share(
-                                                                  ShareParams(text: invitation.message)
-                                                              );
+                                                              Navigator.pop(context);
+                                                              await Future.delayed(const Duration(milliseconds: 300));
+                                                              await SharePlus.instance.share(ShareParams(text: invitation.message));
                                                               if (invitation.status == 'created') {
                                                                 await invitationViewModel.sendInvitation(context, {
                                                                   'userId': user!.id

@@ -1,7 +1,7 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '14.0'
+platform :ios, '15.0'
+use_frameworks!
+use_modular_headers!
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {
@@ -28,30 +28,25 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  use_frameworks!
-  use_modular_headers!
-
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
   target 'RunnerTests' do
     inherit! :search_paths
   end
 end
 
-# post_install do |installer|
-#   installer.pods_project.targets.each do |target|
-#     flutter_additional_ios_build_settings(target)
-#   end
-# end
-
 post_install do |installer|
-  installer.generated_projects.each do |project|
-    project.targets.each do |target|
-        target.build_configurations.each do |config|
-            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-         end
-    end
-end
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      # Force la version iOS minimale
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+
+      # OTHER_CFLAGS safe
+      flags = config.build_settings['OTHER_CFLAGS'] || []
+      flags = [flags] if flags.is_a?(String)
+      flags << '-Wno-error=format'
+      config.build_settings['OTHER_CFLAGS'] = flags.uniq
+    end
   end
 end

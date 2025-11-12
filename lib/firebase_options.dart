@@ -56,19 +56,19 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB03dhGscAiIKnG4yFlz30zmlme822zhWs',
-    appId: '1:20793118775:ios:e6e185804bafbb33202fb2',
+    appId: '1:20793118775:ios:96113c9288ca0feb202fb2',
     messagingSenderId: '20793118775',
     projectId: 'kuuwaa-fbc0b',
     storageBucket: 'kuuwaa-fbc0b.firebasestorage.app',
-    iosBundleId: 'com.dmwema.kuuwaa',
+    iosBundleId: 'com.app.kuuwaa',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyB03dhGscAiIKnG4yFlz30zmlme822zhWs',
-    appId: '1:20793118775:ios:e6e185804bafbb33202fb2',
+    appId: '1:20793118775:ios:96113c9288ca0feb202fb2',
     messagingSenderId: '20793118775',
     projectId: 'kuuwaa-fbc0b',
     storageBucket: 'kuuwaa-fbc0b.firebasestorage.app',
-    iosBundleId: 'com.dmwema.kuuwaa',
+    iosBundleId: 'com.app.kuuwaa',
   );
 }

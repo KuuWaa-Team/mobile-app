@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/check_dialog.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -60,7 +61,7 @@ class InvitationViewModel with ChangeNotifier{
       }
     }).onError((error, stackTrace) {
       print(error);
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -84,7 +85,7 @@ class InvitationViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -97,7 +98,7 @@ class InvitationViewModel with ChangeNotifier{
       setLoading(false);
       setInvitation(ApiResponse.completed(InvitationModel.fromJson(value)));
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -229,7 +230,7 @@ class InvitationViewModel with ChangeNotifier{
       }
     });
     // .onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(error.toString(), context);
+    //   Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
     //   print(error);
     //   setLoading(false);
     // });
@@ -252,7 +253,7 @@ class InvitationViewModel with ChangeNotifier{
         Navigator.pop(context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       print(error);
       setLoading(false);
     });
@@ -277,7 +278,7 @@ class InvitationViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -294,7 +295,7 @@ class InvitationViewModel with ChangeNotifier{
         setLoading(false);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return success;
@@ -319,7 +320,7 @@ class InvitationViewModel with ChangeNotifier{
         Utils.flushBarErrorMessage(value['message'], context);
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;
@@ -434,7 +435,7 @@ class InvitationViewModel with ChangeNotifier{
       setLoading(false);
       return value;
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return null;
@@ -583,7 +584,7 @@ class InvitationViewModel with ChangeNotifier{
         }
       }
     }).onError((error, stackTrace) {
-      Utils.flushBarErrorMessage(error.toString(), context);
+      Utils.flushBarErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.", context);
       setLoading(false);
     });
     return true;

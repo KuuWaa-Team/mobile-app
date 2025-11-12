@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_dialog.dart';
@@ -52,7 +53,6 @@ class Utils {
 
   // static String errorMessage = "Une erreur est survénue, veuillez réssayer plutard.";
 
-  /// Dark Status Bar ------------>>
   void darkStatusBar() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
@@ -68,17 +68,19 @@ class Utils {
 
 
   static void flushBarErrorMessage(String message, BuildContext context) {
-    showFlushbar(context: context, flushbar: Flushbar(
-      message: message,
-      forwardAnimationCurve: Curves.decelerate,
-      icon: const Icon(Icons.error, size: 25, color: Colors.white,),
-      duration: const Duration(seconds: 5),
-      backgroundColor: Colors.red.withOpacity(.88),
-      borderRadius: BorderRadius.circular(5),
-      flushbarPosition: FlushbarPosition.TOP,
-      barBlur: 10,
-      margin: const EdgeInsets.all(10),
-    )..show(context));
+    if (message.isNotEmpty) {
+      showFlushbar(context: context, flushbar: Flushbar(
+        message: message,
+        forwardAnimationCurve: Curves.decelerate,
+        icon: const Icon(Icons.error, size: 25, color: Colors.white,),
+        duration: const Duration(minutes: 5),
+        backgroundColor: Colors.red.withOpacity(.88),
+        borderRadius: BorderRadius.circular(5),
+        flushbarPosition: FlushbarPosition.TOP,
+        barBlur: 10,
+        margin: const EdgeInsets.all(10),
+      )..show(context));
+    }
   }
 
   /// Light Status Bar ------------>>

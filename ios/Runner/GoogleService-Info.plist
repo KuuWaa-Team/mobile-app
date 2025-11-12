@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>20793118775-4t07rkjgi9b8sr1egbggjlclsagvvq0t.apps.googleusercontent.com</string>
+	<string>20793118775-eiauho5f4lo3ot656ivm8icduhbmfekq.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.20793118775-4t07rkjgi9b8sr1egbggjlclsagvvq0t</string>
+	<string>com.googleusercontent.apps.20793118775-eiauho5f4lo3ot656ivm8icduhbmfekq</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>20793118775-feg8l8cimq1b3b7k0i76oaeaa3mpol1v.apps.googleusercontent.com</string>
+	<string>20793118775-4oj80sh8oud09uduse9fr70ov235qn4k.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB03dhGscAiIKnG4yFlz30zmlme822zhWs</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.dmwema.kuuwaa</string>
+	<string>com.app.kuuwaa</string>
 	<key>PROJECT_ID</key>
 	<string>kuuwaa-fbc0b</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:20793118775:ios:e6e185804bafbb33202fb2</string>
+	<string>1:20793118775:ios:96113c9288ca0feb202fb2</string>
 </dict>
 </plist>

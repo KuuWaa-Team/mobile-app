@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
 import 'package:kuuwaa/data/response/status.dart';
@@ -45,6 +48,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
+      bottom: !Platform.isIOS,
       child: Scaffold(
         backgroundColor: appColors.appMediumColor,
         body: Column(

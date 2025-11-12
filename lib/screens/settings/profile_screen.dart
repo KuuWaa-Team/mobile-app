@@ -1,6 +1,7 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_button.dart';
 import 'package:kuuwaa/common/common_widget.dart';
@@ -58,11 +59,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           CircleAvatar(
                             radius: 50,
                             backgroundColor: Colors.white,
-                            backgroundImage: NetworkImage(
-                              user.photoUrl?.isNotEmpty == true
-                                  ? user.photoUrl!
-                                  : "https://i.pravatar.cc/300",
-                            ),
+                            backgroundImage: (user.photoUrl != null && user.photoUrl!.isNotEmpty)
+                                ? NetworkImage(user.photoUrl!)
+                                : null,
+                            child: (user.photoUrl == null || user.photoUrl!.isEmpty)
+                                ? Text(
+                              (user.displayName != null && user.displayName!.length >= 2)
+                                  ? user.displayName!.substring(0, 2).toUpperCase()
+                                  : (user.displayName != null && user.displayName!.isNotEmpty ? (user.displayName ?? '??').substring(0, 1).toUpperCase() : '-'),
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            )
+                                : null,
                           ),
                           SizedBox(height: 12),
                           MyTextView(
