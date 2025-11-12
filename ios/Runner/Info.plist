@@ -47,6 +47,8 @@
 	<string>Nous avons besoin de votre position pour vous localiser sur la carte.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Nous avons besoin de votre position pour vous localiser sur la carte.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Cette application a besoin de votre position pour afficher la carte.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Cette application nécéssite l'utilisation de votre gallerie pour importer des photo comme la photo de l'évenement par exemple</string>
 	<key>NSPhotoLibraryUsageDescription</key>
