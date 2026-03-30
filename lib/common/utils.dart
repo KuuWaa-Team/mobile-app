@@ -42,6 +42,8 @@ class Utils {
     return DateFormat('dd MMM yyyy à HH:mm', 'fr').format(date);
   }
 
+  static String googleMapsApiKey = "AIzaSyCv184kDIZmum-L9mRwLgurIcbQHxgt7zc";
+
   static BoxShadow customShadow () {
     return BoxShadow(
       color: Colors.grey.withOpacity(0.3),
@@ -571,4 +573,5 @@ class EventAdminRoles {
     viewMusicRequests,
     manageInteractiveGame,
   ];
+
 }

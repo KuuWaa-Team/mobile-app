@@ -6,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'dart:io';
 import 'package:kuuwaa/common/app_colors.dart';
 import 'package:kuuwaa/common/common_widget.dart';
+import 'package:kuuwaa/common/utils.dart';
 import 'package:kuuwaa/responsive/responsive_flutter.dart';
 
 class MapPickerPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _MapPickerPageState extends State<MapPickerPage> {
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("AIzaSyCv184kDIZmum-L9mRwLgurIcbQHxgt7zc");
+    googlePlace = GooglePlace(Utils.googleMapsApiKey);
     _determinePosition();
   }
 
